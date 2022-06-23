@@ -76,7 +76,7 @@ Cette liste pourra être compléter suite au retour d'expérience du lot 1.1
 
 # ╔═╡ ad6ab075-fd5a-4631-8312-0edd441e7565
 md"""
-### [Création d'un compte GitHub](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
+###  [Création d'un compte GitHub](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
 Le nom est FiatLux-Rapid et le password FiatLux-01
 mail @ jp.brasile@gmail.com
 
@@ -96,6 +96,10 @@ On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11
 
 ### Github desktop 
 télécharger [Github Desktop](https://desktop.github.com/)
+ajout (ctrl O dans github desktop) D:\...\NotebooksPluto
+commit to master
+
+test de modification
 """
 
 # ╔═╡ 745b0658-f0ed-467e-ad16-473db9a40a5d
