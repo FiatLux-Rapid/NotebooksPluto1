@@ -64,8 +64,8 @@ md"""
 1. Optimisation de son pilotage par analyse des espaces d’état
 1. Modélisation électromagnétique 3D et thermique par la marche des sphères 
 1. Modélisation  et optimisation de bout en bout du transformateur (jusqu'aux pièces imprimées en 3D):
-* application en mode pulsé
-* applicatin en mode continu
+* applications en mode pulsé
+* applications en mode continu
 1. Association de convertisseurs en réseau (via fibre optique et/ou Wifi)
 1. Programmes des microcontrôleurs et de l’IHM générés automatiquement ( automates à états  finis, PWM…) 
 
@@ -74,34 +74,17 @@ md"""
 Cette liste pourra être compléter suite au retour d'expérience du lot 1.1
 """
 
-# ╔═╡ ad6ab075-fd5a-4631-8312-0edd441e7565
+# ╔═╡ d038e213-b29b-4027-a788-0822e3368015
+md""" 
+### Réalisation de notebooks de formation
+"""
+
+# ╔═╡ 97f65e05-05ea-4785-9707-6c53560356b5
+md" voir [pour la formation HTML,CSS,Markdown et Javascript :](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/tutoHTML.jl) "
+
+# ╔═╡ 4de2d7b1-4d51-4a3b-8a0f-540970031714
 md"""
-###  [Création d'un compte GitHub](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
-Le nom est FiatLux-Rapid et le password FiatLux-01
-mail @ jp.brasile@gmail.com
-
-Ensuite lancer github avec le password, github demandera le code qu'il a envoyé par mail pour valider la création
-
-Nous allons sauvegarder le notebook d'abord manuellement puis automatiquement pour ses mises à jour
-
-On créer le répertoire FiatLux-notebook en suivant [*les instructions*](https://gist.github.com/mindplace/b4b094157d7a3be6afd2c96370d39fad#file-git_and_github_instructions-md)
-
-add file tutoHTML.jl drag and drop  commit 
-
-On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11a43dacf65c3959cdbcf9207aa05f6d84ed373/tutoHTML.jl) (copy permalink)
-
-
-...que l'on peut lancer en mettant cette url comme lien du notebook pluto à ouvrir
-
-
-### Github desktop 
-1.télécharger [Github Desktop](https://desktop.github.com/)
-2; Connexion git local <--> Github : file /options/ 
-3; ajout (ctrl O dans github desktop) D:\...\NotebooksPluto
-4:commit to master
-5: 
-
-test de modification
+### Gestion des historiques avec git et Github
 """
 
 # ╔═╡ 745b0658-f0ed-467e-ad16-473db9a40a5d
@@ -129,6 +112,34 @@ details(x, summary="Show more") = @htl("""
 		$(x)
 	</details>
 	""")
+
+# ╔═╡ ad6ab075-fd5a-4631-8312-0edd441e7565
+details(md""" 
+
+
+#### [Création d'un compte GitHub](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
+
+> + Le nom est FiatLux-Rapid et le password FiatLux-01
+> + mail @ jp.brasile@gmail.com
+> + Ensuite lancer github avec le password, github demandera le code qu'il a envoyé par mail pour valider la création
+
+Nous allons sauvegarder le notebook d'abord manuellement puis automatiquement pour ses mises à jour
+##### Mise à jour manuelle
+On créer le répertoire FiatLux-notebook en suivant [*les instructions*](https://gist.github.com/mindplace/b4b094157d7a3be6afd2c96370d39fad#file-git_and_github_instructions-md)
+
+add file tutoHTML.jl drag and drop  commit 
+
+On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11a43dacf65c3959cdbcf9207aa05f6d84ed373/tutoHTML.jl) (copy permalink)
+...que l'on peut lancer en mettant cette url comme lien du notebook pluto à ouvrir
+
+##### Contrôle via GitHub Desktop 
+1. Télécharger [Github Desktop](https://desktop.github.com/)
+2. Connexion git local <--> Github : file /options/ 
+3. ajout du répertoire (ctrl O dans github desktop) D:\...\NotebooksPluto
+4. commit to master
+5. push to github
+""",
+	"")
 
 # ╔═╡ 9692a16c-e9e8-484e-aa7a-2933d5c60a5d
 details(md"""
@@ -1337,6 +1348,9 @@ version = "0.9.1+5"
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╟─649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
+# ╟─d038e213-b29b-4027-a788-0822e3368015
+# ╠═97f65e05-05ea-4785-9707-6c53560356b5
+# ╟─4de2d7b1-4d51-4a3b-8a0f-540970031714
 # ╠═ad6ab075-fd5a-4631-8312-0edd441e7565
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
