@@ -1012,12 +1012,22 @@ This is the content of the note.
         # ...
     end
     ```
-<details>
-    <summary> A secret </summary>
-    <p> Pluto is fun </p>
-</details>
+
+> 👍  le rajout d'un emoji se fait en le trouvant sur le [net](https://gist.github.com/rxaviers/7360908) et couper coller !
+
+
+
 """ # markdown end
 
+
+
+# ╔═╡ 7ee327a6-cfc6-421e-9f67-0fe3c0cf9d0d
+
+details(
+    "Pluto is fun !", "A secret" )
+
+
+# ╔═╡ 0e52df3e-b0f9-46cd-b496-a1b5e25b8ab6
 
 
 # ╔═╡ 3aad6f2b-72ed-4329-959d-ba8c85c45671
@@ -2660,6 +2670,8 @@ version = "0.9.1+5"
 # ╠═6ac30130-4a7e-4401-9c60-ab6e59a8dbf9
 # ╠═b284add0-a6f1-4966-b232-6518f8fbe87c
 # ╠═d4c5c2b7-06a8-4a43-8081-daf52a00aa5e
+# ╠═7ee327a6-cfc6-421e-9f67-0fe3c0cf9d0d
+# ╠═0e52df3e-b0f9-46cd-b496-a1b5e25b8ab6
 # ╠═3aad6f2b-72ed-4329-959d-ba8c85c45671
 # ╠═ee874a81-ba6d-4297-86ec-b53e82af4905
 # ╠═99853782-fb10-4f97-bd56-0c9cd4876053

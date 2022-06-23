@@ -143,6 +143,11 @@ On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11
 3. ajout du répertoire (ctrl O dans github desktop) D:\...\NotebooksPluto
 4. commit to master
 5. push to github
+
+> 👍	La visualisation d'un fichier html peut être faite en l'ouvrant avec *Visual Studio Code* et en cliquant sur "Go Live"
+
+> 👍  le rajout d'un emoji se fait en le trouvant sur le [net](https://gist.github.com/rxaviers/7360908) et couper coller !
+
 """,
 	"")
 
@@ -220,6 +225,11 @@ details(md"""
 	</script>
 	```
 	""", "Show with syntax highlighting")
+
+# ╔═╡ 8c87a9d3-d839-4468-be3a-25cf2c240537
+md"""
+$ text $
+"""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1349,21 +1359,22 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╠═c49dec22-9c65-46b3-b59b-503553be2181
 # ╠═8af69410-c7dd-4155-acfb-e710a75e95ea
-# ╠═f470427b-72ca-429c-81f1-9a388d33e99e
+# ╟─f470427b-72ca-429c-81f1-9a388d33e99e
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╟─649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
 # ╟─d038e213-b29b-4027-a788-0822e3368015
 # ╠═97f65e05-05ea-4785-9707-6c53560356b5
-# ╟─4de2d7b1-4d51-4a3b-8a0f-540970031714
-# ╟─ad6ab075-fd5a-4631-8312-0edd441e7565
+# ╠═4de2d7b1-4d51-4a3b-8a0f-540970031714
+# ╠═ad6ab075-fd5a-4631-8312-0edd441e7565
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
-# ╠═9692a16c-e9e8-484e-aa7a-2933d5c60a5d
+# ╟─9692a16c-e9e8-484e-aa7a-2933d5c60a5d
 # ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
 # ╠═9656c208-22af-47d4-9c9c-ef27151913b4
 # ╠═f7977fc7-610c-491b-a7ca-2c433169f103
 # ╠═e67654b3-e7de-47ad-b72c-cf80b2f0f992
 # ╠═59edcf90-f222-11ec-0710-cf30cec93c3d
+# ╠═8c87a9d3-d839-4468-be3a-25cf2c240537
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
