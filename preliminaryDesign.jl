@@ -95,9 +95,11 @@ On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11
 
 
 ### Github desktop 
-télécharger [Github Desktop](https://desktop.github.com/)
-ajout (ctrl O dans github desktop) D:\...\NotebooksPluto
-commit to master
+1.télécharger [Github Desktop](https://desktop.github.com/)
+2; Connexion git local <--> Github : file /options/ 
+3; ajout (ctrl O dans github desktop) D:\...\NotebooksPluto
+4:commit to master
+5: 
 
 test de modification
 """
