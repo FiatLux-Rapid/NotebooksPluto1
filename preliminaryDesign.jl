@@ -20,6 +20,11 @@ end
 # ╔═╡ 8af69410-c7dd-4155-acfb-e710a75e95ea
 PlutoUI.TableOfContents(aside=true)
 
+# ╔═╡ f470427b-72ca-429c-81f1-9a388d33e99e
+md"""
+>Les notebooks *PLuto* peuvent être exécutés à partir d'un environneemnt Julia soit localement soit à partir de leur URL . Ils peuvent exécuter du code Julia. Les cellules sont activées seulement si nécessaire pour conserver la cohérence d'ensemble (on ne peut affecter qu'une valeur à une variable, les cellules qui l'impliquent sont alors remises automatiquement à jour). L'ordre des cellules n'a pas d'importance pour la production du résultat. Les notebooks  *Pluto* offrent aussi toutes les possibilités de mise en forme (HTML/CSS, MarkDown) et de mise en oeuvre (Javascript). Ils peuvent être exportés en pur html ou pdf.  
+"""
+
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 md"""
 ## Lots de travaux
@@ -1343,21 +1348,22 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╠═c49dec22-9c65-46b3-b59b-503553be2181
-# ╠═59edcf90-f222-11ec-0710-cf30cec93c3d
 # ╠═8af69410-c7dd-4155-acfb-e710a75e95ea
+# ╠═f470427b-72ca-429c-81f1-9a388d33e99e
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╟─649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
 # ╟─d038e213-b29b-4027-a788-0822e3368015
 # ╠═97f65e05-05ea-4785-9707-6c53560356b5
 # ╟─4de2d7b1-4d51-4a3b-8a0f-540970031714
-# ╠═ad6ab075-fd5a-4631-8312-0edd441e7565
+# ╟─ad6ab075-fd5a-4631-8312-0edd441e7565
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
-# ╟─9692a16c-e9e8-484e-aa7a-2933d5c60a5d
+# ╠═9692a16c-e9e8-484e-aa7a-2933d5c60a5d
 # ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
 # ╠═9656c208-22af-47d4-9c9c-ef27151913b4
 # ╠═f7977fc7-610c-491b-a7ca-2c433169f103
 # ╠═e67654b3-e7de-47ad-b72c-cf80b2f0f992
+# ╠═59edcf90-f222-11ec-0710-cf30cec93c3d
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

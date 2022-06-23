@@ -108,9 +108,8 @@ details(md"""
 PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ 44fdda29-cf15-4b19-b40f-f9d37cb67eb8
-md"""
-https://www.tutorialspoint.com/html/index.htm
-"""
+#https://www.tutorialspoint.com/html/index.htm
+
 
 # ╔═╡ 4041c29c-0afc-410d-b0f9-3d886a31308c
 md"""
@@ -554,12 +553,12 @@ md"""
 """
 
 # ╔═╡ b69a1bea-3522-4a6e-994b-a10c3e945a6a
-html"""
-	
-   <body>
+html"""<!--
+<body> 
       <p>Click following link</p>
       <a href = "https://www.tutorialspoint.com" target = "_self">Tutorials Point</a>
    <a href = "https://www.tutorialspoint.com/html/html_quick_guide.htm" target = "_self">Click to go to the link</a>
+
 </body>
 
 <br>
@@ -581,7 +580,7 @@ html"""
       <title>Hyperlink Example</title>
       <base href = "https://www.tutorialspoint.com/">
    </head>
-	
+-->
    <body>
       <p>Click following link</p>
       <a href = "/html/index.htm" target = "_blank">HTML Tutorial</a>
@@ -2606,7 +2605,7 @@ version = "0.9.1+5"
 # ╠═fb754a60-e746-4c1a-91bc-6d91619ef36f
 # ╠═e5369ccf-34f5-46c8-88b8-72c5320743cd
 # ╠═a9be9eb0-f073-11ec-3802-9d7ec98ae107
-# ╟─44fdda29-cf15-4b19-b40f-f9d37cb67eb8
+# ╠═44fdda29-cf15-4b19-b40f-f9d37cb67eb8
 # ╠═4041c29c-0afc-410d-b0f9-3d886a31308c
 # ╟─d90f2fae-d9bb-497c-a168-b676e16308da
 # ╟─709b24a4-9df2-4685-a5c2-b8b74f7b27da
