@@ -85,6 +85,17 @@ Ensuite lancer github avec le password, github demandera le code qu'il a envoyé
 Nous allons sauvegarder le notebook d'abord manuellement puis automatiquement pour ses mises à jour
 
 On créer le répertoire FiatLux-notebook en suivant [*les instructions*](https://gist.github.com/mindplace/b4b094157d7a3be6afd2c96370d39fad#file-git_and_github_instructions-md)
+
+add file tutoHTML.jl drag and drop  commit 
+
+On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11a43dacf65c3959cdbcf9207aa05f6d84ed373/tutoHTML.jl) (copy permalink)
+
+
+...que l'on peut lancer en mettant cette url comme lien du notebook pluto à ouvrir
+
+
+### Github desktop 
+télécharger [Github Desktop](https://desktop.github.com/)
 """
 
 # ╔═╡ 745b0658-f0ed-467e-ad16-473db9a40a5d
@@ -94,6 +105,99 @@ md"""
 
 """
 
+
+# ╔═╡ f558baf4-d69c-4062-84e0-f24aa5bf9ed8
+md"""
+#### Julia code expansion 
+"""
+
+# ╔═╡ 523d898c-4eb7-4e74-a3af-d59e32ee3935
+md"""
+## Ressources
+"""
+
+# ╔═╡ 9656c208-22af-47d4-9c9c-ef27151913b4
+details(x, summary="Show more") = @htl("""
+	<details>
+		<summary>$(summary)</summary>
+		$(x)
+	</details>
+	""")
+
+# ╔═╡ 9692a16c-e9e8-484e-aa7a-2933d5c60a5d
+details(md"""
+```julia
+function func(x)
+    # ...
+end
+```
+""","func(x)")
+
+
+# ╔═╡ f7977fc7-610c-491b-a7ca-2c433169f103
+details(md"""
+#### title
+hidden title
+    ""","test")
+
+# ╔═╡ e67654b3-e7de-47ad-b72c-cf80b2f0f992
+details(md"""
+	```htmlmixed
+	<script type="module" id="asdf">
+		//await new Promise(r => setTimeout(r, 1000))
+
+		const { html, render, Component, useEffect, useLayoutEffect, useState, useRef, useMemo, createContext, useContext, } = await import( "https://cdn.jsdelivr.net/npm/htm@3.0.4/preact/standalone.mjs")
+
+		const node = this ?? document.createElement("div")
+
+		const new_state = $(json(state))
+
+		if(this == null){
+
+			// PREACT APP STARTS HERE
+
+			const Item = ({value}) => {
+				const [loading, set_loading] = useState(true)
+
+				useEffect(() => {
+					set_loading(true)
+
+					const handle = setTimeout(() => {
+						set_loading(false)
+					}, 1000)
+
+					return () => clearTimeout(handle)
+				}, [value])
+
+				return html`<li>\${loading ? 
+					html`<em>Loading...</em>` : 
+					value
+				}</li>`
+			}
+
+			const App = () => {
+
+				const [state, set_state] = useState(new_state)
+				node.set_app_state = set_state
+
+				return html`<h5>Hello world!</h5>
+					<ul>\${
+					state.x.map((x,i) => html`<\${Item} value=\${x} key=\${i}/>`)
+				}</ul>`;
+			}
+
+			// PREACT APP ENDS HERE
+
+			render(html`<\${App}/>`, node);
+
+		} else {
+
+			node.set_app_state(new_state)
+		}
+		return node
+	</script>
+	```
+	""", "Show with syntax highlighting")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1229,5 +1333,11 @@ version = "0.9.1+5"
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
 # ╠═ad6ab075-fd5a-4631-8312-0edd441e7565
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
+# ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
+# ╟─9692a16c-e9e8-484e-aa7a-2933d5c60a5d
+# ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
+# ╠═9656c208-22af-47d4-9c9c-ef27151913b4
+# ╠═f7977fc7-610c-491b-a7ca-2c433169f103
+# ╠═e67654b3-e7de-47ad-b72c-cf80b2f0f992
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
