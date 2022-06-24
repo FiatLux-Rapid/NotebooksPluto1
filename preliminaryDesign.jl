@@ -94,8 +94,19 @@ md"""
 
 
 # ╔═╡ bd3e5ff0-b513-4890-9bee-19a39e87a62e
+
 md"""
 ### Envoi et réception de données de GH à GH remote
+"""
+
+
+# ╔═╡ 02c9a9ac-ef95-4278-a507-af3f345c0279
+@htl """
+<p align = "center" > <font size = "4" >  GH ↔️ ☁️  ↔️ GH  </font>  </p>
+"""
+
+# ╔═╡ 8fb5c378-95a9-4f66-8908-4abac0ae7d07
+md"""
 Ouvrir [speckle.xyz](https://speckle.xyz/) pour obtenir un lien de de communication (new stream)
 Dans GH mettre ce lien comme chemin du plugin "send" et "receive".
 L'envoi et réception peut être fait manuellement ou automatiquement suivant la configuration des plugins: [implantation dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/SendReceiveRemote.PNG?raw=true)
@@ -104,7 +115,11 @@ L'envoi et réception peut être fait manuellement ou automatiquement suivant la
 """
 
 # ╔═╡ f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
+md"""
 
+Les données transmisent peuvent être des objets GH comme un cercle dans l'exemple suivant:
+> [Le fichier gh correspondant](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/f9b79f98d9ad2d60ddde71c40c9e76031f428e9a/grasshopper/SpeckleSendReceived.gh)
+"""
 
 # ╔═╡ 4e04718d-2804-4ef8-b012-79c78a98fadd
 md"""
@@ -1405,8 +1420,10 @@ version = "0.9.1+5"
 # ╟─ad6ab075-fd5a-4631-8312-0edd441e7565
 # ╟─d683a576-b1f0-4635-b23f-c64e3afbbce9
 # ╟─bd3e5ff0-b513-4890-9bee-19a39e87a62e
-# ╠═f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
-# ╠═4e04718d-2804-4ef8-b012-79c78a98fadd
+# ╟─02c9a9ac-ef95-4278-a507-af3f345c0279
+# ╟─8fb5c378-95a9-4f66-8908-4abac0ae7d07
+# ╟─f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
+# ╟─4e04718d-2804-4ef8-b012-79c78a98fadd
 # ╟─4e40bdd7-cdc8-4241-b086-82f365c74d4e
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
