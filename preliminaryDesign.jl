@@ -95,14 +95,17 @@ md"""
 
 # ╔═╡ 4e04718d-2804-4ef8-b012-79c78a98fadd
 md"""
-### Send and receive data from file 
+### Envoi et réception de données via un fichier texte
+Dans les exemples qui suivent, un seul fichier Grasshopper est mis en oeuvre pour l'envoi et la réception de données. En pratique l'envoi et la réception sont délocalisés 
+
+
 [GH envoi et réception de données délocalisée](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/send_receiveSpeckle.png?raw=true)  
 """
 
 # ╔═╡ 4e40bdd7-cdc8-4241-b086-82f365c74d4e
 md"""
 > 👍	Il est possible de récupérer les données d'un fichier texte situé sur GitHub dans Grasshopper"
-> Il suffit de récupérer le lien en surlignant les données à récupérer dans GitHub, puis click droit pour trouver le lien. Un simple traitement des données est aors mis en oeuvre pour "nettoyer" les données
+> Il suffit de récupérer le lien en surlignant les données à récupérer dans GitHub, puis click droit pour trouver le lien. Un simple traitement des données est alors [mis en oeuvre dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/CollectDataFromGitHubinGH.PNG?raw=true) pour "nettoyer" les données
 
 """
 
@@ -1387,9 +1390,9 @@ version = "0.9.1+5"
 # ╟─d038e213-b29b-4027-a788-0822e3368015
 # ╟─97f65e05-05ea-4785-9707-6c53560356b5
 # ╠═ad6ab075-fd5a-4631-8312-0edd441e7565
-# ╠═d683a576-b1f0-4635-b23f-c64e3afbbce9
-# ╠═4e04718d-2804-4ef8-b012-79c78a98fadd
-# ╠═4e40bdd7-cdc8-4241-b086-82f365c74d4e
+# ╟─d683a576-b1f0-4635-b23f-c64e3afbbce9
+# ╟─4e04718d-2804-4ef8-b012-79c78a98fadd
+# ╟─4e40bdd7-cdc8-4241-b086-82f365c74d4e
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
 # ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
