@@ -93,6 +93,13 @@ md"""
 """
 
 
+# ╔═╡ bd3e5ff0-b513-4890-9bee-19a39e87a62e
+md"""
+### Envoi et réception de données de GH à GH remote
+Ouvrir [speckle.xyz](https://speckle.xyz/) pour obtenir un lien de de communication (new stream)
+Dans GH mettre ce lien comme chemin du plugin "envoi" et "receive" 
+"""
+
 # ╔═╡ 4e04718d-2804-4ef8-b012-79c78a98fadd
 md"""
 ### Envoi et réception de données via un fichier texte
@@ -1391,6 +1398,7 @@ version = "0.9.1+5"
 # ╟─97f65e05-05ea-4785-9707-6c53560356b5
 # ╟─ad6ab075-fd5a-4631-8312-0edd441e7565
 # ╟─d683a576-b1f0-4635-b23f-c64e3afbbce9
+# ╠═bd3e5ff0-b513-4890-9bee-19a39e87a62e
 # ╠═4e04718d-2804-4ef8-b012-79c78a98fadd
 # ╟─4e40bdd7-cdc8-4241-b086-82f365c74d4e
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
