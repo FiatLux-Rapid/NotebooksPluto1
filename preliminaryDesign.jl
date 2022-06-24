@@ -17,12 +17,12 @@ end
 # ╔═╡ c49dec22-9c65-46b3-b59b-503553be2181
 #https://htmlcheatsheet.com/
 
-# ╔═╡ 8af69410-c7dd-4155-acfb-e710a75e95ea
-PlutoUI.TableOfContents(aside=true)
-
 # ╔═╡ f470427b-72ca-429c-81f1-9a388d33e99e
 md"""
->Les notebooks *PLuto* peuvent être exécutés à partir d'un environneemnt Julia soit localement soit à partir de leur URL . Ils peuvent exécuter du code Julia. Les cellules sont activées seulement si nécessaire pour conserver la cohérence d'ensemble (on ne peut affecter qu'une valeur à une variable, les cellules qui l'impliquent sont alors remises automatiquement à jour). L'ordre des cellules n'a pas d'importance pour la production du résultat. Les notebooks  *Pluto* offrent aussi toutes les possibilités de mise en forme (HTML/CSS, MarkDown) et de mise en oeuvre (Javascript). Ils peuvent être exportés en pur html ou pdf.  
+>Les notebooks *Pluto* peuvent être exécutés à partir d'un environneemnt Julia soit localement soit à partir de leur URL . Ils peuvent exécuter du code Julia. Les cellules sont activées seulement si nécessaire pour conserver la cohérence d'ensemble (on ne peut affecter qu'une valeur à une variable, les cellules qui l'impliquent sont alors remises automatiquement à jour). L'ordre des cellules n'a pas d'importance pour la production du résultat. Les notebooks  *Pluto* offrent aussi toutes les possibilités de mise en forme (HTML/CSS, MarkDown) et de mise en oeuvre (Javascript). 
+>Ils peuvent être exportés en pur html ou pdf.
+>
+>Pour rendre leurs exécutions indépendantes de l'utilisateur, il faut que tous les fichiers attachés soient accessibles par le net. 
 """
 
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
@@ -85,11 +85,17 @@ md"""
 """
 
 # ╔═╡ 97f65e05-05ea-4785-9707-6c53560356b5
-md" voir [pour la formation HTML,CSS,Markdown et Javascript :](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/tutoHTML.jl) "
+md" voir [pour la formation HTML,CSS,Markdown et Javascript](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/tutoHTML.jl.html) "
 
-# ╔═╡ 4de2d7b1-4d51-4a3b-8a0f-540970031714
+# ╔═╡ d683a576-b1f0-4635-b23f-c64e3afbbce9
 md"""
-### Gestion des historiques avec git et Github
+### [Speckle short video introduction](https://youtu.be/B9humiSpHzM)
+"""
+
+
+# ╔═╡ 4e04718d-2804-4ef8-b012-79c78a98fadd
+md"""
+### send and receive data from file
 """
 
 # ╔═╡ 745b0658-f0ed-467e-ad16-473db9a40a5d
@@ -100,14 +106,14 @@ md"""
 """
 
 
-# ╔═╡ f558baf4-d69c-4062-84e0-f24aa5bf9ed8
-md"""
-#### Julia code expansion 
-"""
-
 # ╔═╡ 523d898c-4eb7-4e74-a3af-d59e32ee3935
 md"""
 ## Ressources
+"""
+
+# ╔═╡ f558baf4-d69c-4062-84e0-f24aa5bf9ed8
+md"""
+#### Julia code expansion 
 """
 
 # ╔═╡ 9656c208-22af-47d4-9c9c-ef27151913b4
@@ -122,7 +128,7 @@ details(x, summary="Show more") = @htl("""
 details(md""" 
 
 
-#### [Création d'un compte GitHub](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
+#### [Création d'un compte GitHub avec qqes astuces](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
 
 > + Le nom est FiatLux-Rapid et le password FiatLux-01
 > + mail @ jp.brasile@gmail.com
@@ -146,10 +152,14 @@ On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11
 
 > 👍	La visualisation d'un fichier html peut être faite en l'ouvrant avec *Visual Studio Code* et en cliquant sur "Go Live"
 
+> 👍   Pour afficher un html dans un navigateur, il faut soit imoprter tout le repository de Github soit le seul fichier html (ctl C, Ct v dans WordPad avec un nom se terminant par .html) 
+
 > 👍  le rajout d'un emoji se fait en le trouvant sur le [net](https://gist.github.com/rxaviers/7360908) et couper coller !
 
 """,
-	"")
+	md"""
+### Gestion des historiques avec git et Github
+""")
 
 # ╔═╡ 9692a16c-e9e8-484e-aa7a-2933d5c60a5d
 details(md"""
@@ -230,6 +240,9 @@ details(md"""
 md"""
 $ text $
 """
+
+# ╔═╡ 8af69410-c7dd-4155-acfb-e710a75e95ea
+PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1358,23 +1371,24 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╠═c49dec22-9c65-46b3-b59b-503553be2181
-# ╠═8af69410-c7dd-4155-acfb-e710a75e95ea
 # ╟─f470427b-72ca-429c-81f1-9a388d33e99e
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╟─649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
 # ╟─d038e213-b29b-4027-a788-0822e3368015
-# ╠═97f65e05-05ea-4785-9707-6c53560356b5
-# ╠═4de2d7b1-4d51-4a3b-8a0f-540970031714
-# ╠═ad6ab075-fd5a-4631-8312-0edd441e7565
+# ╟─97f65e05-05ea-4785-9707-6c53560356b5
+# ╟─ad6ab075-fd5a-4631-8312-0edd441e7565
+# ╠═d683a576-b1f0-4635-b23f-c64e3afbbce9
+# ╠═4e04718d-2804-4ef8-b012-79c78a98fadd
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
+# ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
 # ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
 # ╟─9692a16c-e9e8-484e-aa7a-2933d5c60a5d
-# ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
 # ╠═9656c208-22af-47d4-9c9c-ef27151913b4
 # ╠═f7977fc7-610c-491b-a7ca-2c433169f103
 # ╠═e67654b3-e7de-47ad-b72c-cf80b2f0f992
 # ╠═59edcf90-f222-11ec-0710-cf30cec93c3d
 # ╠═8c87a9d3-d839-4468-be3a-25cf2c240537
+# ╠═8af69410-c7dd-4155-acfb-e710a75e95ea
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
