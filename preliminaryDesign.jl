@@ -99,6 +99,8 @@ md"""
 Ouvrir [speckle.xyz](https://speckle.xyz/) pour obtenir un lien de de communication (new stream)
 Dans GH mettre ce lien comme chemin du plugin "send" et "receive".
 L'envoi et réception peut être fait manuellement ou automatiquement suivant la configuration des plugins: [implantation dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/SendReceiveRemote.PNG?raw=true)
+
+[L'historique des échanges est accessible dans speckle.xyz](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/HistoriqueSpeckle.PNG?raw=true)
 """
 
 # ╔═╡ f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
