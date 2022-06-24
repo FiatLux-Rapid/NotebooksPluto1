@@ -108,6 +108,8 @@ md"""
 # ╔═╡ 8fb5c378-95a9-4f66-8908-4abac0ae7d07
 md"""
 Ouvrir [speckle.xyz](https://speckle.xyz/) pour obtenir un lien de de communication (new stream)
+Dans les exemples qui suivent, un seul fichier Grasshopper est mis en oeuvre pour l'envoi et la réception de données. En pratique l'envoi et la réception sont délocalisés 
+
 Dans GH mettre ce lien comme chemin du plugin "send" et "receive".
 L'envoi et réception peut être fait manuellement ou automatiquement suivant la configuration des plugins: [implantation dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/SendReceiveRemote.PNG?raw=true)
 
@@ -123,8 +125,7 @@ Les données transmisent peuvent être des objets GH comme un cercle dans l'exem
 
 # ╔═╡ 4e04718d-2804-4ef8-b012-79c78a98fadd
 md"""
-### Envoi et réception de données via un fichier texte
-Dans les exemples qui suivent, un seul fichier Grasshopper est mis en oeuvre pour l'envoi et la réception de données. En pratique l'envoi et la réception sont délocalisés 
+### Collecte données texte à partir de GitHub
 
 
 [GH envoi et réception de données délocalisée](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/send_receiveSpeckle.png?raw=true)  
@@ -136,6 +137,9 @@ md"""
 > Il suffit de récupérer le lien en surlignant les données à récupérer dans GitHub, puis click droit pour trouver le lien. Un simple traitement des données est alors [mis en oeuvre dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/CollectDataFromGitHubinGH.PNG?raw=true) pour "nettoyer" les données
 
 """
+
+
+# ╔═╡ bbcf9a3b-6643-4940-a75a-581787e75a53
 
 
 # ╔═╡ 745b0658-f0ed-467e-ad16-473db9a40a5d
@@ -1425,6 +1429,7 @@ version = "0.9.1+5"
 # ╟─f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
 # ╟─4e04718d-2804-4ef8-b012-79c78a98fadd
 # ╟─4e40bdd7-cdc8-4241-b086-82f365c74d4e
+# ╠═bbcf9a3b-6643-4940-a75a-581787e75a53
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
 # ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
