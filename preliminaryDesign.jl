@@ -4,6 +4,9 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 8bd4bf5d-d76b-4ba8-a376-22fd949c8251
+using PythonCall;
+
 # ╔═╡ 59edcf90-f222-11ec-0710-cf30cec93c3d
 begin
 	using Colors, ColorVectorSpace, ImageShow, FileIO, ImageIO
@@ -14,8 +17,42 @@ begin
 	using InteractiveUtils
 end
 
+# ╔═╡ 2e8b7a78-0f86-4a8d-b431-d8b116357bc2
+md"""  
+## PythonCall & JuliaCall
+https://cjdoris.github.io/PythonCall.jl/dev/pythoncall/
+https://docs.juliahub.com/PythonCall/WdXsa/0.5.0/juliacall/
+"""
+
 # ╔═╡ c49dec22-9c65-46b3-b59b-503553be2181
 #https://htmlcheatsheet.com/
+
+# ╔═╡ f6891298-6ebd-4e61-bfa8-00689228d1a4
+begin
+	ENV["JULIA_CONDAPKG_BACKEND"] = "System"
+end
+
+# ╔═╡ 2f6e628e-62e4-475b-bb0d-a2b7ae4e820c
+begin
+	re = pyimport("re") #vimport python module
+	words = re.findall("[a-zA-Z]+", "PythonCall.jl is very useful!")  # run python 
+	sentence = Py(" ").join(words) # run Python
+	pyconvert(String, sentence)  #convert to julia
+end
+
+# ╔═╡ 29d71b89-0fbe-44a4-ab61-2d68bf8a6fe8
+begin
+	xx = Py([3.4, 5.6])  # to python
+	z=pyconvert(Any,xx) # to julia again
+	y=PyArray(xx)  # also julia conversion
+	y[1]==z[1]
+end
+
+# ╔═╡ 955e78e3-c0ab-4f8e-a441-edb429e049bb
+pyconvert(Float64,Py([3.4, 5.6])[0])+5
+
+# ╔═╡ 67e1a008-bebc-4901-b13d-4b6c5b2849cb
+
 
 # ╔═╡ f470427b-72ca-429c-81f1-9a388d33e99e
 md"""
@@ -301,6 +338,7 @@ InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
 
 [compat]
 ColorVectorSpace = "~0.9.9"
@@ -312,6 +350,7 @@ ImageShow = "~0.3.6"
 JSON = "~0.21.3"
 Plots = "~1.30.1"
 PlutoUI = "~0.7.39"
+PythonCall = "~0.9.1"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -410,6 +449,12 @@ version = "4.1.0"
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+
+[[deps.CondaPkg]]
+deps = ["JSON3", "Markdown", "MicroMamba", "Pkg", "TOML"]
+git-tree-sha1 = "75ec3b585578d855204e6671dedbb75347d57465"
+uuid = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
+version = "0.2.10"
 
 [[deps.Contour]]
 deps = ["StaticArrays"]
@@ -680,6 +725,12 @@ git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.3"
 
+[[deps.JSON3]]
+deps = ["Dates", "Mmap", "Parsers", "StructTypes", "UUIDs"]
+git-tree-sha1 = "fd6f0cae36f42525567108a42c1c674af2ac620d"
+uuid = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+version = "1.9.5"
+
 [[deps.JpegTurbo]]
 deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
 git-tree-sha1 = "a77b273f1ddec645d1b7c4fd5fb98c8f90ad10a5"
@@ -835,6 +886,12 @@ uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.1"
+
+[[deps.MicroMamba]]
+deps = ["Pkg", "Scratch"]
+git-tree-sha1 = "18ae2d81035c717f9b0d92c809575266dfe73cc9"
+uuid = "0b3b1443-0f03-428d-bdfb-f27f9c1191ea"
+version = "0.1.8"
 
 [[deps.Missings]]
 deps = ["DataAPI"]
@@ -1003,6 +1060,12 @@ git-tree-sha1 = "d7a7aef8f8f2d537104f170139553b14dfe39fe9"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
 version = "1.7.2"
 
+[[deps.PythonCall]]
+deps = ["CondaPkg", "Dates", "Libdl", "MacroTools", "Markdown", "Pkg", "Requires", "Serialization", "Tables", "UnsafePointers"]
+git-tree-sha1 = "b398d1421b7a495ddb26ca04204f5a0956e2f068"
+uuid = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+version = "0.9.1"
+
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]
 git-tree-sha1 = "18e8f4d1426e965c7b532ddd260599e1510d26ce"
@@ -1128,6 +1191,12 @@ git-tree-sha1 = "9abba8f8fb8458e9adf07c8a2377a070674a24f1"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 version = "0.6.8"
 
+[[deps.StructTypes]]
+deps = ["Dates", "UUIDs"]
+git-tree-sha1 = "d24a825a95a6d98c385001212dc9020d609f2d4f"
+uuid = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
+version = "1.8.1"
+
 [[deps.TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
@@ -1186,6 +1255,11 @@ deps = ["REPL"]
 git-tree-sha1 = "53915e50200959667e78a92a418594b428dffddf"
 uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
 version = "0.4.1"
+
+[[deps.UnsafePointers]]
+git-tree-sha1 = "c81331b3b2e60a982be57c046ec91f599ede674a"
+uuid = "e17b2a0c-0bdf-430a-bd0c-3a23cae4ff39"
+version = "1.0.0"
 
 [[deps.Unzip]]
 git-tree-sha1 = "34db80951901073501137bdbc3d5a8e7bbd06670"
@@ -1414,7 +1488,14 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═2e8b7a78-0f86-4a8d-b431-d8b116357bc2
 # ╠═c49dec22-9c65-46b3-b59b-503553be2181
+# ╠═8bd4bf5d-d76b-4ba8-a376-22fd949c8251
+# ╠═f6891298-6ebd-4e61-bfa8-00689228d1a4
+# ╠═2f6e628e-62e4-475b-bb0d-a2b7ae4e820c
+# ╠═29d71b89-0fbe-44a4-ab61-2d68bf8a6fe8
+# ╠═955e78e3-c0ab-4f8e-a441-edb429e049bb
+# ╠═67e1a008-bebc-4901-b13d-4b6c5b2849cb
 # ╟─f470427b-72ca-429c-81f1-9a388d33e99e
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╟─649c99a2-1603-42fe-980c-b6d102f9c01b
