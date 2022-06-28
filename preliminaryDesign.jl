@@ -52,6 +52,54 @@ end
 pyconvert(Float64,Py([3.4, 5.6])[0])+5
 
 # ╔═╡ 67e1a008-bebc-4901-b13d-4b6c5b2849cb
+md"""
+## Logbook
+Il y a un problème pour hops avec julia implanté dans python.
+appV6.py fonctionne correctement tant que jz est une fonction purement python mais ne fonctionne pas quand c'est une fonction julia. Alors que en effectuant python ligne à ligne cela fonctionne.
+
+
+**Guide · PythonCall & JuliaCall**
+
+
+https://cjdoris.github.io/PythonCall.jl/dev/pythoncall/
+
+
+**juliacall · PyPI**
+https://pypi.org/project/juliacall/
+
+
+**Tutorials - Speckle - The Platform For 3D Data**
+https://speckle.systems/tutorials/
+
+
+**Create Your First Speckle App using only Python 🐍**
+https://www.google.com/amp/s/speckle.systems/tutorials/create-your-first-speckle-app-using-only-python/amp/
+
+"""
+
+
+# ╔═╡ ac812745-7bd6-400e-a8ec-e7308c56133c
+md"""
+L'emploi de Speckle pour assurer des script python a été validé dans main.py (répertoire *pythonInSpecke*): lorsque l'on active dans GH *SpeckleSendReceive.gh* l'historique est mis a jour dans *http://localhost:8501/*
+"""
+
+# ╔═╡ 304eec7c-4dec-4feb-b66b-65affd6e8fad
+@htl """
+ <p>appV6.py: OK if hops output function is pure Python. KO if its integrates Julia code</p>
+      <img src = "https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/images/appV6.PNG" alt = "Test Image" width = "800" height = "500"  border = "5" align = "left"/>
+"""
+
+
+# ╔═╡ cb32bb73-e448-4d0b-9cdb-8b6ee7fb2574
+md"""
+## Speckle python application
+"""
+
+# ╔═╡ 31677e3d-7a2d-4753-9dc0-0a53082e6cd8
+html"""   
+   <a href = "https://www.google.com/amp/s/speckle.systems/tutorials/create-your-first-speckle-app-using-only-python/amp/" target = "_self">Create Your First Speckle App using only Python 🐍
+</a>
+"""
 
 
 # ╔═╡ f470427b-72ca-429c-81f1-9a388d33e99e
@@ -60,6 +108,42 @@ md"""
 >Ils peuvent être exportés en pur html ou pdf.
 >
 >Pour rendre leurs exécutions indépendantes de l'utilisateur, il faut que tous les fichiers attachés soient accessibles par le net. 
+"""
+
+# ╔═╡ 42624349-193f-44d7-94c5-9c1e7f1eced7
+md"""
+## Création d'un site web avec streamlit
+https://streamlit.io/
+"""
+
+# ╔═╡ d6c5271f-3135-43be-943f-53898860f08e
+
+
+# ╔═╡ bbce6e6a-3b95-4718-9c01-6b31d7b39338
+function run_with_timeout(command, timeout::Integer = 5)
+           cmd = run(command; wait=false)
+            for i in 1:timeout
+                if !process_running(cmd) return success(cmd) end
+                sleep(1)
+            end
+            kill(cmd)
+            return false
+				end;
+
+# ╔═╡ a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
+begin   # execution is OK but interrupt not possible : here with timeout dely else ouside Julia 
+	mycommand=`streamlit hello`
+	run_with_timeout(mycommand,30)  # without timeout run(mycommand)
+end
+
+# ╔═╡ eb7950dc-b59e-48ee-845b-d87bfc4f4edd
+md"""
+> 👍	Il est impossible (sous Windows) d'arreter une commande telle que run(`streamlit hello'). La fonction run_with_timeout l'arrête passé un certain délai
+"""
+
+# ╔═╡ 9d3b1a73-da29-4862-9293-5582b7adf117
+md"""
+> 👍	Streamlit permet créer un site web en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que la page web se modifie si l'on fait évoluer le code correspondant
 """
 
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
@@ -76,7 +160,7 @@ Le logiciel s'adresse à trois types d'utilisateurs : les *développeurs* (qui d
 1. *Interconnexion Julia Grasshopper*
     * en local (plugin Julia) 
     * via le cloud
-2. Contrôle collaboratif à distance d'un Rhino Grasshopper (GH)
+2. Contrôle collaboratif à distance d'un Rhino Grasshopper (GH 🦗)
 3. Programmation visuelle hiérarchique (pour éviter l'effet *"spaghetti"*)
 4. Interconnexion navigateur *utilisateurs finaux* / sites *développeur*
 5. Porter la bibliothèque [SciML](https://sciml.ai/) en programmation visuelle (au moins partiellement)
@@ -167,6 +251,9 @@ md"""
 
 [GH envoi et réception de données délocalisée](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/send_receiveSpeckle.png?raw=true)  
 """
+
+# ╔═╡ 2afdefcf-3786-4fc3-843a-22d962627850
+
 
 # ╔═╡ 4e40bdd7-cdc8-4241-b086-82f365c74d4e
 md"""
@@ -1495,10 +1582,20 @@ version = "0.9.1+5"
 # ╠═2f6e628e-62e4-475b-bb0d-a2b7ae4e820c
 # ╠═29d71b89-0fbe-44a4-ab61-2d68bf8a6fe8
 # ╠═955e78e3-c0ab-4f8e-a441-edb429e049bb
-# ╠═67e1a008-bebc-4901-b13d-4b6c5b2849cb
+# ╟─67e1a008-bebc-4901-b13d-4b6c5b2849cb
+# ╟─ac812745-7bd6-400e-a8ec-e7308c56133c
+# ╠═304eec7c-4dec-4feb-b66b-65affd6e8fad
+# ╟─cb32bb73-e448-4d0b-9cdb-8b6ee7fb2574
+# ╟─31677e3d-7a2d-4753-9dc0-0a53082e6cd8
 # ╟─f470427b-72ca-429c-81f1-9a388d33e99e
+# ╟─42624349-193f-44d7-94c5-9c1e7f1eced7
+# ╠═d6c5271f-3135-43be-943f-53898860f08e
+# ╠═bbce6e6a-3b95-4718-9c01-6b31d7b39338
+# ╠═a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
+# ╟─eb7950dc-b59e-48ee-845b-d87bfc4f4edd
+# ╟─9d3b1a73-da29-4862-9293-5582b7adf117
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
-# ╟─649c99a2-1603-42fe-980c-b6d102f9c01b
+# ╠═649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
 # ╟─d038e213-b29b-4027-a788-0822e3368015
 # ╟─97f65e05-05ea-4785-9707-6c53560356b5
@@ -1509,7 +1606,8 @@ version = "0.9.1+5"
 # ╟─8fb5c378-95a9-4f66-8908-4abac0ae7d07
 # ╟─f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
 # ╟─4e04718d-2804-4ef8-b012-79c78a98fadd
-# ╟─4e40bdd7-cdc8-4241-b086-82f365c74d4e
+# ╠═2afdefcf-3786-4fc3-843a-22d962627850
+# ╠═4e40bdd7-cdc8-4241-b086-82f365c74d4e
 # ╠═bbcf9a3b-6643-4940-a75a-581787e75a53
 # ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
 # ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
