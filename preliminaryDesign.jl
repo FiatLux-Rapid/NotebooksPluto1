@@ -134,17 +134,28 @@ function run_with_timeout(command, timeout::Integer = 5)
 begin   # execution is OK but interrupt not possible : here with timeout dely else ouside Julia 
 	mycommand=`streamlit hello`
 	run_with_timeout(mycommand,30)  # without timeout run(mycommand)
-end
+end;
 
 # ╔═╡ eb7950dc-b59e-48ee-845b-d87bfc4f4edd
 md"""
-> 👍	Il est impossible (sous Windows) d'arreter une commande telle que run(`streamlit hello'). La fonction run_with_timeout l'arrête passé un certain délai
+> 👍	Il est impossible (sous Windows) d'arreter une commande telle que run(`streamlit hello'). La fonction *run\_with\_timeout* l'arrête passé un certain délai
 """
 
 # ╔═╡ 9d3b1a73-da29-4862-9293-5582b7adf117
 md"""
-> 👍	Streamlit permet créer un site web en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que la page web se modifie si l'on fait évoluer le code correspondant
+> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Unexample a été réalisé en suivant *https://docs.streamlit.io/library/get-started/create-an-app* 
+
+Il suffit de faire:
+
+* conda activate fiatlux
+* streamlit run https://gist.githubusercontent.com/FiatLux-Rapid/b51a332532d07e30fd83a84c62cbb933/raw/e98cd08ac6bf50bae42d6e84351b98c9aae631a0/streamlit_example.py
 """
+
+# ╔═╡ 8a486868-fba6-4564-b7fc-3f23f3622d02
+
+
+# ╔═╡ 3e151178-a5f2-4db4-a847-2ef697bb20af
+1+1
 
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 md"""
@@ -1593,7 +1604,9 @@ version = "0.9.1+5"
 # ╠═bbce6e6a-3b95-4718-9c01-6b31d7b39338
 # ╠═a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
 # ╟─eb7950dc-b59e-48ee-845b-d87bfc4f4edd
-# ╟─9d3b1a73-da29-4862-9293-5582b7adf117
+# ╠═9d3b1a73-da29-4862-9293-5582b7adf117
+# ╠═8a486868-fba6-4564-b7fc-3f23f3622d02
+# ╠═3e151178-a5f2-4db4-a847-2ef697bb20af
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╠═649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
