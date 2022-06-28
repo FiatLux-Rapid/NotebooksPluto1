@@ -149,6 +149,8 @@ Il suffit de faire:
 
 * conda activate fiatlux
 * streamlit run https://gist.githubusercontent.com/FiatLux-Rapid/b51a332532d07e30fd83a84c62cbb933/raw/e98cd08ac6bf50bae42d6e84351b98c9aae631a0/streamlit_example.py
+
+[Pour **apprendre streamlit en un mois** (et *en français* !)](https://github.com/streamlit/30days-French)
 """
 
 # ╔═╡ 8a486868-fba6-4564-b7fc-3f23f3622d02
