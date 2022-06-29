@@ -7,6 +7,14 @@ using InteractiveUtils
 # ╔═╡ 8bd4bf5d-d76b-4ba8-a376-22fd949c8251
 using PythonCall;
 
+# ╔═╡ 3e151178-a5f2-4db4-a847-2ef697bb20af
+begin
+	using JuMP
+	import Ipopt
+	using Unitful
+end
+
+
 # ╔═╡ 59edcf90-f222-11ec-0710-cf30cec93c3d
 begin
 	using Colors, ColorVectorSpace, ImageShow, FileIO, ImageIO
@@ -133,7 +141,7 @@ function run_with_timeout(command, timeout::Integer = 5)
 # ╔═╡ a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
 begin   # execution is OK but interrupt not possible : here with timeout dely else ouside Julia 
 	mycommand=`streamlit hello`
-	run_with_timeout(mycommand,30)  # without timeout run(mycommand)
+	run_with_timeout(mycommand,10)  # without timeout run(mycommand)
 end;
 
 # ╔═╡ eb7950dc-b59e-48ee-845b-d87bfc4f4edd
@@ -143,7 +151,7 @@ md"""
 
 # ╔═╡ 9d3b1a73-da29-4862-9293-5582b7adf117
 md"""
-> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Unexample a été réalisé en suivant *https://docs.streamlit.io/library/get-started/create-an-app* 
+> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Unexample a été réalisé en suivant [*streamlit*](https://docs.streamlit.io/library/get-started/create-an-app )
 
 Il suffit de faire:
 
@@ -151,13 +159,61 @@ Il suffit de faire:
 * streamlit run https://gist.githubusercontent.com/FiatLux-Rapid/b51a332532d07e30fd83a84c62cbb933/raw/e98cd08ac6bf50bae42d6e84351b98c9aae631a0/streamlit_example.py
 
 [Pour **apprendre streamlit en un mois** (et *en français* !)](https://github.com/streamlit/30days-French)
+
+En particulier (day 7) nous avons connecté github à Streamlit Cloud afin de synchroniser github avec streamlit: [exemple de déploiement](https://fiatlux-rapid-notebo-streamlite-90days-tutostreamlit-app-v2ovvi.streamlitapp.com/)
 """
 
 # ╔═╡ 8a486868-fba6-4564-b7fc-3f23f3622d02
+md"""
+## Toy example
+L'objectif est de faire une application *FiatLux* minimaliste intégrant ses principale fonction; l'objectif est de réaliser un verre (impression 3D) avec le volume maximal pour une quantité de matière donnée avec les paramètres:
+* e=épaisseur (mm)
+* r=rayon (cm)
+* h=hauteur (cm)
+* q=quantité de matière (cm$$^3$$)
+Grasshopper réalise le verre en 3D, Julia fait l'optimisation, Speckle la transmission des données entre l'utilisateur ( et son navigateur) et le développeur
+### * Code en julia pour l'optimisation
+!!! note
+    ```julia
+	begin
+	    using JuMP
+	    import Ipopt 
+		model = Model(Ipopt.Optimizer)
+		r,h= nothing, nothing # clear the julia variables
+		@variable(model, r >= 0.0)
+		@variable(model, h >= 0.0)
+		vol=3*π
+		e=1
+		@NLobjective(model, Max, π*r^2*h)
+		@NLconstraint(model, c, π*r^2*e+2*π*r*h*e== vol)
+		optimize!(model)
+		@show [value(r),value(h)];
+	end
+    ```
+
+### * Modèle Grasshopper
+"""
+
+# ╔═╡ bb195565-987e-471f-bdbd-9563150ab687
 
 
-# ╔═╡ 3e151178-a5f2-4db4-a847-2ef697bb20af
-1+1
+# ╔═╡ 7cd284b6-28b5-41ad-b068-2a4858f1f31f
+begin
+	model = Model(Ipopt.Optimizer)
+	r,h= nothing, nothing # clear the julia variables
+	@variable(model, r >= 0.0)
+	@variable(model, h >= 0.0)
+	vol=9
+	e=1e-1
+	@NLobjective(model, Max, π*r^2*h)
+	@NLconstraint(model, c, π*r^2*e+2*π*r*h*e== vol)
+	optimize!(model);
+	[value(r),value(h)];
+    
+end
+
+# ╔═╡ df67c439-0652-462e-bd98-9b6e106ea161
+value(π*r^2*e+2*π*r*h*e)
 
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 md"""
@@ -435,10 +491,13 @@ HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+Ipopt = "b6b21f68-93f8-5de0-b562-5493be1d77c9"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
 ColorVectorSpace = "~0.9.9"
@@ -447,10 +506,13 @@ FileIO = "~1.14.0"
 HypertextLiteral = "~0.9.4"
 ImageIO = "~0.6.5"
 ImageShow = "~0.3.6"
+Ipopt = "~1.0.2"
 JSON = "~0.21.3"
+JuMP = "~1.1.1"
 Plots = "~1.30.1"
 PlutoUI = "~0.7.39"
 PythonCall = "~0.9.1"
+Unitful = "~1.11.0"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -459,6 +521,12 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.7.2"
 manifest_format = "2.0"
+
+[[deps.ASL_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "6252039f98492252f9e47c312c8ffda0e3b9e78d"
+uuid = "ae81ac8f-d209-56e5-92de-9978fef736f9"
+version = "0.1.3+0"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
@@ -487,6 +555,12 @@ uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
+[[deps.BenchmarkTools]]
+deps = ["JSON", "Logging", "Printf", "Profile", "Statistics", "UUIDs"]
+git-tree-sha1 = "4c10eee4af024676200bc7752e536f858c6b8f93"
+uuid = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+version = "1.3.1"
+
 [[deps.Bzip2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "19a35467a82e236ff51bc17a3a44b69ef35185a2"
@@ -504,6 +578,12 @@ git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.16.1+1"
 
+[[deps.Calculus]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
+uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
+version = "0.5.1"
+
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
 git-tree-sha1 = "9489214b993cd42d17f44c36e359bf6a7c919abf"
@@ -515,6 +595,18 @@ deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
 git-tree-sha1 = "1e315e3f4b0b7ce40feded39c73049692126cf53"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.3"
+
+[[deps.CodecBzip2]]
+deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
+git-tree-sha1 = "2e62a725210ce3c3c2e1a3080190e7ca491f18d7"
+uuid = "523fee87-0ab8-5b00-afb7-3ecf72e48cfd"
+version = "0.7.2"
+
+[[deps.CodecZlib]]
+deps = ["TranscodingStreams", "Zlib_jll"]
+git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
+uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
+version = "0.7.0"
 
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Random"]
@@ -540,6 +632,12 @@ git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
 
+[[deps.CommonSubexpressions]]
+deps = ["MacroTools", "Test"]
+git-tree-sha1 = "7b8a93dba8af7e3b42fecabf646260105ac373f7"
+uuid = "bbf7d656-a473-5ed7-a52c-81e309532950"
+version = "0.3.0"
+
 [[deps.Compat]]
 deps = ["Dates", "LinearAlgebra", "UUIDs"]
 git-tree-sha1 = "924cdca592bc16f14d2f7006754a621735280b74"
@@ -555,6 +653,12 @@ deps = ["JSON3", "Markdown", "MicroMamba", "Pkg", "TOML"]
 git-tree-sha1 = "75ec3b585578d855204e6671dedbb75347d57465"
 uuid = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
 version = "0.2.10"
+
+[[deps.ConstructionBase]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "f74e9d5388b8620b4cee35d4c5a618dd4dc547f4"
+uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
+version = "1.3.0"
 
 [[deps.Contour]]
 deps = ["StaticArrays"]
@@ -585,6 +689,18 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 [[deps.DelimitedFiles]]
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+
+[[deps.DiffResults]]
+deps = ["StaticArrays"]
+git-tree-sha1 = "c18e98cba888c6c25d1c3b048e4b3380ca956805"
+uuid = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
+version = "1.0.3"
+
+[[deps.DiffRules]]
+deps = ["IrrationalConstants", "LogExpFunctions", "NaNMath", "Random", "SpecialFunctions"]
+git-tree-sha1 = "28d605d9a0ac17118fe2c5e9ce0fbb76c3ceb120"
+uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
+version = "1.11.0"
 
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
@@ -647,6 +763,12 @@ deps = ["Printf"]
 git-tree-sha1 = "8339d61043228fdd3eb658d86c926cb282ae72a8"
 uuid = "59287772-0a20-5a39-b81b-1366585eb4c0"
 version = "0.4.2"
+
+[[deps.ForwardDiff]]
+deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "LinearAlgebra", "LogExpFunctions", "NaNMath", "Preferences", "Printf", "Random", "SpecialFunctions", "StaticArrays"]
+git-tree-sha1 = "2f18915445b248731ec5db4e4a17e451020bf21e"
+uuid = "f6369f11-7733-5829-9624-2563aa707210"
+version = "0.10.30"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -798,6 +920,18 @@ git-tree-sha1 = "b3364212fb5d870f724876ffcd34dd8ec6d98918"
 uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
 version = "0.1.7"
 
+[[deps.Ipopt]]
+deps = ["Ipopt_jll", "MathOptInterface"]
+git-tree-sha1 = "8b7b5fdbc71d8f88171865faa11d1c6669e96e32"
+uuid = "b6b21f68-93f8-5de0-b562-5493be1d77c9"
+version = "1.0.2"
+
+[[deps.Ipopt_jll]]
+deps = ["ASL_jll", "Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "MUMPS_seq_jll", "OpenBLAS32_jll", "Pkg"]
+git-tree-sha1 = "e3e202237d93f18856b6ff1016166b0f172a49a8"
+uuid = "9cc047cb-c261-5740-88fc-0cf96f7bdcc7"
+version = "300.1400.400+0"
+
 [[deps.IrrationalConstants]]
 git-tree-sha1 = "7fd44fd4ff43fc60815f8e764c0f352b83c49151"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
@@ -842,6 +976,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "b53380851c6e6664204efb2e62cd24fa5c47e4ba"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "2.1.2+0"
+
+[[deps.JuMP]]
+deps = ["Calculus", "DataStructures", "ForwardDiff", "LinearAlgebra", "MathOptInterface", "MutableArithmetics", "NaNMath", "OrderedCollections", "Printf", "SparseArrays", "SpecialFunctions"]
+git-tree-sha1 = "534adddf607222b34a0a9bba812248a487ab22b7"
+uuid = "4076af6c-e467-56ae-b986-b466b2749572"
+version = "1.1.1"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -957,6 +1097,18 @@ version = "0.3.15"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[deps.METIS_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "1d31872bb9c5e7ec1f618e8c4a56c8b0d9bddc7e"
+uuid = "d00139f3-1899-568f-a2f0-47f597d42d70"
+version = "5.1.1+0"
+
+[[deps.MUMPS_seq_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "METIS_jll", "OpenBLAS32_jll", "Pkg"]
+git-tree-sha1 = "29de2841fa5aefe615dea179fcde48bb87b58f57"
+uuid = "d7ed1dd3-d0ae-5e8e-bfb4-87a502085b8d"
+version = "5.4.1+0"
+
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
 git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
@@ -971,6 +1123,12 @@ version = "0.4.1"
 [[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[deps.MathOptInterface]]
+deps = ["BenchmarkTools", "CodecBzip2", "CodecZlib", "DataStructures", "ForwardDiff", "JSON", "LinearAlgebra", "MutableArithmetics", "NaNMath", "OrderedCollections", "Printf", "SparseArrays", "SpecialFunctions", "Test", "Unicode"]
+git-tree-sha1 = "21e4d46307492e77332c777699c90d58a4fa3245"
+uuid = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
+version = "1.5.0"
 
 [[deps.MbedTLS]]
 deps = ["Dates", "MbedTLS_jll", "Random", "Sockets"]
@@ -1011,6 +1169,12 @@ version = "0.3.3"
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
+[[deps.MutableArithmetics]]
+deps = ["LinearAlgebra", "SparseArrays", "Test"]
+git-tree-sha1 = "4e675d6e9ec02061800d6cfb695812becbd03cdf"
+uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
+version = "1.0.4"
+
 [[deps.NaNMath]]
 git-tree-sha1 = "737a5957f387b17e74d4ad2f440eb330b39a62c5"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
@@ -1036,6 +1200,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
 version = "1.3.5+1"
+
+[[deps.OpenBLAS32_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "9c6c2ed4b7acd2137b878eb96c68e63b76199d0f"
+uuid = "656ef2d0-ae68-5445-9ca0-591084a874a2"
+version = "0.3.17+0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -1153,6 +1323,10 @@ version = "1.3.0"
 [[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[deps.Profile]]
+deps = ["Printf"]
+uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
 [[deps.ProgressMeter]]
 deps = ["Distributed", "Printf"]
@@ -1333,6 +1507,12 @@ git-tree-sha1 = "f90022b44b7bf97952756a6b6737d1a0024a3233"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
 version = "0.5.5"
 
+[[deps.TranscodingStreams]]
+deps = ["Random", "Test"]
+git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
+uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
+version = "0.9.6"
+
 [[deps.Tricks]]
 git-tree-sha1 = "6bac775f2d42a611cdfcd1fb217ee719630c4175"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
@@ -1355,6 +1535,12 @@ deps = ["REPL"]
 git-tree-sha1 = "53915e50200959667e78a92a418594b428dffddf"
 uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
 version = "0.4.1"
+
+[[deps.Unitful]]
+deps = ["ConstructionBase", "Dates", "LinearAlgebra", "Random"]
+git-tree-sha1 = "b649200e887a487468b71821e2644382699f1b0f"
+uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
+version = "1.11.0"
 
 [[deps.UnsafePointers]]
 git-tree-sha1 = "c81331b3b2e60a982be57c046ec91f599ede674a"
@@ -1607,8 +1793,11 @@ version = "0.9.1+5"
 # ╠═a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
 # ╟─eb7950dc-b59e-48ee-845b-d87bfc4f4edd
 # ╠═9d3b1a73-da29-4862-9293-5582b7adf117
-# ╠═8a486868-fba6-4564-b7fc-3f23f3622d02
+# ╟─8a486868-fba6-4564-b7fc-3f23f3622d02
+# ╠═bb195565-987e-471f-bdbd-9563150ab687
 # ╠═3e151178-a5f2-4db4-a847-2ef697bb20af
+# ╠═7cd284b6-28b5-41ad-b068-2a4858f1f31f
+# ╠═df67c439-0652-462e-bd98-9b6e106ea161
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╠═649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
