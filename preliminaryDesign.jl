@@ -4,16 +4,15 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 8bd4bf5d-d76b-4ba8-a376-22fd949c8251
-using PythonCall;
-
 # ╔═╡ 3e151178-a5f2-4db4-a847-2ef697bb20af
 begin
 	using JuMP
 	import Ipopt
-	using Unitful
 end
 
+
+# ╔═╡ dfd14873-9245-4faf-a22f-05369b6a195f
+using PyCall
 
 # ╔═╡ 59edcf90-f222-11ec-0710-cf30cec93c3d
 begin
@@ -25,39 +24,8 @@ begin
 	using InteractiveUtils
 end
 
-# ╔═╡ 2e8b7a78-0f86-4a8d-b431-d8b116357bc2
-md"""  
-## PythonCall & JuliaCall
-https://cjdoris.github.io/PythonCall.jl/dev/pythoncall/
-https://docs.juliahub.com/PythonCall/WdXsa/0.5.0/juliacall/
-"""
-
 # ╔═╡ c49dec22-9c65-46b3-b59b-503553be2181
 #https://htmlcheatsheet.com/
-
-# ╔═╡ f6891298-6ebd-4e61-bfa8-00689228d1a4
-begin
-	ENV["JULIA_CONDAPKG_BACKEND"] = "System"
-end
-
-# ╔═╡ 2f6e628e-62e4-475b-bb0d-a2b7ae4e820c
-begin
-	re = pyimport("re") #vimport python module
-	words = re.findall("[a-zA-Z]+", "PythonCall.jl is very useful!")  # run python 
-	sentence = Py(" ").join(words) # run Python
-	pyconvert(String, sentence)  #convert to julia
-end
-
-# ╔═╡ 29d71b89-0fbe-44a4-ab61-2d68bf8a6fe8
-begin
-	xx = Py([3.4, 5.6])  # to python
-	z=pyconvert(Any,xx) # to julia again
-	y=PyArray(xx)  # also julia conversion
-	y[1]==z[1]
-end
-
-# ╔═╡ 955e78e3-c0ab-4f8e-a441-edb429e049bb
-pyconvert(Float64,Py([3.4, 5.6])[0])+5
 
 # ╔═╡ 67e1a008-bebc-4901-b13d-4b6c5b2849cb
 md"""
@@ -124,8 +92,10 @@ md"""
 https://streamlit.io/
 """
 
-# ╔═╡ d6c5271f-3135-43be-943f-53898860f08e
-
+# ╔═╡ 2dac349e-a825-45b5-8947-7c69729bea7c
+md"""
+> [Streamlit a été racheté par Snowflake pour 800 M\$ ! ]  (https://www.finsmes.com/2022/03/snowflake-to-acquire-streamlit-for-reportedly-800m.html#:~:text=Snowflake%20(NYSE%3A%20SNOW)%2C,deal%20was%20reportedly%20%24800m.)( publié le 7 mars 2022),ce qui montre l'importance de ce logiciel auprès des investisseurs
+"""
 
 # ╔═╡ bbce6e6a-3b95-4718-9c01-6b31d7b39338
 function run_with_timeout(command, timeout::Integer = 5)
@@ -137,6 +107,11 @@ function run_with_timeout(command, timeout::Integer = 5)
             kill(cmd)
             return false
 				end;
+
+# ╔═╡ 6e7360a1-e684-466d-be83-1918826c54b7
+md"""
+> 👍	Il est possible de proposer un accès payant à un utilisateur de FIATLUX en validant son accès pour une durée donnée avec le programme ci-après:
+"""
 
 # ╔═╡ a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
 begin   # execution is OK but interrupt not possible : here with timeout dely else ouside Julia 
@@ -151,7 +126,7 @@ md"""
 
 # ╔═╡ 9d3b1a73-da29-4862-9293-5582b7adf117
 md"""
-> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Unexample a été réalisé en suivant [*streamlit*](https://docs.streamlit.io/library/get-started/create-an-app )
+> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Un example a été réalisé en suivant [*streamlit*](https://docs.streamlit.io/library/get-started/create-an-app )
 
 Il suffit de faire:
 
@@ -161,12 +136,36 @@ Il suffit de faire:
 [Pour **apprendre streamlit en un mois** (et *en français* !)](https://github.com/streamlit/30days-French)
 
 En particulier (day 7) nous avons connecté github à Streamlit Cloud afin de synchroniser github avec streamlit: [exemple de déploiement](https://fiatlux-rapid-notebo-streamlite-90days-tutostreamlit-app-v2ovvi.streamlitapp.com/)
+
+Un [tuto plus approfondi](https://docs.streamlit.io/library/components/components-api) permet les échanges bidirectionels entre utilisateur disposant d'un navigateur et un développeur disposant de python. [Clickez ici pour un démarrage rapide](https://github.com/streamlit/component-template)
+"""
+
+# ╔═╡ 78cbf7a2-168a-4212-941e-7b95b3f514cc
+@htl """
+<iframe src="https://speckle.xyz/embed?stream=19bbef82bc" width="600" height="400" frameborder="0"></iframe>
+<br>
+<div align = "middle" > <p>Le lien est directement récupéré à partir de speckle.xyz</centered> </p> </div>
+"""
+
+# ╔═╡ 777d1647-fe64-4a8f-8935-fcbd47ff3ea4
+md"""
+### Activation site web streamlit
+```console 
+ conda activate fiatlux
+ streamlit run D:\2022\FIATLUX_Implementation\NotebooksPluto\streamlite_90days_tuto\streamlit_app.py
+```
+streamlit_app.py contient l'html:
+
+```console
+html_string = '<iframe src="https://speckle.xyz/embed?stream=19bbef82bc" width="600" height="400" frameborder="0"></iframe>'
+st.markdown(html_string, unsafe_allow_html=True)
+```
 """
 
 # ╔═╡ 8a486868-fba6-4564-b7fc-3f23f3622d02
 md"""
-## Toy example
-L'objectif est de faire une application *FiatLux* minimaliste intégrant ses principale fonction; l'objectif est de réaliser un verre (impression 3D) avec le volume maximal pour une quantité de matière donnée avec les paramètres:
+## Un maquettage rapide et minimaliste des fonctionnalités FIATLUX
+L'objectif est de faire une application *FiatLux* minimaliste intégrant ses principales fonctions; l'objectif est de réaliser un verre (impression 3D) avec le volume maximal pour une quantité de matière donnée avec les paramètres:
 * e=épaisseur (mm)
 * r=rayon (cm)
 * h=hauteur (cm)
@@ -192,10 +191,32 @@ Grasshopper réalise le verre en 3D, Julia fait l'optimisation, Speckle la trans
     ```
 
 ### * Modèle Grasshopper
+Partons de l'existant avec [*cette réalisation*](http://wiki.iad.zhdk.ch/wiki/download/thumbnails/743604339/image2017-11-23_22-52-16.png?version=1&modificationDate=1578151744396&cacheVersion=1&api=v2&width=811&height=250) en suivant [ce guide](http://wiki.iad.zhdk.ch/DT/743604339/Grasshopper+Basics). Le fichier GH correspondant est *GH_Cup.ghx*.
+Nous avons ensuite rajouté l'envoi du résultat 3D via le plugin Speckle.
+On peut alors accéder à ce modèle 3D via l'[url](https://speckle.xyz/streams/19bbef82bc/commits/3ad77a0980?c=%5B0.17717,0.19543,0.18226,-0.01664,0.00163,0.06501,0,1%5D)
+
+L'hisorique de ce stream est conservé [ici](https://speckle.xyz/streams/19bbef82bc/branches/main)
+
+
+### * Connexion Navigateur utilisateur ↔  Développeur en Python
+
+Nous allons utiliser streamlit, SpecklePy en suivant [*ces instructions*](https://speckle.systems/tutorials/create-your-first-speckle-app-using-only-python/) et [cette video](https://www.youtube.com/watch?v=17UOP4XLim8&list=PLlI5Dyt2HaEu83rSRNGmgaDgSl7ytrS4M)
+
+Commençons par un [exemple simple en python](https://github.com/specklesystems/speckle-examples/tree/main/python/speckle-py-starter) 
+
+Dans le fichier [02_create_and_send.py](D:\2022\FIATLUX_Implementation\NotebooksPluto\ToyExample\simpleExample\python\speckle-py-starter\02_create_and_send.py) il faut remplacer ligne 12 avec un stream créé via speckle.xyz et une nouvelle branche nommée duplicated
+
+Il faut aussi installer graphql
+```console
+npm init
+npm install graphql --save
+```
+
+Example javascript : Il faut un token créé sur speckle.xyz (rubrique *profile* ):17a898dbd280df9e42ef5a29676776e126b8418b18
+  8557c57f7fe475ae727995bb4dbc0ee644aed7470f
+Il faut que le stream soit public pour qu l'application fonctionne. 
+Pourle guide utilisateur de cette fonctionnalité voir [ici](https://speckle.guide/user/web.html)
 """
-
-# ╔═╡ bb195565-987e-471f-bdbd-9563150ab687
-
 
 # ╔═╡ 7cd284b6-28b5-41ad-b068-2a4858f1f31f
 begin
@@ -215,6 +236,118 @@ end
 # ╔═╡ df67c439-0652-462e-bd98-9b6e106ea161
 value(π*r^2*e+2*π*r*h*e)
 
+# ╔═╡ 2c057af3-a2cc-46ea-bb2c-4138d8ba90d5
+md"""
+## Logbook Juillet 2022
+"""
+
+# ╔═╡ 84d2d0cf-8d76-41ad-92cb-f28d5968ae56
+md"""
+## * Connexion Julia (pluto notebook) --> Python
+Intégration du code python dans julia
+"""
+
+# ╔═╡ 2e8b7a78-0f86-4a8d-b431-d8b116357bc2
+md"""  
+### PythonCall & JuliaCall
+https://cjdoris.github.io/PythonCall.jl/dev/pythoncall/
+https://docs.juliahub.com/PythonCall/WdXsa/0.5.0/juliacall/
+using PythonCall;
+Testé mais finalement replis sur PyCall 
+"""
+
+# ╔═╡ f6891298-6ebd-4e61-bfa8-00689228d1a4
+begin
+	ENV["JULIA_CONDAPKG_BACKEND"] = "System"
+end
+
+# ╔═╡ ccbb292d-b24a-4279-9299-8365f13438ed
+md"""
+### Julia --> Python (via PyCall) --> Speckle
+Il suffit d'insérer le code python avec py\"\"\"  ...\"\"\"
+"""
+
+# ╔═╡ 7b2cf1cc-ef3c-4b8f-8d4f-8af3a5f65609
+ENV["PYTHON"] = raw"C:\Python39\python.exe" # example for Windows, "raw" to not have to escape: "C:\\Python310-x64\\python.exe"
+
+
+# ╔═╡ fddd1551-776e-4fd1-ae37-0f7e8cc7bca1
+begin
+# les objets sont envoyés dans Grasshopper GH_Cup.ghx
+py"""
+# Running this script will pull the latest commit from the main branch
+# of the specified stream and duplicate it inside a different branch.
+# (branch should exist already or the script will fail
+
+from specklepy.api.client import SpeckleClient
+from specklepy.api.credentials import get_default_account, get_local_accounts
+from specklepy.transports.server import ServerTransport
+from specklepy.api import operations
+from specklepy.objects.base import Base
+from specklepy.objects.geometry import Point
+# The id of the stream to work with (we're assuming it already exists in your default account's server)
+streamId = "834e9dc3f1"
+#<iframe src="https://speckle.xyz/embed?stream=834e9dc3f1" width="600" height="400" frameborder="0"></iframe>
+branchName = "duplicated"
+
+
+# Initialise the Speckle client pointing to your specific server.
+client = SpeckleClient(host="https://speckle.xyz")
+
+# Get the default account
+account = get_default_account()
+# If you have more than one account, or the account is not the default, use get_local_accounts
+# accounts = get_local_accounts()
+# account = accounts[0]
+
+# Authenticate using the account token
+#client.authenticate(token=account.token)
+client.authenticate_with_token(account.token)
+# Get the main branch with it's latest commit reference
+branch = client.branch.get(streamId, "main", 1)
+
+
+# Create the server transport for the specified stream.
+transport = ServerTransport(client=client, stream_id=streamId)
+
+
+# TODO: Perform some operation on the received data
+
+newObj = Base()
+newObj["myTextProp"] = "Some text value"
+newObj["rayon bas verre"] = 70
+newObj["mySpeckleProp"] = Point.from_coords(1, 1, 1)
+
+
+# Send the points using a specific transport
+newHash = operations.send(base=newObj, transports=[transport])
+
+# you can now create a commit on your stream with this object
+commit_id = client.commit.create(
+    stream_id=streamId,
+    branch_name=branchName,
+    object_id=newHash,
+    message="Automatic commit created the python starter example",
+    source_application="PyStarter"
+)
+
+"""
+#get value !
+print("Successfully created commit with id: ", py"commit_id")
+
+end
+
+# ╔═╡ 911e1c44-d330-4ad8-a4e4-59c1521e6a2c
+md"""
+Envoi/réception de données avec streamlit voir 
+D:\2022\FIATLUX_Implementation\NotebooksPluto\CreateComponentinFrontEnd
+
+
+https://discuss.streamlit.io/t/code-snippet-create-components-without-any-frontend-tooling-no-react-babel-webpack-etc/13064
+
+
+"""
+
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 md"""
 ## Lots de travaux
@@ -233,6 +366,7 @@ Le logiciel s'adresse à trois types d'utilisateurs : les *développeurs* (qui d
 3. Programmation visuelle hiérarchique (pour éviter l'effet *"spaghetti"*)
 4. Interconnexion navigateur *utilisateurs finaux* / sites *développeur*
 5. Porter la bibliothèque [SciML](https://sciml.ai/) en programmation visuelle (au moins partiellement)
+5. Créer un environnement multi-utilisateurs (avec node.js)
 6. Porter la bibliothèque [OpenModelica](https://www.openmodelica.org/) dans [ModelingToolKit](https://github.com/SciML/ModelingToolkit.jl)
 7. Stockage des données FIATLUX sur le cloud via [GitHub](https://github.com/) et [Speckle](https://speckle.systems/) avec automatisation de la gestion des évolutions logiciel. [lien pour automatiser GitHub](https://resources.github.com/devops/tools/automation/actions/) 
 8. *Mise en place* et *interconnexion* de ressources logiciel comme python3,excel...
@@ -496,23 +630,21 @@ JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
-Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 
 [compat]
 ColorVectorSpace = "~0.9.9"
 Colors = "~0.12.8"
 FileIO = "~1.14.0"
 HypertextLiteral = "~0.9.4"
-ImageIO = "~0.6.5"
+ImageIO = "~0.6.6"
 ImageShow = "~0.3.6"
 Ipopt = "~1.0.2"
 JSON = "~0.21.3"
 JuMP = "~1.1.1"
-Plots = "~1.30.1"
+Plots = "~1.31.1"
 PlutoUI = "~0.7.39"
-PythonCall = "~0.9.1"
-Unitful = "~1.11.0"
+PyCall = "~1.93.1"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -530,9 +662,9 @@ version = "0.1.3+0"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
-git-tree-sha1 = "6f1d9bc1c08f9f4a8fa92e3ea3cb50153a1b40d4"
+git-tree-sha1 = "8e9c3482c61d06343a6199814bf84f7df82f2b28"
 uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"
-version = "1.1.0"
+version = "1.2.0"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -586,9 +718,9 @@ version = "0.5.1"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "9489214b993cd42d17f44c36e359bf6a7c919abf"
+git-tree-sha1 = "2dd813e5f2f7eec2d1268c57cf2373d3ee91fcea"
 uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
-version = "1.15.0"
+version = "1.15.1"
 
 [[deps.ChangesOfVariables]]
 deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
@@ -610,9 +742,9 @@ version = "0.7.0"
 
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Random"]
-git-tree-sha1 = "7297381ccb5df764549818d9a7d57e45f1057d30"
+git-tree-sha1 = "1fd869cc3875b57347f7027521f561cf46d1fcd8"
 uuid = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
-version = "3.18.0"
+version = "3.19.0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
@@ -648,17 +780,11 @@ version = "4.1.0"
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
 
-[[deps.CondaPkg]]
-deps = ["JSON3", "Markdown", "MicroMamba", "Pkg", "TOML"]
-git-tree-sha1 = "75ec3b585578d855204e6671dedbb75347d57465"
-uuid = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
-version = "0.2.10"
-
-[[deps.ConstructionBase]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "f74e9d5388b8620b4cee35d4c5a618dd4dc547f4"
-uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
-version = "1.3.0"
+[[deps.Conda]]
+deps = ["Downloads", "JSON", "VersionParsing"]
+git-tree-sha1 = "6e47d11ea2776bc5627421d59cdcc1296c058071"
+uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
+version = "1.7.0"
 
 [[deps.Contour]]
 deps = ["StaticArrays"]
@@ -879,9 +1005,9 @@ version = "0.9.4"
 
 [[deps.ImageIO]]
 deps = ["FileIO", "IndirectArrays", "JpegTurbo", "LazyModules", "Netpbm", "OpenEXR", "PNGFiles", "QOI", "Sixel", "TiffImages", "UUIDs"]
-git-tree-sha1 = "d9a03ffc2f6650bd4c831b285637929d99a4efb5"
+git-tree-sha1 = "342f789fd041a55166764c351da1710db97ce0e0"
 uuid = "82e4d734-157c-48bb-816b-45c225c6df19"
-version = "0.6.5"
+version = "0.6.6"
 
 [[deps.ImageShow]]
 deps = ["Base64", "FileIO", "ImageBase", "ImageCore", "OffsetArrays", "StackViews"]
@@ -958,12 +1084,6 @@ deps = ["Dates", "Mmap", "Parsers", "Unicode"]
 git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.3"
-
-[[deps.JSON3]]
-deps = ["Dates", "Mmap", "Parsers", "StructTypes", "UUIDs"]
-git-tree-sha1 = "fd6f0cae36f42525567108a42c1c674af2ac620d"
-uuid = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
-version = "1.9.5"
 
 [[deps.JpegTurbo]]
 deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
@@ -1145,12 +1265,6 @@ git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.1"
 
-[[deps.MicroMamba]]
-deps = ["Pkg", "Scratch"]
-git-tree-sha1 = "18ae2d81035c717f9b0d92c809575266dfe73cc9"
-uuid = "0b3b1443-0f03-428d-bdfb-f27f9c1191ea"
-version = "0.1.8"
-
 [[deps.Missings]]
 deps = ["DataAPI"]
 git-tree-sha1 = "bf210ce90b6c9eed32d25dbcae1ebc565df2687f"
@@ -1191,9 +1305,9 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 
 [[deps.OffsetArrays]]
 deps = ["Adapt"]
-git-tree-sha1 = "ec2e30596282d722f018ae784b7f44f3b88065e4"
+git-tree-sha1 = "1ea784113a6aa054c5ebd95945fa5e52c2f378e7"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.12.6"
+version = "1.12.7"
 
 [[deps.Ogg_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1229,9 +1343,9 @@ uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "ab05aa4cc89736e95915b01e7279e61b1bfe33b8"
+git-tree-sha1 = "9a36165cf84cff35851809a40a928e1103702013"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "1.1.14+0"
+version = "1.1.16+0"
 
 [[deps.OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -1298,15 +1412,15 @@ version = "3.0.0"
 
 [[deps.PlotUtils]]
 deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "bb16469fd5224100e422f0b027d26c5a25de1200"
+git-tree-sha1 = "9888e59493658e476d3073f1ce24348bdc086660"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.2.0"
+version = "1.3.0"
 
 [[deps.Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
-git-tree-sha1 = "2402dffcbc5bb1631fb4f10cb5c3698acdce29ea"
+git-tree-sha1 = "93e82cebd5b25eb33068570e3f63a86be16955be"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.30.1"
+version = "1.31.1"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
@@ -1334,11 +1448,11 @@ git-tree-sha1 = "d7a7aef8f8f2d537104f170139553b14dfe39fe9"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
 version = "1.7.2"
 
-[[deps.PythonCall]]
-deps = ["CondaPkg", "Dates", "Libdl", "MacroTools", "Markdown", "Pkg", "Requires", "Serialization", "Tables", "UnsafePointers"]
-git-tree-sha1 = "b398d1421b7a495ddb26ca04204f5a0956e2f068"
-uuid = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
-version = "0.9.1"
+[[deps.PyCall]]
+deps = ["Conda", "Dates", "Libdl", "LinearAlgebra", "MacroTools", "Serialization", "VersionParsing"]
+git-tree-sha1 = "1fc929f47d7c151c839c5fc1375929766fb8edcc"
+uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+version = "1.93.1"
 
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]
@@ -1438,10 +1552,15 @@ uuid = "cae243ae-269e-4f55-b966-ac2d0dc13c15"
 version = "0.1.1"
 
 [[deps.StaticArrays]]
-deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "2bbd9f2e40afd197a1379aef05e0d85dba649951"
+deps = ["LinearAlgebra", "Random", "StaticArraysCore", "Statistics"]
+git-tree-sha1 = "9f8a5dc5944dc7fbbe6eb4180660935653b0a9d9"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.4.7"
+version = "1.5.0"
+
+[[deps.StaticArraysCore]]
+git-tree-sha1 = "66fe9eb253f910fe8cf161953880cfdaef01cdf0"
+uuid = "1e83bf80-4336-4d27-bf5d-d5a4f845583c"
+version = "1.0.1"
 
 [[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -1455,21 +1574,15 @@ version = "1.4.0"
 
 [[deps.StatsBase]]
 deps = ["DataAPI", "DataStructures", "LinearAlgebra", "LogExpFunctions", "Missings", "Printf", "Random", "SortingAlgorithms", "SparseArrays", "Statistics", "StatsAPI"]
-git-tree-sha1 = "642f08bf9ff9e39ccc7b710b2eb9a24971b52b1a"
+git-tree-sha1 = "48598584bacbebf7d30e20880438ed1d24b7c7d6"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-version = "0.33.17"
+version = "0.33.18"
 
 [[deps.StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "9abba8f8fb8458e9adf07c8a2377a070674a24f1"
+git-tree-sha1 = "ec47fb6069c57f1cee2f67541bf8f23415146de7"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.8"
-
-[[deps.StructTypes]]
-deps = ["Dates", "UUIDs"]
-git-tree-sha1 = "d24a825a95a6d98c385001212dc9020d609f2d4f"
-uuid = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
-version = "1.8.1"
+version = "0.6.11"
 
 [[deps.TOML]]
 deps = ["Dates"]
@@ -1502,10 +1615,10 @@ deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.TiffImages]]
-deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "OffsetArrays", "PkgVersion", "ProgressMeter", "UUIDs"]
-git-tree-sha1 = "f90022b44b7bf97952756a6b6737d1a0024a3233"
+deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "Mmap", "OffsetArrays", "PkgVersion", "ProgressMeter", "UUIDs"]
+git-tree-sha1 = "fcf41697256f2b759de9380a7e8196d6516f0310"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
-version = "0.5.5"
+version = "0.6.0"
 
 [[deps.TranscodingStreams]]
 deps = ["Random", "Test"]
@@ -1536,21 +1649,15 @@ git-tree-sha1 = "53915e50200959667e78a92a418594b428dffddf"
 uuid = "1cfade01-22cf-5700-b092-accc4b62d6e1"
 version = "0.4.1"
 
-[[deps.Unitful]]
-deps = ["ConstructionBase", "Dates", "LinearAlgebra", "Random"]
-git-tree-sha1 = "b649200e887a487468b71821e2644382699f1b0f"
-uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
-version = "1.11.0"
-
-[[deps.UnsafePointers]]
-git-tree-sha1 = "c81331b3b2e60a982be57c046ec91f599ede674a"
-uuid = "e17b2a0c-0bdf-430a-bd0c-3a23cae4ff39"
-version = "1.0.0"
-
 [[deps.Unzip]]
 git-tree-sha1 = "34db80951901073501137bdbc3d5a8e7bbd06670"
 uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
 version = "0.1.2"
+
+[[deps.VersionParsing]]
+git-tree-sha1 = "58d6e80b4ee071f5efd07fda82cb9fbe17200868"
+uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
+version = "1.3.0"
 
 [[deps.Wayland_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg", "XML2_jll"]
@@ -1774,13 +1881,7 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═2e8b7a78-0f86-4a8d-b431-d8b116357bc2
 # ╠═c49dec22-9c65-46b3-b59b-503553be2181
-# ╠═8bd4bf5d-d76b-4ba8-a376-22fd949c8251
-# ╠═f6891298-6ebd-4e61-bfa8-00689228d1a4
-# ╠═2f6e628e-62e4-475b-bb0d-a2b7ae4e820c
-# ╠═29d71b89-0fbe-44a4-ab61-2d68bf8a6fe8
-# ╠═955e78e3-c0ab-4f8e-a441-edb429e049bb
 # ╟─67e1a008-bebc-4901-b13d-4b6c5b2849cb
 # ╟─ac812745-7bd6-400e-a8ec-e7308c56133c
 # ╠═304eec7c-4dec-4feb-b66b-65affd6e8fad
@@ -1788,16 +1889,27 @@ version = "0.9.1+5"
 # ╟─31677e3d-7a2d-4753-9dc0-0a53082e6cd8
 # ╟─f470427b-72ca-429c-81f1-9a388d33e99e
 # ╟─42624349-193f-44d7-94c5-9c1e7f1eced7
-# ╠═d6c5271f-3135-43be-943f-53898860f08e
+# ╟─2dac349e-a825-45b5-8947-7c69729bea7c
 # ╠═bbce6e6a-3b95-4718-9c01-6b31d7b39338
+# ╟─6e7360a1-e684-466d-be83-1918826c54b7
 # ╠═a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
 # ╟─eb7950dc-b59e-48ee-845b-d87bfc4f4edd
-# ╠═9d3b1a73-da29-4862-9293-5582b7adf117
+# ╟─9d3b1a73-da29-4862-9293-5582b7adf117
+# ╠═78cbf7a2-168a-4212-941e-7b95b3f514cc
+# ╟─777d1647-fe64-4a8f-8935-fcbd47ff3ea4
 # ╟─8a486868-fba6-4564-b7fc-3f23f3622d02
-# ╠═bb195565-987e-471f-bdbd-9563150ab687
 # ╠═3e151178-a5f2-4db4-a847-2ef697bb20af
 # ╠═7cd284b6-28b5-41ad-b068-2a4858f1f31f
 # ╠═df67c439-0652-462e-bd98-9b6e106ea161
+# ╠═2c057af3-a2cc-46ea-bb2c-4138d8ba90d5
+# ╠═84d2d0cf-8d76-41ad-92cb-f28d5968ae56
+# ╟─2e8b7a78-0f86-4a8d-b431-d8b116357bc2
+# ╠═f6891298-6ebd-4e61-bfa8-00689228d1a4
+# ╠═ccbb292d-b24a-4279-9299-8365f13438ed
+# ╠═dfd14873-9245-4faf-a22f-05369b6a195f
+# ╠═7b2cf1cc-ef3c-4b8f-8d4f-8af3a5f65609
+# ╠═fddd1551-776e-4fd1-ae37-0f7e8cc7bca1
+# ╟─911e1c44-d330-4ad8-a4e4-59c1521e6a2c
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╠═649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4

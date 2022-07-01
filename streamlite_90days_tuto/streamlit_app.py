@@ -39,3 +39,6 @@ start_time = st.slider(
      format="MM/DD/YY - hh:mm")
 st.write("Start time:", start_time)
 
+html_string = '<iframe src="https://speckle.xyz/embed?stream=19bbef82bc" width="600" height="400" frameborder="0"></iframe>'
+
+st.markdown(html_string, unsafe_allow_html=True)
