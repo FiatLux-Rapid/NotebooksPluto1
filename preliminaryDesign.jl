@@ -162,6 +162,9 @@ st.markdown(html_string, unsafe_allow_html=True)
 ```
 """
 
+# ╔═╡ 6b22f0d1-1ad0-489d-8b43-4d2b18ce1fe3
+
+
 # ╔═╡ 8a486868-fba6-4564-b7fc-3f23f3622d02
 md"""
 ## Un maquettage rapide et minimaliste des fonctionnalités FIATLUX
@@ -1897,6 +1900,7 @@ version = "0.9.1+5"
 # ╟─9d3b1a73-da29-4862-9293-5582b7adf117
 # ╠═78cbf7a2-168a-4212-941e-7b95b3f514cc
 # ╟─777d1647-fe64-4a8f-8935-fcbd47ff3ea4
+# ╠═6b22f0d1-1ad0-489d-8b43-4d2b18ce1fe3
 # ╟─8a486868-fba6-4564-b7fc-3f23f3622d02
 # ╠═3e151178-a5f2-4db4-a847-2ef697bb20af
 # ╠═7cd284b6-28b5-41ad-b068-2a4858f1f31f
