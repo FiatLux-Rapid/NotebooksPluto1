@@ -4,17 +4,17 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 3e151178-a5f2-4db4-a847-2ef697bb20af
-begin
-	using JuMP
-	import Ipopt
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
 end
 
-
-# ╔═╡ dfd14873-9245-4faf-a22f-05369b6a195f
-using PyCall
-
-# ╔═╡ 59edcf90-f222-11ec-0710-cf30cec93c3d
+# ╔═╡ 115b1730-f9d7-11ec-2afe-79dbd9292315
 begin
 	using Colors, ColorVectorSpace, ImageShow, FileIO, ImageIO
 	using PlutoUI
@@ -24,80 +24,109 @@ begin
 	using InteractiveUtils
 end
 
-# ╔═╡ c49dec22-9c65-46b3-b59b-503553be2181
-#https://htmlcheatsheet.com/
-
-# ╔═╡ 67e1a008-bebc-4901-b13d-4b6c5b2849cb
+# ╔═╡ c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
 md"""
-## Logbook
-Il y a un problème pour hops avec julia implanté dans python.
-appV6.py fonctionne correctement tant que jz est une fonction purement python mais ne fonctionne pas quand c'est une fonction julia. Alors que en effectuant python ligne à ligne cela fonctionne.
-
-
-**Guide · PythonCall & JuliaCall**
-
-
-https://cjdoris.github.io/PythonCall.jl/dev/pythoncall/
-
-
-**juliacall · PyPI**
-https://pypi.org/project/juliacall/
-
-
-**Tutorials - Speckle - The Platform For 3D Data**
-https://speckle.systems/tutorials/
-
-
-**Create Your First Speckle App using only Python 🐍**
-https://www.google.com/amp/s/speckle.systems/tutorials/create-your-first-speckle-app-using-only-python/amp/
-
+**Nous reprenons  [ce tuto](https://github.com/streamlit/30days-French). Et [ici](https://docs.streamlit.io/library/cheatsheet) l'antisèche!**
 """
 
-
-# ╔═╡ ac812745-7bd6-400e-a8ec-e7308c56133c
+# ╔═╡ 92cedcdf-894a-436c-826e-54e39727cebd
 md"""
-L'emploi de Speckle pour assurer des script python a été validé dans main.py (répertoire *pythonInSpecke*): lorsque l'on active dans GH *SpeckleSendReceive.gh* l'historique est mis a jour dans *http://localhost:8501/*
+> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Un example a été réalisé en suivant ce guide [*streamlit*](https://docs.streamlit.io/library/get-started/create-an-app )
+
+Il suffit de faire,par exemple, à partir d'une console windows powershell:
+```console
+ conda activate fiatlux
+ streamlit run https://gist.githubusercontent.com/FiatLux-Rapid/b51a332532d07e30fd83a84c62cbb933/raw/e98cd08ac6bf50bae42d6e84351b98c9aae631a0/streamlit_example.py
+```
+
+[Pour **apprendre streamlit en un mois** (et *en français* !)](https://github.com/streamlit/30days-French). Nous reprenons ce tuto dans ce notebook.
+  
+En particulier (day 7) nous avons connecté github à Streamlit Cloud afin de synchroniser github avec streamlit: [exemple de déploiement](https://fiatlux-rapid-notebo-streamlite-90days-tutostreamlit-app-v2ovvi.streamlitapp.com/)
+
+Un [tuto plus approfondi](https://docs.streamlit.io/library/components/components-api) permet les échanges bidirectionels entre utilisateur disposant d'un navigateur et un développeur disposant de python. [Cliquez ici](https://github.com/streamlit/component-template)  pour un example de réalisation.
 """
 
-# ╔═╡ 304eec7c-4dec-4feb-b66b-65affd6e8fad
-@htl """
- <p>appV6.py: OK if hops output function is pure Python. KO if its integrates Julia code</p>
-      <img src = "https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/images/appV6.PNG" alt = "Test Image" width = "800" height = "500"  border = "5" align = "left"/>
-"""
-
-
-# ╔═╡ cb32bb73-e448-4d0b-9cdb-8b6ee7fb2574
+# ╔═╡ 6d54abd0-fe75-4778-afc5-c392daa7705a
 md"""
-## Speckle python application
+Nous allons mettre en oeuvre streamlit à partir de ce notebook (via une console qui est activée pour une durée limitée afin de ne pas bloquer le notebook au delà de cette période)
 """
 
-# ╔═╡ 31677e3d-7a2d-4753-9dc0-0a53082e6cd8
-html"""   
-   <a href = "https://www.google.com/amp/s/speckle.systems/tutorials/create-your-first-speckle-app-using-only-python/amp/" target = "_self">Create Your First Speckle App using only Python 🐍
-</a>
-"""
-
-
-# ╔═╡ f470427b-72ca-429c-81f1-9a388d33e99e
+# ╔═╡ 94d2b294-7802-45d2-8496-79e851eda062
 md"""
->Les notebooks *Pluto* peuvent être exécutés à partir d'un environneemnt Julia soit localement soit à partir de leur URL . Ils peuvent exécuter du code Julia. Les cellules sont activées seulement si nécessaire pour conserver la cohérence d'ensemble (on ne peut affecter qu'une valeur à une variable, les cellules qui l'impliquent sont alors remises automatiquement à jour). L'ordre des cellules n'a pas d'importance pour la production du résultat. Les notebooks  *Pluto* offrent aussi toutes les possibilités de mise en forme (HTML/CSS, MarkDown) et de mise en oeuvre (Javascript). 
->Ils peuvent être exportés en pur html ou pdf.
->
->Pour rendre leurs exécutions indépendantes de l'utilisateur, il faut que tous les fichiers attachés soient accessibles par le net. 
+## Récupération sur github du lien à activer
+Il suffit de naviguer sur le dépôt github "FIATLUX\_Rapid" : 
+
+`https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/streamlite_90days_tuto/streamlit_app2.py` 
+
+et de cliquer sur *"raw"*. Le lien devient alors:
+
+` https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/streamlite_90days_tuto/streamlit_app2.py`
 """
 
-# ╔═╡ 42624349-193f-44d7-94c5-9c1e7f1eced7
+# ╔═╡ 421fefb8-32f8-4290-a120-120b13733df4
 md"""
-## Création d'un site web avec streamlit
-https://streamlit.io/
+## Exécution de Streamlit dans ce notebook:
+Le code est le suivant
+```console
+begin
+	lien="https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/streamlite_90days_tuto/streamlit_app2.py"
+	run_with_timeout(`streamlit run $lien`,DuréeActivation)
+end
+```
 """
 
-# ╔═╡ 2dac349e-a825-45b5-8947-7c69729bea7c
+# ╔═╡ 61742a78-0fab-4864-9d1d-49cef96de6e1
 md"""
-> [Streamlit a été racheté par Snowflake pour 800 M\$ ! ]  (https://www.finsmes.com/2022/03/snowflake-to-acquire-streamlit-for-reportedly-800m.html#:~:text=Snowflake%20(NYSE%3A%20SNOW)%2C,deal%20was%20reportedly%20%24800m.)( publié le 7 mars 2022),ce qui montre l'importance de ce logiciel auprès des investisseurs
+## Tuto interactif Streamlit
 """
 
-# ╔═╡ bbce6e6a-3b95-4718-9c01-6b31d7b39338
+# ╔═╡ 78a15aaf-ef0c-4b76-9d3a-f799f257139c
+begin
+	#@bind veg Radio(["potato" => "🥔", "carrot" => "🥕"], default="carrot")
+	path="https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/streamlite_90days_tuto/"
+@bind veg Radio([path*"streamlit_app2.py" => "Bouton", path*"streamlit_app8.py" => "Slider",path*"streamlit_app9.py" => "Line chart",path*"streamlit_app10.py" => "Select box",path*"streamlit_app11.py" => "Multiselect",path*"streamlit_app12.py" => "Checkbox",path*"streamlit_app14.py" => "Emploi de composant",path*"streamlit_app15.py" => "Insertion Latex",path*"streamlit_app16.py" => "Personnalisation des thèmes",path*"streamlit_app17.py" => "Partie cachée",path*"streamlit_app18.py" => "Chargement de fichier",path*"streamlit_app19.py" => "Mise en page",path*"streamlit_app21.py" => "Barre de progression",path*"streamlit_app22.py" => "Formulaire",path*"streamlit_app23.py" => "Récupération des paramètres de requêtes",path*"streamlit_app24.py" => "Optimisation par mise en cache",path*"streamlit_app25.py" => "Sessions multiples",path*"streamlit_app26.py" => "Utilisation d'API"])
+end
+
+
+# ╔═╡ 8dfda5c3-3e68-41bf-a047-e903763ec238
+lien=veg
+
+# ╔═╡ fa6d42e3-047e-425e-bffe-b4b8fc4e706b
+htl"""
+<a href=$veg> Edit code </a>
+"""
+
+# ╔═╡ e0da53c9-370c-40e9-93d0-7531b1b4f25b
+md"""
+## Ajout de composants streamlit
+Il existe de nombreux composants (voir [ici](https://streamlit.io/components) et [là](https://discuss.streamlit.io/t/streamlit-components-community-tracker/4634))
+
+On peut aussi créer ses propres composants (voir [*](https://docs.streamlit.io/library/components))
+
+Pour les télécharger:
+```console
+conda activate fiatlux
+pip install streamlit_pandas_profiling
+```
+"""
+
+# ╔═╡ 541e3c3b-1285-4d17-96ab-222afe27a55a
+md"""
+## Déploiement dans un environnement de développement avec [gitpod]( https://www.gitpod.io/)
+Remarque : Il existe d'autres environnements de développement cloud similaires, tels que :
+
+* [GitHub Codespaces](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/setting-up-your-python-project-for-codespaces)
+* [Replit](https://replit.com/)
+* [Cloud9](https://aws.amazon.com/cloud9/)
+
+Il faut autoriser la connexion avec github, j'ai choisi l'environnement VS code browser et accepter les extensions python. J'ai également installé l'extension gitpod dans VS studio code et remote-SSH. *A revoir ne fonctionne pas...*
+"""
+
+
+# ╔═╡ f0f85915-1551-489b-924c-5f3ebd15a951
+#run_with_timeout(`streamlit run https://gitpod.io/#/https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/streamlite_90days_tuto/`,DuréeActivation);
+
+# ╔═╡ e88d6481-435c-41af-ad56-e9b7560e4dc9
 function run_with_timeout(command, timeout::Integer = 5)
            cmd = run(command; wait=false)
             for i in 1:timeout
@@ -108,393 +137,31 @@ function run_with_timeout(command, timeout::Integer = 5)
             return false
 				end;
 
-# ╔═╡ 6e7360a1-e684-466d-be83-1918826c54b7
-md"""
-> 👍	Il est possible de proposer un accès payant à un utilisateur de FIATLUX en validant son accès pour une durée donnée avec le programme ci-après:
-"""
-
-# ╔═╡ a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
-begin   # execution is OK but interrupt not possible : here with timeout dely else ouside Julia 
-	mycommand=`streamlit hello`
-	run_with_timeout(mycommand,10)  # without timeout run(mycommand)
-end;
-
-# ╔═╡ eb7950dc-b59e-48ee-845b-d87bfc4f4edd
-md"""
-> 👍	Il est impossible (sous Windows) d'arreter une commande telle que run(`streamlit hello'). La fonction *run\_with\_timeout* l'arrête passé un certain délai
-"""
-
-# ╔═╡ 9d3b1a73-da29-4862-9293-5582b7adf117
-md"""
-> 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Un example a été réalisé en suivant [*streamlit*](https://docs.streamlit.io/library/get-started/create-an-app )
-
-Il suffit de faire:
-
-* conda activate fiatlux
-* streamlit run https://gist.githubusercontent.com/FiatLux-Rapid/b51a332532d07e30fd83a84c62cbb933/raw/e98cd08ac6bf50bae42d6e84351b98c9aae631a0/streamlit_example.py
-
-[Pour **apprendre streamlit en un mois** (et *en français* !)](https://github.com/streamlit/30days-French)
-
-En particulier (day 7) nous avons connecté github à Streamlit Cloud afin de synchroniser github avec streamlit: [exemple de déploiement](https://fiatlux-rapid-notebo-streamlite-90days-tutostreamlit-app-v2ovvi.streamlitapp.com/)
-
-Un [tuto plus approfondi](https://docs.streamlit.io/library/components/components-api) permet les échanges bidirectionels entre utilisateur disposant d'un navigateur et un développeur disposant de python. [Clickez ici pour un démarrage rapide](https://github.com/streamlit/component-template)
-"""
-
-# ╔═╡ 78cbf7a2-168a-4212-941e-7b95b3f514cc
-@htl """
-<iframe src="https://speckle.xyz/embed?stream=19bbef82bc" width="600" height="400" frameborder="0"></iframe>
-<br>
-<div align = "middle" > <p>Le lien est directement récupéré à partir de speckle.xyz</centered> </p> </div>
-"""
-
-# ╔═╡ 777d1647-fe64-4a8f-8935-fcbd47ff3ea4
-md"""
-### Activation site web streamlit
-```console 
- conda activate fiatlux
- streamlit run D:\2022\FIATLUX_Implementation\NotebooksPluto\streamlite_90days_tuto\streamlit_app.py
-```
-streamlit_app.py contient l'html:
-
-```console
-html_string = '<iframe src="https://speckle.xyz/embed?stream=19bbef82bc" width="600" height="400" frameborder="0"></iframe>'
-st.markdown(html_string, unsafe_allow_html=True)
-```
-"""
-
-# ╔═╡ 6b22f0d1-1ad0-489d-8b43-4d2b18ce1fe3
-md"""
-déploiement: par example
-https://fiatlux-rapid-notebook-createcomponentinfrontendmyscript-rsyejx.streamlitapp.com/
-"""
-
-
-# ╔═╡ 8a486868-fba6-4564-b7fc-3f23f3622d02
-md"""
-## Un maquettage rapide et minimaliste des fonctionnalités FIATLUX
-L'objectif est de faire une application *FiatLux* minimaliste intégrant ses principales fonctions; l'objectif est de réaliser un verre (impression 3D) avec le volume maximal pour une quantité de matière donnée avec les paramètres:
-* e=épaisseur (mm)
-* r=rayon (cm)
-* h=hauteur (cm)
-* q=quantité de matière (cm$$^3$$)
-Grasshopper réalise le verre en 3D, Julia fait l'optimisation, Speckle la transmission des données entre l'utilisateur ( et son navigateur) et le développeur
-### * Code en julia pour l'optimisation
-!!! note
-    ```julia
-	begin
-	    using JuMP
-	    import Ipopt 
-		model = Model(Ipopt.Optimizer)
-		r,h= nothing, nothing # clear the julia variables
-		@variable(model, r >= 0.0)
-		@variable(model, h >= 0.0)
-		vol=3*π
-		e=1
-		@NLobjective(model, Max, π*r^2*h)
-		@NLconstraint(model, c, π*r^2*e+2*π*r*h*e== vol)
-		optimize!(model)
-		@show [value(r),value(h)];
+# ╔═╡ f0eff59b-f392-4900-b659-1a08e0b7ec78
+begin
+	struct MySlider 
+	    range::AbstractRange
+	    default::Number
 	end
-    ```
-
-### * Modèle Grasshopper
-Partons de l'existant avec [*cette réalisation*](http://wiki.iad.zhdk.ch/wiki/download/thumbnails/743604339/image2017-11-23_22-52-16.png?version=1&modificationDate=1578151744396&cacheVersion=1&api=v2&width=811&height=250) en suivant [ce guide](http://wiki.iad.zhdk.ch/DT/743604339/Grasshopper+Basics). Le fichier GH correspondant est *GH_Cup.ghx*.
-Nous avons ensuite rajouté l'envoi du résultat 3D via le plugin Speckle.
-On peut alors accéder à ce modèle 3D via l'[url](https://speckle.xyz/streams/19bbef82bc/commits/3ad77a0980?c=%5B0.17717,0.19543,0.18226,-0.01664,0.00163,0.06501,0,1%5D)
-
-L'hisorique de ce stream est conservé [ici](https://speckle.xyz/streams/19bbef82bc/branches/main)
-
-
-### * Connexion Navigateur utilisateur ↔  Développeur en Python
-
-Nous allons utiliser streamlit, SpecklePy en suivant [*ces instructions*](https://speckle.systems/tutorials/create-your-first-speckle-app-using-only-python/) et [cette video](https://www.youtube.com/watch?v=17UOP4XLim8&list=PLlI5Dyt2HaEu83rSRNGmgaDgSl7ytrS4M)
-
-Commençons par un [exemple simple en python](https://github.com/specklesystems/speckle-examples/tree/main/python/speckle-py-starter) 
-
-Dans le fichier [02_create_and_send.py](D:\2022\FIATLUX_Implementation\NotebooksPluto\ToyExample\simpleExample\python\speckle-py-starter\02_create_and_send.py) il faut remplacer ligne 12 avec un stream créé via speckle.xyz et une nouvelle branche nommée duplicated
-
-Il faut aussi installer graphql
-```console
-npm init
-npm install graphql --save
-```
-
-Example javascript : Il faut un token créé sur speckle.xyz (rubrique *profile* ):17a898dbd280df9e42ef5a29676776e126b8418b18
-  8557c57f7fe475ae727995bb4dbc0ee644aed7470f
-Il faut que le stream soit public pour qu l'application fonctionne. 
-Pourle guide utilisateur de cette fonctionnalité voir [ici](https://speckle.guide/user/web.html)
-"""
-
-# ╔═╡ 7cd284b6-28b5-41ad-b068-2a4858f1f31f
-begin
-	model = Model(Ipopt.Optimizer)
-	r,h= nothing, nothing # clear the julia variables
-	@variable(model, r >= 0.0)
-	@variable(model, h >= 0.0)
-	vol=9
-	e=1e-1
-	@NLobjective(model, Max, π*r^2*h)
-	@NLconstraint(model, c, π*r^2*e+2*π*r*h*e== vol)
-	optimize!(model);
-	[value(r),value(h)];
-    
+	function Base.show(io::IO, ::MIME"text/html", slider::MySlider)
+	    print(io, """
+			<input type="range" 
+			min="$(first(slider.range))" 
+			step="$(step(slider.range))"
+			max="$(last(slider.range))" 
+			value="$(slider.default)"
+			oninput="this.nextElementSibling.value=this.value">
+			<output>$(slider.default)</output>""")
+	end
 end
 
-# ╔═╡ df67c439-0652-462e-bd98-9b6e106ea161
-value(π*r^2*e+2*π*r*h*e)
+# ╔═╡ 2b13b2b7-5103-4586-b001-7c32c755bfa3
+md"Durée activation (s): $(@bind DuréeActivation MySlider(1:100, 20))"
 
-# ╔═╡ 2c057af3-a2cc-46ea-bb2c-4138d8ba90d5
-md"""
-## Logbook Juillet 2022
-"""
+# ╔═╡ 80e38f46-3757-4b66-bdec-9c4807f7060d
+run_with_timeout(`streamlit run $lien`,DuréeActivation);
 
-# ╔═╡ 84d2d0cf-8d76-41ad-92cb-f28d5968ae56
-md"""
-## * Connexion Julia (pluto notebook) --> Python
-Intégration du code python dans julia
-"""
-
-# ╔═╡ 2e8b7a78-0f86-4a8d-b431-d8b116357bc2
-md"""  
-### PythonCall & JuliaCall
-https://cjdoris.github.io/PythonCall.jl/dev/pythoncall/
-https://docs.juliahub.com/PythonCall/WdXsa/0.5.0/juliacall/
-using PythonCall;
-Testé mais finalement replis sur PyCall 
-"""
-
-# ╔═╡ f6891298-6ebd-4e61-bfa8-00689228d1a4
-begin
-	ENV["JULIA_CONDAPKG_BACKEND"] = "System"
-end
-
-# ╔═╡ ccbb292d-b24a-4279-9299-8365f13438ed
-md"""
-### Julia --> Python (via PyCall) --> Speckle
-Il suffit d'insérer le code python avec py\"\"\"  ...\"\"\"
-"""
-
-# ╔═╡ 7b2cf1cc-ef3c-4b8f-8d4f-8af3a5f65609
-ENV["PYTHON"] = raw"C:\Python39\python.exe" # example for Windows, "raw" to not have to escape: "C:\\Python310-x64\\python.exe"
-
-
-# ╔═╡ fddd1551-776e-4fd1-ae37-0f7e8cc7bca1
-begin
-# les objets sont envoyés dans Grasshopper GH_Cup.ghx
-py"""
-# Running this script will pull the latest commit from the main branch
-# of the specified stream and duplicate it inside a different branch.
-# (branch should exist already or the script will fail
-
-from specklepy.api.client import SpeckleClient
-from specklepy.api.credentials import get_default_account, get_local_accounts
-from specklepy.transports.server import ServerTransport
-from specklepy.api import operations
-from specklepy.objects.base import Base
-from specklepy.objects.geometry import Point
-# The id of the stream to work with (we're assuming it already exists in your default account's server)
-streamId = "834e9dc3f1"
-#<iframe src="https://speckle.xyz/embed?stream=834e9dc3f1" width="600" height="400" frameborder="0"></iframe>
-branchName = "duplicated"
-
-
-# Initialise the Speckle client pointing to your specific server.
-client = SpeckleClient(host="https://speckle.xyz")
-
-# Get the default account
-account = get_default_account()
-# If you have more than one account, or the account is not the default, use get_local_accounts
-# accounts = get_local_accounts()
-# account = accounts[0]
-
-# Authenticate using the account token
-#client.authenticate(token=account.token)
-client.authenticate_with_token(account.token)
-# Get the main branch with it's latest commit reference
-branch = client.branch.get(streamId, "main", 1)
-
-
-# Create the server transport for the specified stream.
-transport = ServerTransport(client=client, stream_id=streamId)
-
-
-# TODO: Perform some operation on the received data
-
-newObj = Base()
-newObj["myTextProp"] = "Some text value"
-newObj["rayon bas verre"] = 70
-newObj["mySpeckleProp"] = Point.from_coords(1, 1, 1)
-
-
-# Send the points using a specific transport
-newHash = operations.send(base=newObj, transports=[transport])
-
-# you can now create a commit on your stream with this object
-commit_id = client.commit.create(
-    stream_id=streamId,
-    branch_name=branchName,
-    object_id=newHash,
-    message="Automatic commit created the python starter example",
-    source_application="PyStarter"
-)
-
-"""
-#get value !
-print("Successfully created commit with id: ", py"commit_id")
-
-end
-
-# ╔═╡ 911e1c44-d330-4ad8-a4e4-59c1521e6a2c
-md"""
-Envoi/réception de données avec streamlit voir 
-D:\2022\FIATLUX_Implementation\NotebooksPluto\CreateComponentinFrontEnd
-
-
-https://discuss.streamlit.io/t/code-snippet-create-components-without-any-frontend-tooling-no-react-babel-webpack-etc/13064
-
-
-"""
-
-# ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
-md"""
-## Lots de travaux
-"""
-
-# ╔═╡ 649c99a2-1603-42fe-980c-b6d102f9c01b
-md"""
-### 1. Lot 1: Avant-projet (durée 6 mois)
-#### 1.1 Spécification du logiciel FIATLUX
-Le logiciel s'adresse à trois types d'utilisateurs : les *développeurs* (qui disposent des ressources logiciel FiatLux), les *étudiants* (qu'il faut former aux outils de base) et les *utilisateurs finaux* (qui ne dispose que d'un navigateur)
-1. Réalisation de notebooks de formation dans l'esprit de [*Introduction to computational thinking*](https://computationalthinking.mit.edu/Spring21/) 
-1. *Interconnexion Julia Grasshopper*
-    * en local (plugin Julia) 
-    * via le cloud
-2. Contrôle collaboratif à distance d'un Rhino Grasshopper (GH 🦗)
-3. Programmation visuelle hiérarchique (pour éviter l'effet *"spaghetti"*)
-4. Interconnexion navigateur *utilisateurs finaux* / sites *développeur*
-5. Porter la bibliothèque [SciML](https://sciml.ai/) en programmation visuelle (au moins partiellement)
-5. Créer un environnement multi-utilisateurs (avec node.js)
-6. Porter la bibliothèque [OpenModelica](https://www.openmodelica.org/) dans [ModelingToolKit](https://github.com/SciML/ModelingToolkit.jl)
-7. Stockage des données FIATLUX sur le cloud via [GitHub](https://github.com/) et [Speckle](https://speckle.systems/) avec automatisation de la gestion des évolutions logiciel. [lien pour automatiser GitHub](https://resources.github.com/devops/tools/automation/actions/) 
-8. *Mise en place* et *interconnexion* de ressources logiciel comme python3,excel...
-9. Lien via le cloud entre les *utilisateurs finaux* et le *ou les* sites *développeurs*. 
-10. *Digital twins* : L'optimisation automatique nécessite de réaliser de nombreuses boucles afin de converger vers le résultats optimum cela est possible en réalisant des modèles jumeaux des modèles (en général lourd de mise en œuvre) définissant le process à optimiser.
-11. La *marche des Sphères* : pour résoudre des problèmes physiques incluant une géométrie complexe
-12. Outils permettant la création d'un site dédié aux *utilisateurs finaux* pour une application spécifique.
-13. Liaison de FIATLUX avec l'impression 3D
-14. Liaison de FIATLUX avec la mise en oeuvre sur microcontrôleur
-15. Outils permettant d'accéder aux ressources FIATLUX disponibles avec un exemple de mise en œuvre pour chacun d'entre eux.
-
-
-**L'objectif du lot 1.1 est d'établir l'avant projet de FIATLUX en explorant les pistes susceptibles de développer les briques précédemment listées.** 
-
-Cette liste pourra être compléter suite au retour d'expérience du lot 1.2
-
-"""
-
-# ╔═╡ 9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
-md"""
-#### 1.2 Tâches à automatiser pour le conditionnement électrique
-1. Génération et simplification automatique et symbolique des équations d'un circuit électrique (convertisseurs)
-1. Simulation différentiable du circuit
-1. Optimisation de son pilotage par analyse des espaces d’état
-1. Modélisation électromagnétique 3D et thermique par la marche des sphères 
-1. Modélisation  et optimisation de bout en bout du transformateur (jusqu'aux pièces imprimées en 3D):
-* applications en mode pulsé
-* applications en mode continu
-1. Association de convertisseurs en réseau (via fibre optique et/ou Wifi)
-1. Programmes des microcontrôleurs et de l’IHM générés automatiquement ( automates à états  finis, PWM…) 
-
-**L'objectif du lot 1.2 est d'établir l'avant projet de FIATLUX en explorant les pistes susceptibles de développer les briques précédemment listées.**
-
-Cette liste pourra être compléter suite au retour d'expérience du lot 1.1
-"""
-
-# ╔═╡ d038e213-b29b-4027-a788-0822e3368015
-md""" 
-### Réalisation de notebooks de formation
-"""
-
-# ╔═╡ 97f65e05-05ea-4785-9707-6c53560356b5
-md" voir [pour la formation HTML,CSS,Markdown et Javascript](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/tutoHTML.jl.html) "
-
-# ╔═╡ d683a576-b1f0-4635-b23f-c64e3afbbce9
-md"""
-### [Speckle short video introduction](https://youtu.be/B9humiSpHzM)
-"""
-
-
-# ╔═╡ bd3e5ff0-b513-4890-9bee-19a39e87a62e
-
-md"""
-### Envoi et réception de données de GH à GH remote
-"""
-
-
-# ╔═╡ 02c9a9ac-ef95-4278-a507-af3f345c0279
-@htl """
-<p align = "center" > <font size = "4" >  GH ↔️ ☁️  ↔️ GH  </font>  </p>
-"""
-
-# ╔═╡ 8fb5c378-95a9-4f66-8908-4abac0ae7d07
-md"""
-Ouvrir [speckle.xyz](https://speckle.xyz/) pour obtenir un lien de de communication (new stream)
-Dans les exemples qui suivent, un seul fichier Grasshopper est mis en oeuvre pour l'envoi et la réception de données. En pratique l'envoi et la réception sont délocalisés 
-
-Dans GH mettre ce lien comme chemin du plugin "send" et "receive".
-L'envoi et réception peut être fait manuellement ou automatiquement suivant la configuration des plugins: [implantation dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/SendReceiveRemote.PNG?raw=true)
-
-[L'historique des échanges est accessible dans speckle.xyz](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/HistoriqueSpeckle.PNG?raw=true)
-"""
-
-# ╔═╡ f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
-md"""
-
-Les données transmisent peuvent être des objets GH comme un cercle dans l'exemple suivant:
-> [Le fichier gh correspondant](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/f9b79f98d9ad2d60ddde71c40c9e76031f428e9a/grasshopper/SpeckleSendReceived.gh)
-"""
-
-# ╔═╡ 4e04718d-2804-4ef8-b012-79c78a98fadd
-md"""
-### Collecte données texte à partir de GitHub
-
-
-[GH envoi et réception de données délocalisée](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/send_receiveSpeckle.png?raw=true)  
-"""
-
-# ╔═╡ 2afdefcf-3786-4fc3-843a-22d962627850
-
-
-# ╔═╡ 4e40bdd7-cdc8-4241-b086-82f365c74d4e
-md"""
-> 👍	Il est possible de récupérer les données d'un fichier texte situé sur GitHub dans Grasshopper"
-> Il suffit de récupérer le lien en surlignant les données à récupérer dans GitHub, puis click droit pour trouver le lien. Un simple traitement des données est alors [mis en oeuvre dans GH](https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/master/images/CollectDataFromGitHubinGH.PNG?raw=true) pour "nettoyer" les données
-
-"""
-
-
-# ╔═╡ bbcf9a3b-6643-4940-a75a-581787e75a53
-
-
-# ╔═╡ 745b0658-f0ed-467e-ad16-473db9a40a5d
-md"""
-### Lot 2 : Développement logiciel(durée 30 mois)
-### Lot 3 : Application au conditionnement électrique (durée 30 mois)
-
-"""
-
-
-# ╔═╡ 523d898c-4eb7-4e74-a3af-d59e32ee3935
-md"""
-## Ressources
-"""
-
-# ╔═╡ f558baf4-d69c-4062-84e0-f24aa5bf9ed8
-md"""
-#### Julia code expansion 
-"""
-
-# ╔═╡ 9656c208-22af-47d4-9c9c-ef27151913b4
+# ╔═╡ ed277ddc-e955-4532-aa6f-3915a0e6f57b
 details(x, summary="Show more") = @htl("""
 	<details>
 		<summary>$(summary)</summary>
@@ -502,124 +169,7 @@ details(x, summary="Show more") = @htl("""
 	</details>
 	""")
 
-# ╔═╡ ad6ab075-fd5a-4631-8312-0edd441e7565
-details(md""" 
-
-
-#### [Création d'un compte GitHub avec qqes astuces](https://github.com/join?plan=free&ref_cta=Join%2520for%2520free&ref_loc=cards&ref_page=%2Fpricing&source=pricing-card-free)
-
-> + Le nom est FiatLux-Rapid et le password FiatLux-01
-> + mail @ jp.brasile@gmail.com
-> + Ensuite lancer github avec le password, github demandera le code qu'il a envoyé par mail pour valider la création
-
-Nous allons sauvegarder le notebook d'abord manuellement puis automatiquement pour ses mises à jour
-##### Mise à jour manuelle
-On créer le répertoire FiatLux-notebook en suivant [*les instructions*](https://gist.github.com/mindplace/b4b094157d7a3be6afd2c96370d39fad#file-git_and_github_instructions-md)
-
-add file tutoHTML.jl drag and drop  commit 
-
-On récupère son [url](https://github.com/FiatLux-Rapid/NotebooksPluto/blob/f11a43dacf65c3959cdbcf9207aa05f6d84ed373/tutoHTML.jl) (copy permalink)
-...que l'on peut lancer en mettant cette url comme lien du notebook pluto à ouvrir
-
-##### Contrôle via GitHub Desktop 
-1. Télécharger [Github Desktop](https://desktop.github.com/)
-2. Connexion git local <--> Github : file /options/ 
-3. ajout du répertoire (ctrl O dans github desktop) D:\...\NotebooksPluto
-4. commit to master
-5. push to github
-
-> 👍	La visualisation d'un fichier html peut être faite en l'ouvrant avec *Visual Studio Code* et en cliquant sur "Go Live"
-
-> 👍   Pour afficher un html dans un navigateur, il faut soit imoprter tout le repository de Github soit le seul fichier html (ctl C, Ct v dans WordPad avec un nom se terminant par .html) 
-
-> 👍  le rajout d'un emoji se fait en le trouvant sur le [net](https://gist.github.com/rxaviers/7360908) et couper coller !
-
-""",
-	md"""
-### Gestion des historiques avec git et Github
-""")
-
-# ╔═╡ 9692a16c-e9e8-484e-aa7a-2933d5c60a5d
-details(md"""
-```julia
-function func(x)
-    # ...
-end
-```
-""","func(x)")
-
-
-# ╔═╡ f7977fc7-610c-491b-a7ca-2c433169f103
-details(md"""
-#### title
-hidden title
-    ""","test")
-
-# ╔═╡ e67654b3-e7de-47ad-b72c-cf80b2f0f992
-details(md"""
-	```htmlmixed
-	<script type="module" id="asdf">
-		//await new Promise(r => setTimeout(r, 1000))
-
-		const { html, render, Component, useEffect, useLayoutEffect, useState, useRef, useMemo, createContext, useContext, } = await import( "https://cdn.jsdelivr.net/npm/htm@3.0.4/preact/standalone.mjs")
-
-		const node = this ?? document.createElement("div")
-
-		const new_state = $(json(state))
-
-		if(this == null){
-
-			// PREACT APP STARTS HERE
-
-			const Item = ({value}) => {
-				const [loading, set_loading] = useState(true)
-
-				useEffect(() => {
-					set_loading(true)
-
-					const handle = setTimeout(() => {
-						set_loading(false)
-					}, 1000)
-
-					return () => clearTimeout(handle)
-				}, [value])
-
-				return html`<li>\${loading ? 
-					html`<em>Loading...</em>` : 
-					value
-				}</li>`
-			}
-
-			const App = () => {
-
-				const [state, set_state] = useState(new_state)
-				node.set_app_state = set_state
-
-				return html`<h5>Hello world!</h5>
-					<ul>\${
-					state.x.map((x,i) => html`<\${Item} value=\${x} key=\${i}/>`)
-				}</ul>`;
-			}
-
-			// PREACT APP ENDS HERE
-
-			render(html`<\${App}/>`, node);
-
-		} else {
-
-			node.set_app_state(new_state)
-		}
-		return node
-	</script>
-	```
-	""", "Show with syntax highlighting")
-
-# ╔═╡ 8c87a9d3-d839-4468-be3a-25cf2c240537
-md"""
-$ text $
-"""
-
-# ╔═╡ 8af69410-c7dd-4155-acfb-e710a75e95ea
+# ╔═╡ 5a3f3b34-4364-45e0-8d7b-66d4aa1559ce
 PlutoUI.TableOfContents(aside=true)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -632,12 +182,9 @@ HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
-Ipopt = "b6b21f68-93f8-5de0-b562-5493be1d77c9"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
-JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 
 [compat]
 ColorVectorSpace = "~0.9.9"
@@ -646,12 +193,9 @@ FileIO = "~1.14.0"
 HypertextLiteral = "~0.9.4"
 ImageIO = "~0.6.6"
 ImageShow = "~0.3.6"
-Ipopt = "~1.0.2"
 JSON = "~0.21.3"
-JuMP = "~1.1.1"
 Plots = "~1.31.1"
 PlutoUI = "~0.7.39"
-PyCall = "~1.93.1"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -660,12 +204,6 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.7.2"
 manifest_format = "2.0"
-
-[[deps.ASL_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "6252039f98492252f9e47c312c8ffda0e3b9e78d"
-uuid = "ae81ac8f-d209-56e5-92de-9978fef736f9"
-version = "0.1.3+0"
 
 [[deps.AbstractFFTs]]
 deps = ["ChainRulesCore", "LinearAlgebra"]
@@ -694,12 +232,6 @@ uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 [[deps.Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
-[[deps.BenchmarkTools]]
-deps = ["JSON", "Logging", "Printf", "Profile", "Statistics", "UUIDs"]
-git-tree-sha1 = "4c10eee4af024676200bc7752e536f858c6b8f93"
-uuid = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
-version = "1.3.1"
-
 [[deps.Bzip2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "19a35467a82e236ff51bc17a3a44b69ef35185a2"
@@ -717,12 +249,6 @@ git-tree-sha1 = "4b859a208b2397a7a623a03449e4636bdb17bcf2"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
 version = "1.16.1+1"
 
-[[deps.Calculus]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "f641eb0a4f00c343bbc32346e1217b86f3ce9dad"
-uuid = "49dc2e85-a5d0-5ad3-a950-438e2897f1b9"
-version = "0.5.1"
-
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra", "SparseArrays"]
 git-tree-sha1 = "2dd813e5f2f7eec2d1268c57cf2373d3ee91fcea"
@@ -734,18 +260,6 @@ deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
 git-tree-sha1 = "1e315e3f4b0b7ce40feded39c73049692126cf53"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.3"
-
-[[deps.CodecBzip2]]
-deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
-git-tree-sha1 = "2e62a725210ce3c3c2e1a3080190e7ca491f18d7"
-uuid = "523fee87-0ab8-5b00-afb7-3ecf72e48cfd"
-version = "0.7.2"
-
-[[deps.CodecZlib]]
-deps = ["TranscodingStreams", "Zlib_jll"]
-git-tree-sha1 = "ded953804d019afa9a3f98981d99b33e3db7b6da"
-uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.7.0"
 
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "Random"]
@@ -771,12 +285,6 @@ git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
 
-[[deps.CommonSubexpressions]]
-deps = ["MacroTools", "Test"]
-git-tree-sha1 = "7b8a93dba8af7e3b42fecabf646260105ac373f7"
-uuid = "bbf7d656-a473-5ed7-a52c-81e309532950"
-version = "0.3.0"
-
 [[deps.Compat]]
 deps = ["Dates", "LinearAlgebra", "UUIDs"]
 git-tree-sha1 = "924cdca592bc16f14d2f7006754a621735280b74"
@@ -786,12 +294,6 @@ version = "4.1.0"
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-
-[[deps.Conda]]
-deps = ["Downloads", "JSON", "VersionParsing"]
-git-tree-sha1 = "6e47d11ea2776bc5627421d59cdcc1296c058071"
-uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
-version = "1.7.0"
 
 [[deps.Contour]]
 deps = ["StaticArrays"]
@@ -822,18 +324,6 @@ uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
 [[deps.DelimitedFiles]]
 deps = ["Mmap"]
 uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
-
-[[deps.DiffResults]]
-deps = ["StaticArrays"]
-git-tree-sha1 = "c18e98cba888c6c25d1c3b048e4b3380ca956805"
-uuid = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
-version = "1.0.3"
-
-[[deps.DiffRules]]
-deps = ["IrrationalConstants", "LogExpFunctions", "NaNMath", "Random", "SpecialFunctions"]
-git-tree-sha1 = "28d605d9a0ac17118fe2c5e9ce0fbb76c3ceb120"
-uuid = "b552c78f-8df3-52c6-915a-8e097449b14b"
-version = "1.11.0"
 
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
@@ -896,12 +386,6 @@ deps = ["Printf"]
 git-tree-sha1 = "8339d61043228fdd3eb658d86c926cb282ae72a8"
 uuid = "59287772-0a20-5a39-b81b-1366585eb4c0"
 version = "0.4.2"
-
-[[deps.ForwardDiff]]
-deps = ["CommonSubexpressions", "DiffResults", "DiffRules", "LinearAlgebra", "LogExpFunctions", "NaNMath", "Preferences", "Printf", "Random", "SpecialFunctions", "StaticArrays"]
-git-tree-sha1 = "2f18915445b248731ec5db4e4a17e451020bf21e"
-uuid = "f6369f11-7733-5829-9624-2563aa707210"
-version = "0.10.30"
 
 [[deps.FreeType2_jll]]
 deps = ["Artifacts", "Bzip2_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
@@ -1053,18 +537,6 @@ git-tree-sha1 = "b3364212fb5d870f724876ffcd34dd8ec6d98918"
 uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
 version = "0.1.7"
 
-[[deps.Ipopt]]
-deps = ["Ipopt_jll", "MathOptInterface"]
-git-tree-sha1 = "8b7b5fdbc71d8f88171865faa11d1c6669e96e32"
-uuid = "b6b21f68-93f8-5de0-b562-5493be1d77c9"
-version = "1.0.2"
-
-[[deps.Ipopt_jll]]
-deps = ["ASL_jll", "Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "MUMPS_seq_jll", "OpenBLAS32_jll", "Pkg"]
-git-tree-sha1 = "e3e202237d93f18856b6ff1016166b0f172a49a8"
-uuid = "9cc047cb-c261-5740-88fc-0cf96f7bdcc7"
-version = "300.1400.400+0"
-
 [[deps.IrrationalConstants]]
 git-tree-sha1 = "7fd44fd4ff43fc60815f8e764c0f352b83c49151"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
@@ -1103,12 +575,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "b53380851c6e6664204efb2e62cd24fa5c47e4ba"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
 version = "2.1.2+0"
-
-[[deps.JuMP]]
-deps = ["Calculus", "DataStructures", "ForwardDiff", "LinearAlgebra", "MathOptInterface", "MutableArithmetics", "NaNMath", "OrderedCollections", "Printf", "SparseArrays", "SpecialFunctions"]
-git-tree-sha1 = "534adddf607222b34a0a9bba812248a487ab22b7"
-uuid = "4076af6c-e467-56ae-b986-b466b2749572"
-version = "1.1.1"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1224,18 +690,6 @@ version = "0.3.15"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
-[[deps.METIS_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "1d31872bb9c5e7ec1f618e8c4a56c8b0d9bddc7e"
-uuid = "d00139f3-1899-568f-a2f0-47f597d42d70"
-version = "5.1.1+0"
-
-[[deps.MUMPS_seq_jll]]
-deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "METIS_jll", "OpenBLAS32_jll", "Pkg"]
-git-tree-sha1 = "29de2841fa5aefe615dea179fcde48bb87b58f57"
-uuid = "d7ed1dd3-d0ae-5e8e-bfb4-87a502085b8d"
-version = "5.4.1+0"
-
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
 git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
@@ -1250,12 +704,6 @@ version = "0.4.1"
 [[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
-
-[[deps.MathOptInterface]]
-deps = ["BenchmarkTools", "CodecBzip2", "CodecZlib", "DataStructures", "ForwardDiff", "JSON", "LinearAlgebra", "MutableArithmetics", "NaNMath", "OrderedCollections", "Printf", "SparseArrays", "SpecialFunctions", "Test", "Unicode"]
-git-tree-sha1 = "21e4d46307492e77332c777699c90d58a4fa3245"
-uuid = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
-version = "1.5.0"
 
 [[deps.MbedTLS]]
 deps = ["Dates", "MbedTLS_jll", "Random", "Sockets"]
@@ -1290,12 +738,6 @@ version = "0.3.3"
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
 
-[[deps.MutableArithmetics]]
-deps = ["LinearAlgebra", "SparseArrays", "Test"]
-git-tree-sha1 = "4e675d6e9ec02061800d6cfb695812becbd03cdf"
-uuid = "d8a4904e-b15c-11e9-3269-09a3773c0cb0"
-version = "1.0.4"
-
 [[deps.NaNMath]]
 git-tree-sha1 = "737a5957f387b17e74d4ad2f440eb330b39a62c5"
 uuid = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
@@ -1321,12 +763,6 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
 version = "1.3.5+1"
-
-[[deps.OpenBLAS32_jll]]
-deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "9c6c2ed4b7acd2137b878eb96c68e63b76199d0f"
-uuid = "656ef2d0-ae68-5445-9ca0-591084a874a2"
-version = "0.3.17+0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -1445,21 +881,11 @@ version = "1.3.0"
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[deps.Profile]]
-deps = ["Printf"]
-uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
-
 [[deps.ProgressMeter]]
 deps = ["Distributed", "Printf"]
 git-tree-sha1 = "d7a7aef8f8f2d537104f170139553b14dfe39fe9"
 uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
 version = "1.7.2"
-
-[[deps.PyCall]]
-deps = ["Conda", "Dates", "Libdl", "LinearAlgebra", "MacroTools", "Serialization", "VersionParsing"]
-git-tree-sha1 = "1fc929f47d7c151c839c5fc1375929766fb8edcc"
-uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
-version = "1.93.1"
 
 [[deps.QOI]]
 deps = ["ColorTypes", "FileIO", "FixedPointNumbers"]
@@ -1627,12 +1053,6 @@ git-tree-sha1 = "fcf41697256f2b759de9380a7e8196d6516f0310"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
 version = "0.6.0"
 
-[[deps.TranscodingStreams]]
-deps = ["Random", "Test"]
-git-tree-sha1 = "216b95ea110b5972db65aa90f88d8d89dcb8851c"
-uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.9.6"
-
 [[deps.Tricks]]
 git-tree-sha1 = "6bac775f2d42a611cdfcd1fb217ee719630c4175"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
@@ -1660,11 +1080,6 @@ version = "0.4.1"
 git-tree-sha1 = "34db80951901073501137bdbc3d5a8e7bbd06670"
 uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
 version = "0.1.2"
-
-[[deps.VersionParsing]]
-git-tree-sha1 = "58d6e80b4ee071f5efd07fda82cb9fbe17200868"
-uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
-version = "1.3.0"
 
 [[deps.Wayland_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg", "XML2_jll"]
@@ -1888,60 +1303,24 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═c49dec22-9c65-46b3-b59b-503553be2181
-# ╟─67e1a008-bebc-4901-b13d-4b6c5b2849cb
-# ╟─ac812745-7bd6-400e-a8ec-e7308c56133c
-# ╠═304eec7c-4dec-4feb-b66b-65affd6e8fad
-# ╟─cb32bb73-e448-4d0b-9cdb-8b6ee7fb2574
-# ╟─31677e3d-7a2d-4753-9dc0-0a53082e6cd8
-# ╟─f470427b-72ca-429c-81f1-9a388d33e99e
-# ╟─42624349-193f-44d7-94c5-9c1e7f1eced7
-# ╟─2dac349e-a825-45b5-8947-7c69729bea7c
-# ╠═bbce6e6a-3b95-4718-9c01-6b31d7b39338
-# ╟─6e7360a1-e684-466d-be83-1918826c54b7
-# ╠═a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
-# ╟─eb7950dc-b59e-48ee-845b-d87bfc4f4edd
-# ╠═9d3b1a73-da29-4862-9293-5582b7adf117
-# ╠═78cbf7a2-168a-4212-941e-7b95b3f514cc
-# ╟─777d1647-fe64-4a8f-8935-fcbd47ff3ea4
-# ╠═6b22f0d1-1ad0-489d-8b43-4d2b18ce1fe3
-# ╟─8a486868-fba6-4564-b7fc-3f23f3622d02
-# ╠═3e151178-a5f2-4db4-a847-2ef697bb20af
-# ╠═7cd284b6-28b5-41ad-b068-2a4858f1f31f
-# ╠═df67c439-0652-462e-bd98-9b6e106ea161
-# ╠═2c057af3-a2cc-46ea-bb2c-4138d8ba90d5
-# ╠═84d2d0cf-8d76-41ad-92cb-f28d5968ae56
-# ╟─2e8b7a78-0f86-4a8d-b431-d8b116357bc2
-# ╠═f6891298-6ebd-4e61-bfa8-00689228d1a4
-# ╠═ccbb292d-b24a-4279-9299-8365f13438ed
-# ╠═dfd14873-9245-4faf-a22f-05369b6a195f
-# ╠═7b2cf1cc-ef3c-4b8f-8d4f-8af3a5f65609
-# ╠═fddd1551-776e-4fd1-ae37-0f7e8cc7bca1
-# ╟─911e1c44-d330-4ad8-a4e4-59c1521e6a2c
-# ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
-# ╠═649c99a2-1603-42fe-980c-b6d102f9c01b
-# ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4
-# ╟─d038e213-b29b-4027-a788-0822e3368015
-# ╟─97f65e05-05ea-4785-9707-6c53560356b5
-# ╟─ad6ab075-fd5a-4631-8312-0edd441e7565
-# ╟─d683a576-b1f0-4635-b23f-c64e3afbbce9
-# ╟─bd3e5ff0-b513-4890-9bee-19a39e87a62e
-# ╟─02c9a9ac-ef95-4278-a507-af3f345c0279
-# ╟─8fb5c378-95a9-4f66-8908-4abac0ae7d07
-# ╟─f6eafdaa-b23a-4ac2-a1a7-008fd0ba1ed5
-# ╟─4e04718d-2804-4ef8-b012-79c78a98fadd
-# ╠═2afdefcf-3786-4fc3-843a-22d962627850
-# ╠═4e40bdd7-cdc8-4241-b086-82f365c74d4e
-# ╠═bbcf9a3b-6643-4940-a75a-581787e75a53
-# ╟─745b0658-f0ed-467e-ad16-473db9a40a5d
-# ╟─523d898c-4eb7-4e74-a3af-d59e32ee3935
-# ╟─f558baf4-d69c-4062-84e0-f24aa5bf9ed8
-# ╟─9692a16c-e9e8-484e-aa7a-2933d5c60a5d
-# ╠═9656c208-22af-47d4-9c9c-ef27151913b4
-# ╠═f7977fc7-610c-491b-a7ca-2c433169f103
-# ╠═e67654b3-e7de-47ad-b72c-cf80b2f0f992
-# ╠═59edcf90-f222-11ec-0710-cf30cec93c3d
-# ╠═8c87a9d3-d839-4468-be3a-25cf2c240537
-# ╠═8af69410-c7dd-4155-acfb-e710a75e95ea
+# ╟─c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
+# ╟─92cedcdf-894a-436c-826e-54e39727cebd
+# ╟─6d54abd0-fe75-4778-afc5-c392daa7705a
+# ╟─2b13b2b7-5103-4586-b001-7c32c755bfa3
+# ╟─94d2b294-7802-45d2-8496-79e851eda062
+# ╟─421fefb8-32f8-4290-a120-120b13733df4
+# ╟─8dfda5c3-3e68-41bf-a047-e903763ec238
+# ╟─80e38f46-3757-4b66-bdec-9c4807f7060d
+# ╟─61742a78-0fab-4864-9d1d-49cef96de6e1
+# ╠═78a15aaf-ef0c-4b76-9d3a-f799f257139c
+# ╟─fa6d42e3-047e-425e-bffe-b4b8fc4e706b
+# ╠═e0da53c9-370c-40e9-93d0-7531b1b4f25b
+# ╟─541e3c3b-1285-4d17-96ab-222afe27a55a
+# ╠═f0f85915-1551-489b-924c-5f3ebd15a951
+# ╠═115b1730-f9d7-11ec-2afe-79dbd9292315
+# ╠═e88d6481-435c-41af-ad56-e9b7560e4dc9
+# ╠═f0eff59b-f392-4900-b659-1a08e0b7ec78
+# ╠═ed277ddc-e955-4532-aa6f-3915a0e6f57b
+# ╠═5a3f3b34-4364-45e0-8d7b-66d4aa1559ce
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
