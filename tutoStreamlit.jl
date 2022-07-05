@@ -29,6 +29,11 @@ md"""
 **Nous reprenons  [ce tuto](https://github.com/streamlit/30days-French). Et [ici](https://docs.streamlit.io/library/cheatsheet) l'antisèche!**
 """
 
+# ╔═╡ 58a71b89-66bc-4a89-a20f-ffe70b8f8060
+md"""
+Pour aller plus loin : `https://youtu.be/JwSS70SZdyM`
+"""
+
 # ╔═╡ 92cedcdf-894a-436c-826e-54e39727cebd
 md"""
 > 👍	Streamlit permet de **créer un site web** en une ligne de code à partir d'un fichier python interne ou externe (via https://gist.github.com/). On peut faire en sorte que *la page web se modifie si l'on fait évoluer le code correspondant*. Un example a été réalisé en suivant ce guide [*streamlit*](https://docs.streamlit.io/library/get-started/create-an-app )
@@ -75,6 +80,15 @@ end
 ```
 """
 
+# ╔═╡ bd3c5942-713e-492b-996d-ac5aaa03fc6f
+run('code "https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/streamlite_90days_tuto/streamlit_app18.py"`)
+
+# ╔═╡ c1da123f-d393-49c9-a0fc-2bc80fd79c8d
+
+
+# ╔═╡ 81c50f2f-7792-4230-bc66-0cf2385ce9ee
+
+
 # ╔═╡ 61742a78-0fab-4864-9d1d-49cef96de6e1
 md"""
 ## Tuto interactif Streamlit
@@ -93,7 +107,7 @@ lien=veg
 
 # ╔═╡ fa6d42e3-047e-425e-bffe-b4b8fc4e706b
 htl"""
-<a href=$veg> Edit code </a>
+<a href=$veg  > Edit code </a>
 """
 
 # ╔═╡ e0da53c9-370c-40e9-93d0-7531b1b4f25b
@@ -119,7 +133,12 @@ Remarque : Il existe d'autres environnements de développement cloud similaires,
 * [Replit](https://replit.com/)
 * [Cloud9](https://aws.amazon.com/cloud9/)
 
-Il faut autoriser la connexion avec github, j'ai choisi l'environnement VS code browser et accepter les extensions python. J'ai également installé l'extension gitpod dans VS studio code et remote-SSH. *A revoir ne fonctionne pas...*
+Il faut autoriser la connexion avec github, j'ai choisi l'environnement VS code browser et accepter les extensions python. J'ai également installé l'extension gitpod dans VS studio code et remote-SSH.
+
+Mise en oeuvre de [julia quick start](https://www.gitpod.io/docs/quickstart/julia)
+
+En un [click](https://gitpod.io/#https://github.com/gitpod-io/template-julia) on crée le [lien](https://gitpodio-templatejulia-5gzcgxw03bj.ws-eu51.gitpod.io/) qui lance hello word en julia en cliquant sur " ▷ " en haut à droite
+
 """
 
 
@@ -1303,19 +1322,23 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╟─c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
+# ╠═c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
+# ╟─58a71b89-66bc-4a89-a20f-ffe70b8f8060
 # ╟─92cedcdf-894a-436c-826e-54e39727cebd
-# ╟─6d54abd0-fe75-4778-afc5-c392daa7705a
-# ╟─2b13b2b7-5103-4586-b001-7c32c755bfa3
-# ╟─94d2b294-7802-45d2-8496-79e851eda062
-# ╟─421fefb8-32f8-4290-a120-120b13733df4
+# ╠═6d54abd0-fe75-4778-afc5-c392daa7705a
+# ╠═2b13b2b7-5103-4586-b001-7c32c755bfa3
+# ╠═94d2b294-7802-45d2-8496-79e851eda062
+# ╠═421fefb8-32f8-4290-a120-120b13733df4
+# ╠═bd3c5942-713e-492b-996d-ac5aaa03fc6f
 # ╟─8dfda5c3-3e68-41bf-a047-e903763ec238
-# ╟─80e38f46-3757-4b66-bdec-9c4807f7060d
+# ╟─c1da123f-d393-49c9-a0fc-2bc80fd79c8d
+# ╠═80e38f46-3757-4b66-bdec-9c4807f7060d
+# ╠═81c50f2f-7792-4230-bc66-0cf2385ce9ee
 # ╟─61742a78-0fab-4864-9d1d-49cef96de6e1
 # ╠═78a15aaf-ef0c-4b76-9d3a-f799f257139c
-# ╟─fa6d42e3-047e-425e-bffe-b4b8fc4e706b
+# ╠═fa6d42e3-047e-425e-bffe-b4b8fc4e706b
 # ╠═e0da53c9-370c-40e9-93d0-7531b1b4f25b
-# ╟─541e3c3b-1285-4d17-96ab-222afe27a55a
+# ╠═541e3c3b-1285-4d17-96ab-222afe27a55a
 # ╠═f0f85915-1551-489b-924c-5f3ebd15a951
 # ╠═115b1730-f9d7-11ec-2afe-79dbd9292315
 # ╠═e88d6481-435c-41af-ad56-e9b7560e4dc9
