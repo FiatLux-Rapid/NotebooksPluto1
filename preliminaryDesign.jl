@@ -355,6 +355,33 @@ https://discuss.streamlit.io/t/code-snippet-create-components-without-any-fronte
 
 """
 
+# ╔═╡ c5c80272-443b-4292-af3d-bb2bfee4a40c
+md"""
+## Didacticiel NodeJS 
+voir [ici](https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/tutoNodeJS.jl)
+"""
+
+# ╔═╡ 55166b92-58bd-4471-b42e-7019a1b028b1
+md"""
+> 👍 On peut maintenant mettre en oeuvre des notebook pluto sans installation particulière:
+>en cliquant [ici](https://hub-binder.mybinder.ovh/user/fonsp-pluto-on-binder-ddk4whca/pluto/edit?id=8b72d70e-fcfe-11ec-2f59-8b93ec7b06c5&token=cQJnOc_mTJWEfYrfhMlQ6Q) par exemple
+"""
+
+# ╔═╡ a375945e-ff05-4639-b9b8-57160c77a6a5
+md"""
+## Maquettage rapide d'une application FIATLUX V2
+
+Nous allons utiliser
+* Grasshopper pour la conception paramétrique d'un objet simple : 
+Un verre avec 3 paramètres l'épaisseur `e` des parois, sa hauteur `h`et son rayon `R`.
+* Julia pour l'optimisation avec contraintes:
+Le verre doit avoir un volume donnée en minimisant la matière nécessaire pour le fabriquer (```π*R²*e+2*π*R*h*e```)
+* Streamlit pour la réalisation du front end: entrées des paramètres et visualisation 3D du verre
+* Speckle pour l'interconnexion backend/frontend, l'interconnexion python/Grasshopper et le déploiement.
+* Le projet sera synchronisé avec sa sauvegarde sur Github
+
+"""
+
 # ╔═╡ 4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 md"""
 ## Lots de travaux
@@ -1898,7 +1925,7 @@ version = "0.9.1+5"
 # ╟─42624349-193f-44d7-94c5-9c1e7f1eced7
 # ╟─2dac349e-a825-45b5-8947-7c69729bea7c
 # ╠═bbce6e6a-3b95-4718-9c01-6b31d7b39338
-# ╟─6e7360a1-e684-466d-be83-1918826c54b7
+# ╠═6e7360a1-e684-466d-be83-1918826c54b7
 # ╠═a7b8fdd4-fe61-4725-9380-e94cb7acbfd5
 # ╟─eb7950dc-b59e-48ee-845b-d87bfc4f4edd
 # ╠═9d3b1a73-da29-4862-9293-5582b7adf117
@@ -1909,8 +1936,8 @@ version = "0.9.1+5"
 # ╠═3e151178-a5f2-4db4-a847-2ef697bb20af
 # ╠═7cd284b6-28b5-41ad-b068-2a4858f1f31f
 # ╠═df67c439-0652-462e-bd98-9b6e106ea161
-# ╠═2c057af3-a2cc-46ea-bb2c-4138d8ba90d5
-# ╠═84d2d0cf-8d76-41ad-92cb-f28d5968ae56
+# ╟─2c057af3-a2cc-46ea-bb2c-4138d8ba90d5
+# ╟─84d2d0cf-8d76-41ad-92cb-f28d5968ae56
 # ╟─2e8b7a78-0f86-4a8d-b431-d8b116357bc2
 # ╠═f6891298-6ebd-4e61-bfa8-00689228d1a4
 # ╠═ccbb292d-b24a-4279-9299-8365f13438ed
@@ -1918,6 +1945,9 @@ version = "0.9.1+5"
 # ╠═7b2cf1cc-ef3c-4b8f-8d4f-8af3a5f65609
 # ╠═fddd1551-776e-4fd1-ae37-0f7e8cc7bca1
 # ╟─911e1c44-d330-4ad8-a4e4-59c1521e6a2c
+# ╠═c5c80272-443b-4292-af3d-bb2bfee4a40c
+# ╟─55166b92-58bd-4471-b42e-7019a1b028b1
+# ╠═a375945e-ff05-4639-b9b8-57160c77a6a5
 # ╟─4d3548c4-3396-428d-a5d8-38dd7d8f9eb6
 # ╠═649c99a2-1603-42fe-980c-b6d102f9c01b
 # ╟─9ba3692e-cd7e-4480-bc7b-2f2b3af7e6d4

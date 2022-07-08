@@ -348,7 +348,7 @@ res.json(success(message, pokemon))
 
 # ╔═╡ f09ca278-439f-41bb-8d05-7bb19385d57f
 md"""
-## Retour de tous les pokémonse
+## Retour de tous les pokémons
 Le *end point* est /api/pokemons/
 ```javascript
 app.get('/api/pokemons', (req, res) => {
@@ -472,7 +472,7 @@ app.post('/api/pokemons', (req, res) => {
 ## Installer Insomnia
 Il faut télécharger [*insomnia core*](https://updates.insomnia.rest/downloads/windows/latest?app=com.insomnia.app&source=website)
 
-# #Requête GET avec insomnia
+## Requête GET avec insomnia
 * lancer insomnia
 * Nouvelle requête GET nom GET /pokemo,
 * URL : http://localhost:3000/api/pokmons
@@ -515,7 +515,288 @@ app
     .use(bodyParser.json())
 ```
 
+L'envoi par POST du pokemon json *Chenipan* est maintenat correct
+
 """
+
+# ╔═╡ 9df0faf4-2265-4f61-af2d-0639df2ea974
+md"""
+## Modifier un pokemon
+On utilise la commande HTTP *PUT* en renvoyant un pokemon complet. La commande *PATCH* (modification partielle) est à éviter car il peut y avoir collision si deux clients entament une modification en même temps.
+
+On rajoute un *end point* dans app.js
+
+```javascript
+// ...
+ 
+app.put('/api/pokemons/:id', (req, res) => {
+ const id = parseInt(req.params.id);
+ const pokemonUpdated = { ...req.body, id: id }
+ pokemons = pokemons.map(pokemon => {
+  return pokemon.id === id ? pokemonUpdated : pokemon
+ })
+  
+ const message = `Le pokémon ${pokemonUpdated.name} a bien été modifié.`
+ res.json(success(message, pokemonUpdated))
+});
+ 
+// ...
+```
+
+Il ne reste plus qu'à envoyer le pokemon modifié (par exemple le 1) sur insomnia
+avec la coommande PUT, l'url *http://localhost:3000:api/pokemons/1*
+et un pokemon moodifié  (on supprime l'ID et la date de la creation qui est de la responsabilité de l'API) et  *body* de type *json*
+```json
+	{
+			"name": "Bulbizarre V2",
+			"hp": 25,
+			"cp": 5,
+			"picture": "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png",
+			"types": [
+				"Plante",
+				"Poison"
+			]
+		}
+```
+"""
+
+# ╔═╡ 1ee77c92-b371-4536-b5d2-c8f9c55cd5ac
+md"""
+##  Supprimer un pokemon
+
+```javascript
+// ...
+ 
+app.delete('/api/pokemons/:id', (req, res) => {
+  const id = parseInt(req.params.id)
+  const pokemonDeleted = pokemons.find(pokemon => pokemon.id === id)
+  pokemons = pokemons.filter(pokemon => pokemon.id !== id)
+  const message = `Le pokémon ${pokemonDeleted.name} a bien été supprimé.`
+  res.json(success(message, pokemonDeleted))
+});
+ 
+// ...
+```
+
+On utilise insomnia avec un *end point* : *http://localhost:3000/api/pokemons/1* par  exemple et la commande *DEL*
+"""
+
+
+# ╔═╡ e0c96571-c461-4263-8026-6c4dfaef5707
+md"""
+## Base de données SQL
+* Télécharger *XAMPP* (permet de réaliser un serveur web APACHE, une base de données MariaDB, et une application web PHPMyAdmin). Le [téléchargement](https://www.apachefriends.org/fr/download.html) nécessite les droits administrateur
+
+* Démarrer la base de données SQL
+On trouve le *dashbord* [ici](http://localhost/dashboard/)
+
+PHPMyAdmiin ne sera utilisé que pour visualiser notre base de données
+* Comprendre le rôle de l'ORM qui convertit les requ^tes SQL en javascript
+
+* L'ORM sequelize
+A la racine du projet: 
+
+`npm install sequelize --save` 
+
+
+Puis: `npm install mariadb --save`
+
+On importe la fonction sequilize : `const {Sequelize} = require('sequelize')`
+
+et on accède à la base de données avec:
+```javascript
+const sequelize= new Sequelize(
+    'root',
+    'root',
+    '',
+    {
+        host: 'localhost',
+        dialect: 'mariadb',
+        dialectOptions: {
+            timezone :'Etc/GMT-2'
+    } ,
+    logging : false
+}
+)  
+
+```
+
+et 
+
+```javascript
+sequelize.authenticate()
+    .then( _ => console.log('connexion OK'))
+    .catch(error=>console.error(`connexion impossible ${error}`))
+
+```
+
+Il reste à créer la base de données *pokedex* dans [XAMPP](http://localhost/phpmyadmin/)
+
+"""
+
+# ╔═╡ 0db672cc-1ce5-46c3-8899-7a5969b7a4f4
+md"""
+## Présentation de la base de données Sequelize
+
+Sequelize est basée sur les modèles (*models*) qui sont des abstraction des tables de données.
+Un modèle est un objet Javascript muni de pràpriétés et de types.
+
+Ainsi un modèle pokemon correspondra à la table pokemons (avec un s!)
+
+## Création d'un modèle sequelize
+
+On organise notre projet avec un dossier src qui contient le dossier models avec un fichier pokemon.js:  
+
+```javascript
+module.exports = (sequelize, DataTypes) => {
+    return sequelize.define('Pokemon', {   //nom du modèle la table sera pokemons
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,    //clef primaire doit être unique
+        autoIncrement: true
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false   // cette prpriété ne peut pas être absente
+      },
+      hp: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      cp: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      picture: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      types: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
+    }, {
+      timestamps: true,
+      createdAt: 'created',  // remplace le time stamp de création par "created"
+      updatedAt: false   // date de modification désactivée
+    })
+  }
+```
+
+## Synchroniser sequelize avec la base de données
+
+On adapteapp.js avec:
+```javascript
+const {Sequelize,DataTypes} = require('sequelize')
+const PokemonModel= require('./src/models/pokemon')
+sequelize.sync({force:true})
+    .then(_=>console.log('la connexion a bien été établie'))
+```
+
+## Instancier un modèle sequelize
+
+```javascript
+const Pokemon=PokemonModel(sequelize,DataTypes)
+sequelize.sync({force:true}) 
+    .then (_ => {
+        console.log('la connexion a bien été établie')
+
+        Pokemon.create({
+            name: "Bulbizarre V2",
+            hp: 25,
+            cp: 5,
+            picture: "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/001.png",
+            types: ["Plante","Poison"].join()
+        }).then(bulbizare => console.log(bulbizare.toJSON()))
+    })
+```
+"""
+
+# ╔═╡ 8a8360ce-ce6e-4e2f-8def-f7138a4c9935
+md"""
+## Initialiser les 12 pokemons
+
+Avec map:
+```javascript
+const Pokemon=PokemonModel(sequelize,DataTypes)  // Instanciation
+sequelize.sync({force:true}) 
+    .then (_ => {
+        console.log('la connexion a bien été établie')
+
+        //Pokemon.create({
+        pokemons.map(pokemon => {
+            Pokemon.create({
+                name: pokemon.name,
+                hp : pokemon.hp,
+                cp : pokemon.cp,
+                picture: pokemon.picture,
+                types:pokemon.types.join()})
+        .then(bulbizare => console.log(bulbizare.toJSON()))
+    })
+})
+```
+## Structuration du code app.js
+
+app.js devient:
+```javascript
+//console.log("Hello  Node 😄. ")
+const express = require('express')    
+const morgan= require('morgan')    // log book sur console
+const favicon= require('serve-favicon')  // add favicon
+const bodyParser=require('body-parser')  // middleware json to stringy
+const sequelize= require('./src/db/sequelize')  // SQL /JS interconnexion
+const app = express()
+const port = 3000
+app
+    .use(favicon(__dirname+'/favicon.ico'))
+    .use(morgan('dev'))
+    .use(bodyParser.json())
+sequelize.initDb
+app.listen(port, () => console.log(`Notre application Node est démarrée sur : http://localhost:${port}`))
+
+// end points à créer
+```
+
+et sequelize.js (dans src/db):
+```javascript
+const { Sequelize, DataTypes } = require('sequelize')
+const PokemonModel = require('../models/pokemon')
+const pokemons = require('./mock-pokemon')
+  
+const sequelize = new Sequelize('pokedex', 'root', '', {
+  host: 'localhost',
+  dialect: 'mariadb',
+  dialectOptions: {
+    timezone: 'Etc/GMT-2',
+  },
+  logging: false
+})
+  
+const Pokemon = PokemonModel(sequelize, DataTypes)
+  
+const initDb = () => {
+  return sequelize.sync({force: true}).then(_ => {
+    pokemons.map(pokemon => {
+      Pokemon.create({
+        name: pokemon.name,
+        hp: pokemon.hp,
+        cp: pokemon.cp,
+        picture: pokemon.picture,
+        types: pokemon.types.join()
+      }).then(pokemon => console.log(pokemon.toJSON()))
+    })
+    console.log('La base de donnée a bien été initialisée !')
+  })
+}
+  
+module.exports = { 
+  initDb, Pokemon
+}
+```
+"""
+
+# ╔═╡ b0884626-8722-4a3e-884f-14e0f8941ec7
+
 
 # ╔═╡ 55c19467-cb8a-4609-a157-9668278aee54
 function run_with_timeout(command, timeout::Integer = 5)
@@ -556,29 +837,6 @@ details(x, summary="Show more") = @htl("""
 		$(x)
 	</details>
 	""");
-
-# ╔═╡ 85e7ad65-173b-47bc-9742-1807587ec353
-md"""
-```json
-{
-  "name": "node-pokemon-api",
-  "version": "1.0.0",
-  "description": "API Rest to  manage pokemons",
-  "main": "app.js",
-  "scripts": {
-  "start": "nodemon app.js" 
-  },
-  "author": "JPB",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.18"
-  }
-}
-```
-"""
 
 # ╔═╡ 576977f4-0101-4498-bd41-0f2525aa2f9f
 PlutoUI.TableOfContents(aside=true)
@@ -1733,15 +1991,20 @@ version = "0.9.1+5"
 # ╟─9b711a4f-b1fb-4c07-b3d7-90d8b19b2a9c
 # ╟─da0121d0-b301-40bd-b0fa-a90d60a8972b
 # ╟─be1c5e23-51df-42d9-b1c0-8182185d653d
-# ╠═953d6fbf-8718-441b-bedd-6f3554622e4b
+# ╟─953d6fbf-8718-441b-bedd-6f3554622e4b
 # ╟─94cc426d-2b30-406e-a7c9-dfb47d8ad98d
 # ╟─f09ca278-439f-41bb-8d05-7bb19385d57f
-# ╠═5bdab855-ac22-42c8-92a1-6ef0ce4fdc11
+# ╟─5bdab855-ac22-42c8-92a1-6ef0ce4fdc11
+# ╟─9df0faf4-2265-4f61-af2d-0639df2ea974
+# ╟─1ee77c92-b371-4536-b5d2-c8f9c55cd5ac
+# ╟─e0c96571-c461-4263-8026-6c4dfaef5707
+# ╟─0db672cc-1ce5-46c3-8899-7a5969b7a4f4
+# ╟─8a8360ce-ce6e-4e2f-8def-f7138a4c9935
+# ╠═b0884626-8722-4a3e-884f-14e0f8941ec7
 # ╠═8d35a120-faa6-11ec-0cdf-55b60c52ec9e
 # ╠═55c19467-cb8a-4609-a157-9668278aee54
 # ╠═9eec85cd-e032-46f3-805d-99c4ca229fc2
 # ╠═2fb9cbd7-86d0-4f13-914c-627bf5e5b6a0
-# ╠═85e7ad65-173b-47bc-9742-1807587ec353
 # ╟─576977f4-0101-4498-bd41-0f2525aa2f9f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

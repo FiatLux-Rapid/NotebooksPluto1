@@ -24,6 +24,12 @@ begin
 	using InteractiveUtils
 end
 
+# ╔═╡ db0d6055-9062-4a79-bd8c-0e9218c2329d
+
+
+# ╔═╡ cfad1ff0-f863-4da2-919c-00339364297d
+
+
 # ╔═╡ c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
 md"""
 **Nous reprenons  [ce tuto](https://github.com/streamlit/30days-French). Et [ici](https://docs.streamlit.io/library/cheatsheet) l'antisèche!**
@@ -140,6 +146,9 @@ Mise en oeuvre de [julia quick start](https://www.gitpod.io/docs/quickstart/juli
 En un [click](https://gitpod.io/#https://github.com/gitpod-io/template-julia) on crée le [lien](https://gitpodio-templatejulia-5gzcgxw03bj.ws-eu51.gitpod.io/) qui lance hello word en julia en cliquant sur " ▷ " en haut à droite
 
 """
+
+
+# ╔═╡ 24be729d-4ddf-4dfa-bf4b-b2643f20bfc6
 
 
 # ╔═╡ f0f85915-1551-489b-924c-5f3ebd15a951
@@ -1322,6 +1331,8 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═db0d6055-9062-4a79-bd8c-0e9218c2329d
+# ╠═cfad1ff0-f863-4da2-919c-00339364297d
 # ╠═c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
 # ╟─58a71b89-66bc-4a89-a20f-ffe70b8f8060
 # ╟─92cedcdf-894a-436c-826e-54e39727cebd
@@ -1339,6 +1350,7 @@ version = "0.9.1+5"
 # ╠═fa6d42e3-047e-425e-bffe-b4b8fc4e706b
 # ╠═e0da53c9-370c-40e9-93d0-7531b1b4f25b
 # ╠═541e3c3b-1285-4d17-96ab-222afe27a55a
+# ╠═24be729d-4ddf-4dfa-bf4b-b2643f20bfc6
 # ╠═f0f85915-1551-489b-924c-5f3ebd15a951
 # ╠═115b1730-f9d7-11ec-2afe-79dbd9292315
 # ╠═e88d6481-435c-41af-ad56-e9b7560e4dc9
