@@ -36,11 +36,14 @@ x
 x^2
 
 # ╔═╡ 290f7c69-2e7b-4afe-9fde-dcee302fa58f
-Mypath=download("D:\\2022\\FIATLUX_Implementation\\NotebooksPluto\\ToyExampleV1\\Docs.jl")
+myPath=download("https://github.com/FiatLux-Rapid/NotebooksPluto1/raw/master/ToyExampleV1/Docs.jl")
 
 # ╔═╡ 420f55ee-a1d2-4c26-841f-964291f23b3a
 pwd()
 
+
+# ╔═╡ 55309e02-bb66-4641-9d90-eb6ce042be9f
+PlutoSliderServer.run_notebook(myPath)
 
 # ╔═╡ acaab1c0-ae95-11eb-2113-ed072f61171b
 md"""
@@ -553,13 +556,14 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 """
 
 # ╔═╡ Cell order:
-# ╟─732b9e4a-7852-45f3-8dfb-4840570f1006
+# ╠═732b9e4a-7852-45f3-8dfb-4840570f1006
 # ╠═75862184-0b7a-4c95-9958-b19caa88410e
 # ╠═9f64989a-2411-4407-8af5-fbfde5db6b41
 # ╠═aef4a291-ee1d-4429-91ab-b78ecadb0ee8
 # ╠═2a3b329b-8cb0-4fa1-8a5c-c0a122a674ba
 # ╠═290f7c69-2e7b-4afe-9fde-dcee302fa58f
 # ╠═420f55ee-a1d2-4c26-841f-964291f23b3a
+# ╠═55309e02-bb66-4641-9d90-eb6ce042be9f
 # ╟─acaab1c0-ae95-11eb-2113-ed072f61171b
 # ╠═3c725c21-d4cf-46d1-ab08-e0aaa361101c
 # ╠═de2697bc-360a-4a6b-92ae-a53de0bc8548
