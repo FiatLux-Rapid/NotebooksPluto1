@@ -4,6 +4,15 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 600c2e1d-ec3e-4974-b02b-319f77dedff2
+using Genie,Genie.Router,Genie.Renderer.Html, Genie.Renderer.Json,Genie.Requests
+
+# ╔═╡ f07fcd5f-807e-4802-8193-2c90a2484b5c
+ using HTTP.WebSockets
+
+# ╔═╡ fff8dd7e-d479-4c0b-b6c2-6064584df30a
+using HTTP
+
 # ╔═╡ 7fd5df5f-2767-48a2-ab80-d4912dba16e6
 begin
 	using JuMP
@@ -45,7 +54,216 @@ md"""
 > 👍 Il est possible de ne pas lancer une requête si une requête identique avait été préalablement lancée. En effet streamlit conserve l'historique des requêtes précédentes dans des *commits*. Il faut donc balayer l'ensemble des commits archivés pour voir si l'on retrouve les paramètres de la requête souhaitée afin de récupérer, le cas échéant, les résultats déjà archivés avant toute nouvelle requête.
 
 > 👍 Les requêtes archivées peuvent aussi être utilisés à des fins statistiques dans un contexte marketing ou pour servir de base de données pour réaliser un *jumeau digital* directement intégré en front end et qui pourra être utilisé pour de nouvelles requêtes sans passer par le serveur.
+
+
+> 👍 Il est possible d'ouvrir plusieurs notebook en même temps, il suffit de revenir au menu principal (flèche ← en haut à gauche du navigateur) , copier l'url et l'ouvrir dans un nouvel onglet !
 """
+
+# ╔═╡ 7a6a6e87-56c1-4a7c-b49c-81bda3c82065
+md"""
+## Réalisation d'un site client FIATLUX maquette
+
+Il existe plusieurs possibilités de framework pour mettre en oeuvre la partie client (front end) et la partie serveur (backend).
+**Streamlit** semble le meilleur candidat pour le front end et pour le backend:
+* **Speckle** dans grasshopper semble le mieux adapté pour tout ce qui est production 3D ; il activera suivant la route mise ne oeuvre le la réalisation paramétrique correspondante 
+* **Pluto** semble me meilleur candidat pour ce qui est dss mises en oeuvre julia, python (via pyCall) et javascript.
+"""
+
+# ╔═╡ c5502518-c38b-4b21-806f-52868115d00f
+md"""
+Un des avantages d'un serveur Grasshopper est qu'il permet de fonctionner avec une instance Grasshopper déjà ouverte donc disponible pour traiter des requêtes graphiques.
+De même un serveur Pluto aura toutes ses bibliothèques et fonctions précompilées et pourra donc répondre de façon très rapide à toutes les requêtes.
+On peut imaginer des serveurs spécialisés optimisés à traiter des tâches spécifiques
+
+Clients et serveurs fonctionnent en réseau:
+* Speckle et Pluto gèrent les requêtes de clients multiples
+* Des serveurs en série décompose une tâche complexe en sous-tâches à réaliser successivement
+* Des serveurs en parallèle peuvent fournir plusieurs solutions à une requête donnée (site marchand)
+* Des serveurs spécialisés en réseau constituent un espace collaboratif
+
+"""
+
+# ╔═╡ 776fa883-806a-45e8-866a-fd9ea49de765
+begin
+
+md"""
+	
+```python
+import streamlit as st
+import pandas as pd
+
+
+st.header('FIATLUX client')
+
+e = st.slider('Epaisseur souhaitée pour le verre ?', 0.1, 1.0, 0.2)
+st.write('Epaisseur' ,'=', e, 'cm')
+V=st.slider('Volume souhaité?', 50.0, 1000.,300.0)
+st.write('Volume' ,'=', V, r'$$ cm^3 $$')
+```
+"""
+end
+
+# ╔═╡ 0c7b1103-8533-440b-944e-eca21d739952
+md"""
+## Réalisation d'un serveur Pluto
+* Installation de [pluto-rest](https://github.com/ctrekker/pluto-rest)
+La visio explicative est [ici](https://www.youtube.com/watch?v=cx_mjsmybA8)
+
+Dans une console julia n'import où dans le monde
+```julia
+import Pkg; Pkg.add("plutoRESTClient")
+using PlutoRESTClient
+nb=PlutoNotebook("http://localhost:1234/?secret=S6L412Fp","Docs.jl")
+```
+"""
+
+# ╔═╡ e5e6f968-7729-4631-93d9-4acb7e12b82c
+
+md"""
+## Réalisation d'un serveur node.js
+* Vérifions que node est bien installé sur notre ordinateur
+"""
+
+
+# ╔═╡ c4189247-0959-4e94-b198-db96de500f40
+run(`node -v`);
+
+# ╔═╡ eb991f2a-ed86-4c32-bc08-a36434366ce0
+myDir=pwd()
+
+# ╔═╡ 879436b4-08e1-43e7-b2fc-8c23733ea889
+md"""
+Notre répertoire de travail est $(myDir)
+"""
+
+# ╔═╡ b0f51d3c-a07c-4ed6-9b4b-5964118936e3
+md"""
+* On crée un répertoire */serveurNode* dans $(pwd()) et un fichier *app.js* dans ce répertoire
+dans lequel on insère (avev vs studio par exemple)
+```javascript
+console.log("Hello  Node 😄  ")
+```
+que l'on exécute
+```console
+node ./serveurNode/app0.js
+```
+"""
+
+# ╔═╡ c335521d-ec2a-4fc1-b82d-266dad36a02a
+run(`node ./serveurNode/app0.js`);
+
+# ╔═╡ 7ed2f250-b63b-4bd4-8ee0-68eba8a493ec
+md"""
+* Le serveur fonctionne correctement sur ce serveur maquette , nous allons donc réaliser le *vrai* serveur sur un nouveau fichier app.js dans le même répertoire
+
+
+* on se place dans le répertoire du serveur
+```console
+cd ./serveurNode
+```
+
+
+* on configure le projet (sous ce répertoire) avec
+```console
+npm init
+```
+Ne peut être lancé via pluto, donc le faire à partir d'un terminal VS code
+
+"""
+
+# ╔═╡ ee687a13-6541-4868-9ac8-afb92aeba51e
+md"""
+Le fichier package.json suivant est automatiquement créé en fonction de nos réponses
+```json
+{
+  "name": "fiatlux_server",
+  "version": "1.0.0",
+  "description": "node server for a toy FIATLUX example",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "JP Brasile",
+  "license": "MIT"
+}
+```
+
+
+on remplace dans ce package le script avec 
+
+```json
+"scripts": {
+    "start": "nodemon app.js"
+  },
+```
+et on peut maintenant mettre en oeuvre l'appli avec (sous VS code)
+```console
+npm run start
+```
+
+
+"""
+
+# ╔═╡ aea1137a-1938-44a9-935a-13acf300cfd0
+ nameA=[]
+
+# ╔═╡ 2a1adb70-2498-4982-8d1c-941c78411bb7
+begin
+ 
+# Genie Hello World!
+# As simple as Hello
+route("/hello") do
+    "Welcome to Genie!"
+end
+
+# Powerful high-performance HTML view templates
+route("/html") do
+    h1("Welcome to Genie HTML!") #|> html
+end
+
+# JSON rendering built in
+
+route("./json/") do
+    (:greeting => "Welcome to Genie!") |> json
+end	
+
+	route("/hi") do
+  		name = params(:name, "Anon")
+		
+  		"Hello $name"
+		push!(nameA,name)
+		
+				end
+
+	
+	
+end
+
+# ╔═╡ c8b6d38d-4d2c-47e3-ae15-cfe3237ab160
+up(8001, async = true)
+
+# ╔═╡ c8ee01db-2032-4154-9c7c-5f82cf026644
+nameA
+
+# ╔═╡ 215afe86-91a8-4330-9240-f0f992e49ef3
+md"""
+Lz requête *http://127.0.0.1:8001/hi?name=Toto/* montre que le serveur récupère bien le nom
+"""
+
+# ╔═╡ 104f2db7-9610-4675-a760-709a2d13c4c9
+
+
+# ╔═╡ 6a1c5476-ebb2-4584-9a6b-17ea7716b4ce
+
+
+# ╔═╡ 7be7820e-23b4-4172-9791-f43a703b5a36
+#down()
+
+# ╔═╡ 2360a112-d4f7-415b-82e4-d1d9245b1699
+ #run_with_timeout(`node D:/2022/FIATLUX_Implementation/NotebooksPluto/NODE-POKEMON-API/app.js`,50)
+
+# ╔═╡ f631d1aa-7a7a-4ee2-aa3a-9f73893d46e6
+pwd()
 
 # ╔═╡ b2fe6b7d-c682-4adc-98dc-ecd5e025bce4
 
@@ -55,7 +273,7 @@ Nous allons utiliser
 * Grasshopper pour la conception paramétrique d'un objet simple : 
 Un verre avec 3 paramètres l'épaisseur `e` des parois, sa hauteur `h`et son rayon `R`.
 * Julia pour l'optimisation avec contraintes:
-Le verre doit avoir un volume donné en minimisant la part matière nécessaire pour le fabriquer (```π*R²*e+2*π*R*h*e```)
+Le verre doit avoir un volume donné en minimisant la part matière nécessaire pour le fabriquer (```π*R²*e+π*(2*e*R-e^2)*(h-e)```)
 * Streamlit pour la réalisation du front end: entrées des paramètres et visualisation 3D du verre
 * Speckle pour l'interconnexion backend/frontend, l'interconnexion python/Grasshopper et le déploiement.
 * Le projet sera synchronisé avec sa sauvegarde sur Github
@@ -130,7 +348,10 @@ Le client a été intégré dans ce notebook pour des raisons pratiques, en réa
 
 
 # ╔═╡ 9522c1f6-4781-4537-ac9d-420bb05584b6
-Jvol=485.0
+begin   # Le client envoie ses critères  
+Jvol=485.0   #Volume objectif (variable julia)
+Jépaisseur=1.0  # épaisseur :paramètre fixé par le client
+end
 
 # ╔═╡ e49480c8-3d67-4547-93fd-0d96b32085b6
 begin
@@ -177,8 +398,8 @@ transport = ServerTransport(client=client, stream_id=streamId)
 
 newObj = Base()
 newObj["Data from client"] = "From client"
-newObj["Volume"] = $Jvol
-newObj["épaisseur"] = "0.5"
+newObj["Volume"] = $Jvol  # les variables julia sont passées à Python
+newObj["épaisseur"] = $Jépaisseur 
 newObj["Point"] =Point.from_coords(1, 1, 1)
 
 
@@ -219,7 +440,7 @@ Dans la cellule ci-dessous faire "expand data view" . On visualise bien les vale
 # ╔═╡ 0a10ea62-962f-4471-8abf-61008fe52922
 # use that stream id to get the stream from the server
 @htl """
-<iframe src= "https://speckle.xyz/streams/834e9dc3f1/" width="600" height="400" frameborder="0"> </iframe>
+<iframe src= "https://speckle.xyz/streams/834e9dc3f1/" width="800" height="400" frameborder="0"> </iframe>
 """
 
 # ╔═╡ 8a79af6c-9798-4fa4-8d61-451c5bacf3a4
@@ -228,19 +449,33 @@ Dans la cellule ci-dessous faire "expand data view" . On visualise bien les vale
 """
 
 
+# ╔═╡ 8591ed8f-23aa-46f3-81b0-86f896ca65e3
+md""" 
+[Possibilité 3D en html](https://github.com/mcneel/rhino-developer-samples/tree/7/rhino3dm#samples) et [ici](https://github.com/mcneel/rhino-developer-samples/tree/7/rhino3dm#samples)
+"""
+
+# ╔═╡ 3051c04c-c2e0-4f16-985c-1468c4169306
+@htl """
+<iframe src= "https://mcneel.github.io/rhino-developer-samples/rhino3dm/js/SampleViewer/02_advanced/" width="600" height="400" frameborder="0"> </iframe>
+"""
+
 # ╔═╡ a6e4cc74-f8b0-4b0b-b0bf-30863eed784b
 md"""
-Dans Grasshopper, nous réceptionnons les données [épaisseur, volume] en provenance du client et nous les sauvegardons dans *ReceiveFromClient.csv*. Il peuvent donc être récupérer par le serveur sous Julia:
+Dans Grasshopper, nous réceptionnons les données [épaisseur, volume] en provenance du client et nous les sauvegardons dans *ReceiveFromClient.csv*. Elles peuvent donc être récupérées par le serveur sous Julia:
 """
 
 # ╔═╡ 57638089-79c4-4a03-bf12-12290f229eee
 begin
+	
 f=CSV.read("D:/2022/FIATLUX_Implementation/NotebooksPluto/ToyExampleV1/ReceiveFromClient.csv", DataFrame)
 	e=f[1,1]
 	vol=f[2,1]
-	"épaisseur="*string(e)*", volume souhaité="*string(vol)
+
 end
 
+
+# ╔═╡ 29173ad3-d9d2-421d-a384-0e54368399ca
+f
 
 # ╔═╡ a70ffb37-2fe6-4974-9210-230494608dd8
 md"""
@@ -271,13 +506,15 @@ end
 begin
 	model = Model(Ipopt.Optimizer)
 	r,h= nothing, nothing # clear the julia variables
-	@variable(model, r >= 0.0)  # le rayon
-	@variable(model, h >= 0.0) # la hauteur
+	@variable(model,30>= r >= 0.0)  # le rayon
+	@variable(model,30>= h >= 0.0) # la hauteur
 	#vol=300  # volume objectif cm3
 	#e=4e-1  # épaisseur du verre
-	@NLobjective(model, Min,π*r^2*e+2*π*r*h*e)  # le volume de la part matière est à minimiser
+	@NLobjective(model, Min,π*r^2*e+π*(2r-e^2)*(h-e) ) # le volume de la part matière est à minimiser
 	# On calcule le volume intérieur du verre
-	@NLconstraint(model, c, π*(r-e)^2*(h-e)== vol) # "c" est le nom de la contrainte
+	@NLconstraint(model, c, (h-e)*(r-e)^2*π== vol) # "c" est le nom de la contrainte
+	@NLconstraint(model, c1, h>=e) #
+	@NLconstraint(model, c3, r>=e) #
 	optimize!(model);
 
 	r=value(r)  # variable à nouveau julia
@@ -285,7 +522,7 @@ begin
     [r,h,π*(r-e)^2*(h-e)]  # volume calculé. L'optimum correspond à r=h !
   
 	htl"""
-	"Résultat de l'optimisation: rayon=$(round(r,digits=1)),hauteur=$(round(h,digits=1)), volume=$(round(π*(r-e)^2*(h-e),digits=1))
+	"Résultat de l'optimisation: rayon=$(round(r,digits=1)),hauteur=$(round(h,digits=1)), volume=$(round(π*(r-e)^2*(h-e),digits=1)), part matière=$(round(π*r^2*e+π*(2r-e^2)*(h-e),digits=1))
 	"""
 	
 end
@@ -294,7 +531,7 @@ end
 md"""
 ## Résultat de l'optimisation --> Grasshopper
 Les données nécessaires à Grasshopper pour réaliser la modélisation du verre en 3D sont fournis à Grasshopper via un fichier csv *optimizedDataForGH.csv*
-Si les entités réalisant l'optimisation Hulia et la modélisation GH était séparées, il faudrait passer par Speckle.
+Si les entités réalisant l'optimisation Julia et la modélisation GH était séparées, il faudrait passer par Speckle.
 """
 
 # ╔═╡ 364f4cd7-21a6-4bbd-ba5f-6724c947532a
@@ -383,6 +620,8 @@ ColorVectorSpace = "c3611d14-8923-5661-9e6a-0046d554d3a4"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 ImageIO = "82e4d734-157c-48bb-816b-45c225c6df19"
 ImageShow = "4e3cecfd-b093-5904-9786-8bbb286a6a31"
@@ -400,6 +639,8 @@ ColorVectorSpace = "~0.9.9"
 Colors = "~0.12.8"
 DataFrames = "~1.3.4"
 FileIO = "~1.14.0"
+Genie = "~4.18.1"
+HTTP = "~0.9.17"
 HypertextLiteral = "~0.9.4"
 ImageIO = "~0.6.6"
 ImageShow = "~0.3.6"
@@ -442,6 +683,12 @@ git-tree-sha1 = "af92965fb30777147966f58acb05da51c5616b5f"
 uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
 version = "3.3.3"
 
+[[deps.ArgParse]]
+deps = ["Logging", "TextWrap"]
+git-tree-sha1 = "3102bce13da501c9104df33549f511cd25264d7d"
+uuid = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
+version = "1.1.4"
+
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
 
@@ -467,6 +714,12 @@ version = "1.0.8+0"
 git-tree-sha1 = "eb4cb44a499229b3b8426dcfb5dd85333951ff90"
 uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
 version = "0.4.2"
+
+[[deps.CSTParser]]
+deps = ["Tokenize"]
+git-tree-sha1 = "dc96b54b68e930db929403c38c08af71dde6e984"
+uuid = "00ebfdb7-1f24-5e51-bd34-a7502290713f"
+version = "3.3.4"
 
 [[deps.CSV]]
 deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings"]
@@ -497,6 +750,12 @@ deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
 git-tree-sha1 = "1e315e3f4b0b7ce40feded39c73049692126cf53"
 uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
 version = "0.1.3"
+
+[[deps.CodeTracking]]
+deps = ["InteractiveUtils", "UUIDs"]
+git-tree-sha1 = "6d4fa04343a7fc9f9cb9cff9558929f3d2752717"
+uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
+version = "1.0.9"
 
 [[deps.CodecBzip2]]
 deps = ["Bzip2_jll", "Libdl", "TranscodingStreams"]
@@ -533,6 +792,12 @@ deps = ["ColorTypes", "FixedPointNumbers", "Reexport"]
 git-tree-sha1 = "417b0ed7b8b838aa6ca0a87aadf1bb9eb111ce40"
 uuid = "5ae59095-9a9b-59fe-a467-6f913c188581"
 version = "0.12.8"
+
+[[deps.CommonMark]]
+deps = ["Crayons", "JSON", "URIs"]
+git-tree-sha1 = "4cd7063c9bdebdbd55ede1af70f3c2f48fab4215"
+uuid = "a80b9123-70ca-4bc0-993e-6e3bcb318db6"
+version = "0.8.6"
 
 [[deps.CommonSubexpressions]]
 deps = ["MacroTools", "Test"]
@@ -634,6 +899,12 @@ git-tree-sha1 = "bad72f730e9e91c08d9427d5e8db95478a3c323d"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.4.8+0"
 
+[[deps.EzXML]]
+deps = ["Printf", "XML2_jll"]
+git-tree-sha1 = "0fa3b52a04a4e210aeb1626def9c90df3ae65268"
+uuid = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+version = "1.1.0"
+
 [[deps.FFMPEG]]
 deps = ["FFMPEG_jll"]
 git-tree-sha1 = "b57e3acbe22f8484b4b5ff66a7499717fe1a9cc8"
@@ -657,6 +928,9 @@ deps = ["Compat", "Dates", "Mmap", "Printf", "Test", "UUIDs"]
 git-tree-sha1 = "129b104185df66e408edd6625d480b7f9e9823a0"
 uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
 version = "0.9.18"
+
+[[deps.FileWatching]]
+uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[deps.FixedPointNumbers]]
 deps = ["Statistics"]
@@ -704,6 +978,10 @@ git-tree-sha1 = "51d2dfe8e590fbd74e7a842cf6d13d8a2f45dc01"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
 version = "3.3.6+0"
 
+[[deps.GMP_jll]]
+deps = ["Artifacts", "Libdl"]
+uuid = "781609d7-10c4-51f6-84f2-b8444358ff6d"
+
 [[deps.GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "RelocatableFolders", "Serialization", "Sockets", "Test", "UUIDs"]
 git-tree-sha1 = "c98aea696662d09e215ef7cda5296024a9646c75"
@@ -715,6 +993,12 @@ deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "
 git-tree-sha1 = "3a233eeeb2ca45842fe100e0413936834215abf5"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
 version = "0.64.4+0"
+
+[[deps.Genie]]
+deps = ["ArgParse", "Dates", "Distributed", "EzXML", "FilePathsBase", "HTTP", "HttpCommon", "Inflector", "JSON3", "JuliaFormatter", "Logging", "Markdown", "MbedTLS", "Millboard", "Nettle", "OrderedCollections", "Pkg", "REPL", "Random", "Reexport", "Revise", "SHA", "Serialization", "Sockets", "UUIDs", "Unicode", "VersionCheck", "YAML"]
+git-tree-sha1 = "c3fa75b1f98dbe5f36c55f5e474171ec2fd2c3fc"
+uuid = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
+version = "4.18.1"
 
 [[deps.GeometryBasics]]
 deps = ["EarCut_jll", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -762,6 +1046,12 @@ deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll",
 git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
 version = "2.8.1+1"
+
+[[deps.HttpCommon]]
+deps = ["Dates", "Nullables", "Test", "URIParser"]
+git-tree-sha1 = "46313284237aa6ca67a6bce6d6fbd323d19cff59"
+uuid = "77172c1b-203f-54ac-aa54-3f1198fe9f90"
+version = "0.5.0"
 
 [[deps.Hyperscript]]
 deps = ["Test"]
@@ -820,6 +1110,12 @@ version = "1.0.0"
 git-tree-sha1 = "f5fc07d4e706b84f72d54eedcc1c13d92fb0871c"
 uuid = "d25df0c9-e2be-5dd7-82c8-3ad0b3e990b9"
 version = "0.1.2"
+
+[[deps.Inflector]]
+deps = ["Unicode"]
+git-tree-sha1 = "8555b54ddf27806b070ce1d1cf623e1feb13750c"
+uuid = "6d011eab-0732-4556-8808-e463c76bf3b6"
+version = "1.0.1"
 
 [[deps.IniFile]]
 git-tree-sha1 = "f550e6e32074c939295eb5ea6de31849ac2c9625"
@@ -886,6 +1182,12 @@ git-tree-sha1 = "3c837543ddb02250ef42f4738347454f95079d4e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.3"
 
+[[deps.JSON3]]
+deps = ["Dates", "Mmap", "Parsers", "StructTypes", "UUIDs"]
+git-tree-sha1 = "fd6f0cae36f42525567108a42c1c674af2ac620d"
+uuid = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+version = "1.9.5"
+
 [[deps.JpegTurbo]]
 deps = ["CEnum", "FileIO", "ImageCore", "JpegTurbo_jll", "TOML"]
 git-tree-sha1 = "a77b273f1ddec645d1b7c4fd5fb98c8f90ad10a5"
@@ -903,6 +1205,18 @@ deps = ["Calculus", "DataStructures", "ForwardDiff", "LinearAlgebra", "MathOptIn
 git-tree-sha1 = "534adddf607222b34a0a9bba812248a487ab22b7"
 uuid = "4076af6c-e467-56ae-b986-b466b2749572"
 version = "1.1.1"
+
+[[deps.JuliaFormatter]]
+deps = ["CSTParser", "CommonMark", "DataStructures", "Pkg", "Tokenize"]
+git-tree-sha1 = "2e9129c034d3b9338d0f77672db5f8b312047689"
+uuid = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
+version = "0.22.11"
+
+[[deps.JuliaInterpreter]]
+deps = ["CodeTracking", "InteractiveUtils", "Random", "UUIDs"]
+git-tree-sha1 = "52617c41d2761cc05ed81fe779804d3b7f14fff7"
+uuid = "aa1ae85d-cabe-5617-a682-6adf51b2e16a"
+version = "0.9.13"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1018,6 +1332,12 @@ version = "0.3.15"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[deps.LoweredCodeUtils]]
+deps = ["JuliaInterpreter"]
+git-tree-sha1 = "dedbebe234e06e1ddad435f5c6f4b85cd8ce55f7"
+uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
+version = "2.2.2"
+
 [[deps.METIS_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "1d31872bb9c5e7ec1f618e8c4a56c8b0d9bddc7e"
@@ -1066,6 +1386,11 @@ git-tree-sha1 = "e498ddeee6f9fdb4551ce855a46f54dbd900245f"
 uuid = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
 version = "0.3.1"
 
+[[deps.Millboard]]
+git-tree-sha1 = "ea6a5b7e56e76d8051023faaa11d91d1d881dac3"
+uuid = "39ec1447-df44-5f4c-beaa-866f30b4d3b2"
+version = "0.2.5"
+
 [[deps.Missings]]
 deps = ["DataAPI"]
 git-tree-sha1 = "bf210ce90b6c9eed32d25dbcae1ebc565df2687f"
@@ -1101,8 +1426,25 @@ git-tree-sha1 = "18efc06f6ec36a8b801b23f076e3c6ac7c3bf153"
 uuid = "f09324ee-3d7c-5217-9330-fc30815ba969"
 version = "1.0.2"
 
+[[deps.Nettle]]
+deps = ["Libdl", "Nettle_jll"]
+git-tree-sha1 = "f96a7485d2404f90c7c5c417e64d231f8edc5f08"
+uuid = "49dea1ee-f6fa-5aa6-9a11-8816cee7d4b9"
+version = "0.5.2"
+
+[[deps.Nettle_jll]]
+deps = ["Artifacts", "GMP_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "eca63e3847dad608cfa6a3329b95ef674c7160b4"
+uuid = "4c82536e-c426-54e4-b420-14f461c4ed8b"
+version = "3.7.2+0"
+
 [[deps.NetworkOptions]]
 uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
+
+[[deps.Nullables]]
+git-tree-sha1 = "8f87854cc8f3685a60689d8edecaa29d2251979b"
+uuid = "4d1e1d77-625e-5b40-9113-a560ec7a8ecd"
+version = "1.0.0"
 
 [[deps.OffsetArrays]]
 deps = ["Adapt"]
@@ -1315,6 +1657,12 @@ git-tree-sha1 = "838a3a4188e2ded87a4f9f184b4b0d78a1e91cb7"
 uuid = "ae029012-a4dd-5104-9daa-d747884805df"
 version = "1.3.0"
 
+[[deps.Revise]]
+deps = ["CodeTracking", "Distributed", "FileWatching", "JuliaInterpreter", "LibGit2", "LoweredCodeUtils", "OrderedCollections", "Pkg", "REPL", "Requires", "UUIDs", "Unicode"]
+git-tree-sha1 = "4d4239e93531ac3e7ca7e339f15978d0b5149d03"
+uuid = "295af30f-e4ad-537b-8983-00126c2a3abe"
+version = "3.3.3"
+
 [[deps.SHA]]
 uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
 
@@ -1401,11 +1749,23 @@ git-tree-sha1 = "48598584bacbebf7d30e20880438ed1d24b7c7d6"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.33.18"
 
+[[deps.StringEncodings]]
+deps = ["Libiconv_jll"]
+git-tree-sha1 = "50ccd5ddb00d19392577902f0079267a72c5ab04"
+uuid = "69024149-9ee7-55f6-a4c4-859efe599b68"
+version = "0.3.5"
+
 [[deps.StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
 git-tree-sha1 = "ec47fb6069c57f1cee2f67541bf8f23415146de7"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 version = "0.6.11"
+
+[[deps.StructTypes]]
+deps = ["Dates", "UUIDs"]
+git-tree-sha1 = "d24a825a95a6d98c385001212dc9020d609f2d4f"
+uuid = "856f2bd8-1eba-4b0a-8007-ebc267875bd4"
+version = "1.8.1"
 
 [[deps.TOML]]
 deps = ["Dates"]
@@ -1437,11 +1797,21 @@ version = "0.1.1"
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
+[[deps.TextWrap]]
+git-tree-sha1 = "9250ef9b01b66667380cf3275b3f7488d0e25faf"
+uuid = "b718987f-49a8-5099-9789-dcd902bef87d"
+version = "1.0.1"
+
 [[deps.TiffImages]]
 deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "Mmap", "OffsetArrays", "PkgVersion", "ProgressMeter", "UUIDs"]
 git-tree-sha1 = "fcf41697256f2b759de9380a7e8196d6516f0310"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
 version = "0.6.0"
+
+[[deps.Tokenize]]
+git-tree-sha1 = "2b3af135d85d7e70b863540160208fa612e736b9"
+uuid = "0796e94c-ce3b-5d07-9a54-7f471281c624"
+version = "0.5.24"
 
 [[deps.TranscodingStreams]]
 deps = ["Random", "Test"]
@@ -1453,6 +1823,12 @@ version = "0.9.6"
 git-tree-sha1 = "6bac775f2d42a611cdfcd1fb217ee719630c4175"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
 version = "0.1.6"
+
+[[deps.URIParser]]
+deps = ["Unicode"]
+git-tree-sha1 = "53a9f49546b8d2dd2e688d216421d050c9a31d0d"
+uuid = "30578b45-9adc-5946-b283-645ec420af67"
+version = "0.4.1"
 
 [[deps.URIs]]
 git-tree-sha1 = "97bbe755a53fe859669cd907f2d96aee8d2c1355"
@@ -1476,6 +1852,18 @@ version = "0.4.1"
 git-tree-sha1 = "34db80951901073501137bdbc3d5a8e7bbd06670"
 uuid = "41fe7b60-77ed-43a1-b4f0-825fd5a5650d"
 version = "0.1.2"
+
+[[deps.UrlDownload]]
+deps = ["HTTP", "ProgressMeter"]
+git-tree-sha1 = "05f86730c7a53c9da603bd506a4fc9ad0851171c"
+uuid = "856ac37a-3032-4c1c-9122-f86d88358c8b"
+version = "1.0.0"
+
+[[deps.VersionCheck]]
+deps = ["Dates", "JSON3", "Logging", "Pkg", "Random", "Scratch", "UrlDownload"]
+git-tree-sha1 = "89ef2431dd59344ebaf052d0737205854ded0c62"
+uuid = "a637dc6b-bca1-447e-a4fa-35264c9d0580"
+version = "0.2.0"
 
 [[deps.VersionParsing]]
 git-tree-sha1 = "58d6e80b4ee071f5efd07fda82cb9fbe17200868"
@@ -1638,6 +2026,12 @@ git-tree-sha1 = "79c31e7844f6ecf779705fbc12146eb190b7d845"
 uuid = "c5fb5394-a638-5e4d-96e5-b29de1b5cf10"
 version = "1.4.0+3"
 
+[[deps.YAML]]
+deps = ["Base64", "Dates", "Printf", "StringEncodings"]
+git-tree-sha1 = "3c6e8b9f5cdaaa21340f841653942e1a6b6561e5"
+uuid = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
+version = "0.4.7"
+
 [[deps.Zlib_jll]]
 deps = ["Libdl"]
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
@@ -1711,8 +2105,33 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╟─394d2f30-fd0b-11ec-1fc6-8ba50442f9a2
-# ╟─62d62d31-132c-4fc9-a0c1-e9507ce92d3e
-# ╟─b2fe6b7d-c682-4adc-98dc-ecd5e025bce4
+# ╠═62d62d31-132c-4fc9-a0c1-e9507ce92d3e
+# ╠═7a6a6e87-56c1-4a7c-b49c-81bda3c82065
+# ╟─c5502518-c38b-4b21-806f-52868115d00f
+# ╠═776fa883-806a-45e8-866a-fd9ea49de765
+# ╠═0c7b1103-8533-440b-944e-eca21d739952
+# ╠═e5e6f968-7729-4631-93d9-4acb7e12b82c
+# ╠═c4189247-0959-4e94-b198-db96de500f40
+# ╠═eb991f2a-ed86-4c32-bc08-a36434366ce0
+# ╟─879436b4-08e1-43e7-b2fc-8c23733ea889
+# ╟─b0f51d3c-a07c-4ed6-9b4b-5964118936e3
+# ╠═c335521d-ec2a-4fc1-b82d-266dad36a02a
+# ╟─7ed2f250-b63b-4bd4-8ee0-68eba8a493ec
+# ╟─ee687a13-6541-4868-9ac8-afb92aeba51e
+# ╠═600c2e1d-ec3e-4974-b02b-319f77dedff2
+# ╠═aea1137a-1938-44a9-935a-13acf300cfd0
+# ╠═2a1adb70-2498-4982-8d1c-941c78411bb7
+# ╠═c8b6d38d-4d2c-47e3-ae15-cfe3237ab160
+# ╠═c8ee01db-2032-4154-9c7c-5f82cf026644
+# ╠═215afe86-91a8-4330-9240-f0f992e49ef3
+# ╠═104f2db7-9610-4675-a760-709a2d13c4c9
+# ╠═6a1c5476-ebb2-4584-9a6b-17ea7716b4ce
+# ╠═7be7820e-23b4-4172-9791-f43a703b5a36
+# ╠═f07fcd5f-807e-4802-8193-2c90a2484b5c
+# ╠═fff8dd7e-d479-4c0b-b6c2-6064584df30a
+# ╠═2360a112-d4f7-415b-82e4-d1d9245b1699
+# ╠═f631d1aa-7a7a-4ee2-aa3a-9f73893d46e6
+# ╠═b2fe6b7d-c682-4adc-98dc-ecd5e025bce4
 # ╠═968dfd5f-89b3-4eb2-949b-b0bd8a12d3a7
 # ╟─511adc08-962e-47fa-9a37-7ad3cbe8f085
 # ╠═29e50e5f-2496-43c5-96bd-1cb529383197
@@ -1725,7 +2144,10 @@ version = "0.9.1+5"
 # ╠═2c26d100-cabd-4b0d-8b06-2c8436525870
 # ╠═0a10ea62-962f-4471-8abf-61008fe52922
 # ╠═8a79af6c-9798-4fa4-8d61-451c5bacf3a4
+# ╠═8591ed8f-23aa-46f3-81b0-86f896ca65e3
+# ╠═3051c04c-c2e0-4f16-985c-1468c4169306
 # ╠═a6e4cc74-f8b0-4b0b-b0bf-30863eed784b
+# ╠═29173ad3-d9d2-421d-a384-0e54368399ca
 # ╠═57638089-79c4-4a03-bf12-12290f229eee
 # ╟─a70ffb37-2fe6-4974-9210-230494608dd8
 # ╠═f2c9bcd0-04ea-4df6-b8a1-c2268d3976f5

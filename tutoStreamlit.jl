@@ -24,12 +24,6 @@ begin
 	using InteractiveUtils
 end
 
-# ╔═╡ db0d6055-9062-4a79-bd8c-0e9218c2329d
-
-
-# ╔═╡ cfad1ff0-f863-4da2-919c-00339364297d
-
-
 # ╔═╡ c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
 md"""
 **Nous reprenons  [ce tuto](https://github.com/streamlit/30days-French). Et [ici](https://docs.streamlit.io/library/cheatsheet) l'antisèche!**
@@ -185,6 +179,12 @@ end
 
 # ╔═╡ 2b13b2b7-5103-4586-b001-7c32c755bfa3
 md"Durée activation (s): $(@bind DuréeActivation MySlider(1:100, 20))"
+
+# ╔═╡ 78d33ad2-28e4-472c-a907-3830fa5fcd0b
+begin
+	lien1="https://raw.githubusercontent.com/FiatLux-Rapid/NotebooksPluto1/master/streamlite_90days_tuto/streamlit_app2.py"
+	run_with_timeout(`streamlit run $lien1`,DuréeActivation)
+end
 
 # ╔═╡ 80e38f46-3757-4b66-bdec-9c4807f7060d
 run_with_timeout(`streamlit run $lien`,DuréeActivation);
@@ -1331,17 +1331,16 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═db0d6055-9062-4a79-bd8c-0e9218c2329d
-# ╠═cfad1ff0-f863-4da2-919c-00339364297d
 # ╠═c45d9d5d-c7b6-4cd6-bad4-b839f2debb70
 # ╟─58a71b89-66bc-4a89-a20f-ffe70b8f8060
 # ╟─92cedcdf-894a-436c-826e-54e39727cebd
 # ╠═6d54abd0-fe75-4778-afc5-c392daa7705a
 # ╠═2b13b2b7-5103-4586-b001-7c32c755bfa3
-# ╠═94d2b294-7802-45d2-8496-79e851eda062
+# ╟─94d2b294-7802-45d2-8496-79e851eda062
 # ╠═421fefb8-32f8-4290-a120-120b13733df4
+# ╠═78d33ad2-28e4-472c-a907-3830fa5fcd0b
 # ╠═bd3c5942-713e-492b-996d-ac5aaa03fc6f
-# ╟─8dfda5c3-3e68-41bf-a047-e903763ec238
+# ╠═8dfda5c3-3e68-41bf-a047-e903763ec238
 # ╟─c1da123f-d393-49c9-a0fc-2bc80fd79c8d
 # ╠═80e38f46-3757-4b66-bdec-9c4807f7060d
 # ╠═81c50f2f-7792-4230-bc66-0cf2385ce9ee

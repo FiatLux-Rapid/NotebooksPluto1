@@ -1,0 +1,11 @@
+{
+  "name": "fiatlux_server",
+  "version": "1.0.0",
+  "description": "node server for a toy FIATLUX example",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "JP Brasile",
+  "license": "MIT"
+}

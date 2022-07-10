@@ -153,7 +153,7 @@ npm run start
 # ╔═╡ 9b711a4f-b1fb-4c07-b3d7-90d8b19b2a9c
 md"""
 ## Installer *Express.js*
-C'est l'appication la plus popullaire pour la création d'API Rest.
+C'est l'appication la plus populaire pour la création d'API Rest.
 On l'installe avec 
 ```console
 npm install express --save
@@ -189,9 +189,14 @@ En l'état une modification de app.js n'est pas répercutée sur le port 3000 (i
 ```
 Cette fonctionnalité n'es utile qu'en développement d'où *- -save-dev*
 
-start devient 
+start devient (dans package.json)
 "start": "nodemon app.js" 
 afin d'activer nodemon
+
+et il faut pour la console envoyer la commade :
+```console
+npm run start nodemon app.js
+```
 
 Les modifications dans app.js sont maintenant automatiquement prise en compte
 
@@ -278,7 +283,7 @@ app.get('/api/pokemons/', (req, res) => {
 Lorsque l'on veut renvoyer des données plus complexe qu'une chaine de caractères la commande *res.send()* n'est plus suffisante car les données doivent être envoyées au format *jjson*. Heureusement *Express* fournit une fonction pour ce faire, la commande *res.json()*
 
 ## Embellir la réponse json dans le navigateur
-Il suufit de rajouter à chrome l'expesion [*json viewer*](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh?hl=fr)
+Il suufit de rajouter à chrome l'expansion [*json viewer*](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh?hl=fr)
 """
 
 # ╔═╡ 94cc426d-2b30-406e-a7c9-dfb47d8ad98d
@@ -1982,16 +1987,16 @@ version = "0.9.1+5"
 # ╟─fc6289af-a741-4b11-9208-f9742f4d5925
 # ╠═7065fece-206d-401d-b75a-901cf185026e
 # ╠═332d2307-48ad-4744-bc88-8a26c16f44e3
-# ╟─d3b67683-a9c8-4595-8d16-50be2908ceae
+# ╠═d3b67683-a9c8-4595-8d16-50be2908ceae
 # ╠═d1e3ee9f-efb0-4e5d-bb77-4f0d0edb2521
 # ╠═41c357f7-1a08-4810-a208-85253ab01f0d
 # ╟─1cc74b57-1109-464a-82fb-27be42259ed9
 # ╟─8ff01192-5833-4271-91b8-4c82788b2be1
-# ╟─e6bbc68f-3ea3-4bec-8332-cd19573fe3bd
-# ╟─9b711a4f-b1fb-4c07-b3d7-90d8b19b2a9c
+# ╠═e6bbc68f-3ea3-4bec-8332-cd19573fe3bd
+# ╠═9b711a4f-b1fb-4c07-b3d7-90d8b19b2a9c
 # ╟─da0121d0-b301-40bd-b0fa-a90d60a8972b
-# ╟─be1c5e23-51df-42d9-b1c0-8182185d653d
-# ╟─953d6fbf-8718-441b-bedd-6f3554622e4b
+# ╠═be1c5e23-51df-42d9-b1c0-8182185d653d
+# ╠═953d6fbf-8718-441b-bedd-6f3554622e4b
 # ╟─94cc426d-2b30-406e-a7c9-dfb47d8ad98d
 # ╟─f09ca278-439f-41bb-8d05-7bb19385d57f
 # ╟─5bdab855-ac22-42c8-92a1-6ef0ce4fdc11
