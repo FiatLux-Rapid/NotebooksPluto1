@@ -4,6 +4,9 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ ad67872f-06ad-4088-be30-ab865dadc003
+using WebAPI
+
 # ╔═╡ 600c2e1d-ec3e-4974-b02b-319f77dedff2
 using Genie,Genie.Router,Genie.Renderer.Html, Genie.Renderer.Json,Genie.Requests
 
@@ -38,6 +41,120 @@ begin
 	using DataFrames
 end
 
+# ╔═╡ c34f220e-6706-4661-8f99-7b8d856c015a
+md"""
+## ToyExampleV2
+### API streamlit
+* On crée le fichier app.py dans le répertoire ToyExampleV2 (VS code) et on active l'environnement fiatlux pour le terminal pointant sur ce répertoire
+* On utilise le tuto *tutoStreamlit.jl* pour réaliser l'API souhaité
+* On crée un stream dédié à l'envoi des données API → Julia (via speckle.xyz)
+le stream est *https://speckle.xyz/streams/36b6a4554d*
+* L'envoi API → Julia a été réalisé dans app.py
+```
+https://speckle.xyz/streams/36b6a4554d/commits/357903b478
+```
+l'id de l'objet *14be226ac92562de9f646d6bd88d0d6e*
+* Nous allons créé un module julia de réception et de traitement de ce stream (sous la forme d'un notebook *ToyExampleV2Optim.jl*)
+
+Lors de la mise au point nous avons rencontré les problèmes suivants:
+* il faut un stream pour chaque envoi
+  * depuis l'API python avec le stream ToyeXampleV2_APIJulia
+  * Après l'optimisation avec le stream fromJulia
+  * Après le traitement par GH avec le stream FromGH
+
+
+* L'API Python ne remet pas à jour le stream en provenance de Grasshopper, un rafraîchissement de la page remet les conditions V,e à leur état initial (incohérent avec l'objet 3D qui est alors mis à jour): pour régler ce problème nous avons lancé la récupération de l'objet après
+  * L'envoi de "submit"
+  * Un délai de 5 s pemrettant la prise en compte des traitements (une façon plus sophistiquée consiterait à utiliser une fonction asynchrone basée sur l'arrivé du nouveau stream (comme cela est implémenté dans speckle pour GH avec les fonctions auto receive et auto send))
+
+  * Le notebook julia bien que réactif ne voit pas le changement du nouveau stream (inséré dans un script Python qui ne change pas):
+
+  Cela remet en cause notre architecture privilégiant d'insérer du code python dans un script julia. 
+  Il faut probablement faire l'inverse:
+    * partir d'un script python qui détecte de façon asynchrone l'arrivée de nouveaux flux.
+    * activer alors un script julia
+    * Pour activer un notebook particulier Pluto.run(notebook="test.jl")
+
+    * Pour lancer une commande dans python
+```Python
+
+import subprocess, sys
+
+computer_name = "L8694C"
+
+p = subprocess.Popen(
+    ["powershell.exe", "Get-ADComputer " + computer_name+ " | Select-Object Name"],
+    stdout=sys.stdout)
+
+p.communicate()
+```
+
+  * Lancement en une ligne julia 
+
+  Nous avons testé 
+```console
+julia -e 'import Pluto; Pluto.run(notebook="tutoHTML.jl")' 
+```
+  (qui ne fonctionne pas) alors alors que
+```console
+julia -e 'import Pluto; Pluto.run()'
+``` 
+  fonctionne
+
+
+  * L'option la plus pertinente consiste à décomposer les fonctions avec 
+     * un acteur python qui récupère les entrées via Speckle et met les données dans un fichier local (*in.csv*)
+Cet acteur peut être un simple API réalisé avec streamlit, localisé chez l'acteur python qui a pour seule fonction d'écrire les données du stream dans in.txt à chaque changement 
+     * un acteur julia lors des changements du fichier *in.csv* et qui le traite.
+```julia
+open("in.txt") do f
+       line = 0
+
+         # read till end of file
+         while ! eof(f)
+
+            # read a new / next line for every iteration
+            s = readline(f)
+            line += 1
+            println("$line . $s")
+         end
+       end
+```
+
+Il faut que le fichier in.txt soit rafraîchi si le stream change
+pip install streamlit-autorefresh
+
+
+"""
+
+# ╔═╡ 4e5181d5-f0b3-4194-9c4d-c70119db1c11
+md"""
+### Point d'étape (15/7/2022)
+
+L'architecture logiciel maquêtée présentent plusieurs avantages
+* Elle est distribuée dans le cloud: les contributions et les requêtes client peuvent venir de n'importe où dans le monde
+* Elle est asynchrone: l'activité n'est pas séquentielle mais les tâches s'activent en tant que de besoin
+* Elle est multilangages: les applications peuvent provenir de Julia, Python, Grasshopper...
+* Elle conserve la mémoire du passé: on peut revenir à des versions antérieures de logiciel sans avoir eu a se préoccuper des sauvegardes
+* Les modifications logiciels (d'où qu'elles proviennent) sont automatiquement actives
+* Les logiciels consistituant le coeur des ressources ne peuvent pas être piratés
+* Ces logiciels sont mis en oeuvre sans temps de latence car toutes les ressources nécessaires sont déjà chargés et précompilés (Julia). 
+*  Le front end est généré par un serveur très léger qui n'a pour fonction que d'établir l'IHM client et le routage des requêtes. Il peut être donc être hébergé sur des sites gratuits.
+* On évite pour l'emploi de la solution de Grasshopper intégré dans le cloud, payante au temps passé. Au contraire la version mono-ordinateur (même avec plusieurs instances d'ouverte) devient accessible à tous de part le monde et cela ne nécessite qu'une seule licence. 
+* Pour julia on peut activer plusieurs notebooks Pluto indépendant chacun dédié à des tâches spécifiques
+
+**RESTE A FAIRE**
+* Mise en œuvre de streamlit pour l'interface client et déploiement
+* Réalisation du cas d'école (V2) avec Julia/GH/Streamlit/Speckle/Python
+* Mise en œuvre de ModelingToolKit.jl pour le choix automatique des variables à optimiser 
+""" 
+
+# ╔═╡ 9824289d-e5c9-4713-9dde-3ddbcd888676
+read("D:\2022\FIATLUX_Implementation\NotebooksPluto\ToyExampleV2\in.txt")
+
+# ╔═╡ 8f7cd2bc-d0eb-4681-ac99-37bcab30819b
+pwd()
+
 # ╔═╡ 394d2f30-fd0b-11ec-1fc6-8ba50442f9a2
 
 @htl """
@@ -57,7 +174,25 @@ md"""
 
 
 > 👍 Il est possible d'ouvrir plusieurs notebook en même temps, il suffit de revenir au menu principal (flèche ← en haut à gauche du navigateur) , copier l'url et l'ouvrir dans un nouvel onglet !
+
+> 👍 Pour créer un module Julia ayant ces propres dépendances, il suffit de se mettre
+dans le bon répertoire et de faire sous julia
+```julia
+import Pkg
+] activate
+#  Pkg.generate nommDuModule 
+```
+
+
+> 👍 Exécution de Julia en remote [ici]( https://rikhuijzer.github.io/JuliaTutorialsTemplate/getting-started/#without_running_the_site_locally)
+
+> 👍 On peut zoomer dézoomer un notebook Pluto en appuyant sur *Ctrl* en même temps qu'en agissant sur la roulette de la souris
+
+> 👍 Pour éviter l'affichage lié à l'exécution d'une cellule, il suffit de rajouter *nothing* à la fin de la cellule et rien de ne sera afficher
 """
+
+# ╔═╡ 09e67d1b-dddd-4128-9df5-46ea1e664c76
+
 
 # ╔═╡ 7a6a6e87-56c1-4a7c-b49c-81bda3c82065
 md"""
@@ -106,6 +241,29 @@ end
 # ╔═╡ 0c7b1103-8533-440b-944e-eca21d739952
 md"""
 ## Réalisation d'un serveur Pluto
+Il existe trois possiblités que nous allons tester.
+
+Dans tous les cas il faut que le programme julia à mettre en oeuvre soit un module propre. Pour créer un tel module "sliderServerTest.jl" il doit contenir localement ces propres dépendances. On se place dans le répertoire où devra se trouver le module
+```console
+cd D:\2022\FIATLUX_Implementation\NotebooksPluto\ToyExampleV1
+
+```
+sous Julia:
+```julia
+begin
+let
+    import Pkg
+    Pkg.activate(".")
+    Pkg.generate sliderServerTest
+    #Pkg.add("XXX")
+end
+
+end
+```
+
+* pluto-Rest
+#### PlutoSliderServer ( ne tourne que sous linux)
+
 * Installation de [pluto-rest](https://github.com/ctrekker/pluto-rest)
 La visio explicative est [ici](https://www.youtube.com/watch?v=cx_mjsmybA8)
 
@@ -116,6 +274,123 @@ using PlutoRESTClient
 nb=PlutoNotebook("http://localhost:1234/?secret=S6L412Fp","Docs.jl")
 ```
 """
+
+# ╔═╡ 24bb245c-3fbd-4c17-955c-0f483b0e157a
+md"""
+ [WebAPI](https://github.com/fonsp/WebAPI.jl)
+On écrit explicitement dans le notebook les commandes get et post souhaitées
+```julia
+begin
+using WebAPI
+
+function bhaskara(a, b, c)
+    Δ = b^2 - 4*a*c
+
+    Δ < 0 && (Δ = complex(Δ))
+
+    x₁ = (-b + √Δ) / 2a
+    x₂ = (-b - √Δ) / 2a
+    return x₁, x₂
+end
+
+const app = App()
+
+add_get!(app, "/bhaskara/:a/:b/:c") do req
+    a = parse(Int, req.params.a)
+    b = parse(Int, req.params.b)
+    c = parse(Int, req.params.c)
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Dict("x1" => "$x₁", "x2" => "$x₂")
+end
+
+add_get!(app, "/bhaskara") do req
+    verifykeys(req.query, (:a, :b, :c)) || return Res(400, "Incorrect Query.")
+
+    a = parse(Int, req.query.a)
+    b = parse(Int, req.query.b)
+    c = parse(Int, req.query.c)
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return (x1 = "$x₁", x2 = "$x₂")
+end
+
+add_post!(app, "/bhaskara") do req
+    verifykeys(req.body, ["a", "b", "c"]) || return Res(400, "Incorrect JSON.")
+
+    a = req.body.a
+    b = req.body.b
+    c = req.body.c
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Res(201, (x1 = "$x₁", x2 = "$x₂"))
+end
+
+serve(app) #Deafult: ip = localhost, port = 8081
+end
+```
+
+Malheureusement le lancement de cette cellule sur Pluto bloque le notebook. Il faut donc créer un serveur dédié remplissant certaine fonction (sous pluto par exemple) distinct des autres notebooks
+
+"""
+
+
+# ╔═╡ 61121415-bf02-447d-a4d0-14e4c68829ce
+# to import WebAPI
+#using Pkg; Pkg.add(url="https://github.com/eliascarv/WebAPI.jl")#, adding rev="master" and/or subdir="tree/master/src
+
+
+# ╔═╡ 87399a03-8c61-4912-9068-29ee9d49d97f
+begin
+
+
+function bhaskara(a, b, c)
+    Δ = b^2 - 4*a*c
+
+    Δ < 0 && (Δ = complex(Δ))
+
+    x₁ = (-b + √Δ) / 2a
+    x₂ = (-b - √Δ) / 2a
+    return x₁, x₂
+end
+
+const app = App()
+add_get!(app, "/bhaskara/:a/:b/:c") do req
+    a = parse(Int, req.params.a)
+    b = parse(Int, req.params.b)
+    c = parse(Int, req.params.c)
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Dict("x1" => "$x₁", "x2" => "$x₂")
+end
+
+add_get!(app, "/bhaskara") do req
+    verifykeys(req.query, (:a, :b, :c)) || return Res(400, "Incorrect Query.")
+
+    a = parse(Int, req.query.a)
+    b = parse(Int, req.query.b)
+    c = parse(Int, req.query.c)
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return (x1 = "$x₁", x2 = "$x₂")
+end
+
+add_post!(app, "/bhaskara") do req
+    verifykeys(req.body, ["a", "b", "c"]) || return Res(400, "Incorrect JSON.")
+
+    a = req.body.a
+    b = req.body.b
+    c = req.body.c
+    x₁, x₂ = bhaskara(a, b, c)
+
+    return Res(201, (x1 = "$x₁", x2 = "$x₂"))
+end
+
+serve(app) #Deafult: ip = localhost, port = 8081
+end
+
+# ╔═╡ 74e918fa-d49f-40cc-96a7-af7c8dec803a
+1+1
 
 # ╔═╡ e5e6f968-7729-4631-93d9-4acb7e12b82c
 
@@ -253,8 +528,23 @@ Lz requête *http://127.0.0.1:8001/hi?name=Toto/* montre que le serveur récupè
 # ╔═╡ 104f2db7-9610-4675-a760-709a2d13c4c9
 
 
-# ╔═╡ 6a1c5476-ebb2-4584-9a6b-17ea7716b4ce
+# ╔═╡ 525e13e1-d2be-4d73-8f9f-68c3e7570357
 
+
+# ╔═╡ 6a1c5476-ebb2-4584-9a6b-17ea7716b4ce
+md"""
+#### Réalisation d'une passerelle speckle 
+L'évalution a été réalisée avec succès surle  notebook GHServer.jl :
+* PyCall permet de passer de julia en python
+* Specklepy permet alors 
+  * de créer une url (stream) d'échange active (elle est mise en mémoire dans le site speckle.xyz) avec tout l'historique de son utilisation (commit)
+  * De bâtir un objet contenant les données à transférer (y compris de type géométrique)
+  * De le transférer avec un message
+  * L'objet peut alors être reçu en temps réel sur Grasshopper (streamFromGHServer.gx)
+
+**La liaison julia ⟶ Grasshopper est donc établie via internet** 	
+
+"""
 
 # ╔═╡ 7be7820e-23b4-4172-9791-f43a703b5a36
 #down()
@@ -334,6 +624,13 @@ begin   # execution is OK but interrupt not possible : here with timeout delay
 end;
 ```
 """
+
+# ╔═╡ 74b5477b-9168-4cd8-aada-d661129ad2cb
+
+
+
+# ╔═╡ e52caa5e-dbe6-43d3-aa64-2fa6eda70a4e
+1+1
 
 # ╔═╡ a01b63b0-96a5-4aca-86f9-5ef3320b59f0
 
@@ -502,6 +799,9 @@ end
 
 """
 
+# ╔═╡ 3dff1720-648d-45f4-ad4c-b69ed624e90f
+
+
 # ╔═╡ f2c9bcd0-04ea-4df6-b8a1-c2268d3976f5
 begin
 	model = Model(Ipopt.Optimizer)
@@ -609,6 +909,24 @@ begin   # execution is OK but interrupt not possible : here with timeout dely el
 	run_with_timeout(mycommand,20)  # without timeout run(mycommand)
 end;
 
+# ╔═╡ a81be1c2-fdda-4fd3-8c90-88335901d3a7
+# Pkg.add("Colors")
+
+# ╔═╡ f4ebe983-0375-45dc-b107-a17b74516939
+#Pkg.add("ColorVectorSpace")
+
+# ╔═╡ 6b71eb5f-e5d5-40e7-87fb-0b41835a54ce
+#Pkg.add("ColorVectorSpace")
+
+# ╔═╡ 2e16679f-ac65-4507-af49-53f0895273a0
+#Pkg.add("HypertextLiteral")
+
+# ╔═╡ ffc2d82b-aa46-4f04-93d2-38ef36a172b3
+#Pkg.add("DataFrames")
+
+# ╔═╡ 9477d6e7-9bdb-403c-98d6-512ad6f58da2
+#Pkg.add("CSV")
+
 # ╔═╡ 8cf32708-2c11-4711-820f-e6964de03804
 PlutoUI.TableOfContents(aside=true)
 
@@ -647,7 +965,7 @@ ImageShow = "~0.3.6"
 Ipopt = "~1.0.2"
 JSON = "~0.21.3"
 JuMP = "~1.1.1"
-Plots = "~1.31.1"
+Plots = "~1.31.2"
 PlutoUI = "~0.7.39"
 PyCall = "~1.93.1"
 """
@@ -984,15 +1302,15 @@ uuid = "781609d7-10c4-51f6-84f2-b8444358ff6d"
 
 [[deps.GR]]
 deps = ["Base64", "DelimitedFiles", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Pkg", "Printf", "Random", "RelocatableFolders", "Serialization", "Sockets", "Test", "UUIDs"]
-git-tree-sha1 = "c98aea696662d09e215ef7cda5296024a9646c75"
+git-tree-sha1 = "037a1ca47e8a5989cc07d19729567bb71bfabd0c"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.64.4"
+version = "0.66.0"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "3a233eeeb2ca45842fe100e0413936834215abf5"
+git-tree-sha1 = "c8ab731c9127cd931c93221f65d6a1008dad7256"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.64.4+0"
+version = "0.66.0+0"
 
 [[deps.Genie]]
 deps = ["ArgParse", "Dates", "Distributed", "EzXML", "FilePathsBase", "HTTP", "HttpCommon", "Inflector", "JSON3", "JuliaFormatter", "Logging", "Markdown", "MbedTLS", "Millboard", "Nettle", "OrderedCollections", "Pkg", "REPL", "Random", "Reexport", "Revise", "SHA", "Serialization", "Sockets", "UUIDs", "Unicode", "VersionCheck", "YAML"]
@@ -1486,9 +1804,9 @@ uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "9a36165cf84cff35851809a40a928e1103702013"
+git-tree-sha1 = "e60321e3f2616584ff98f0a4f18d98ae6f89bbb3"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "1.1.16+0"
+version = "1.1.17+0"
 
 [[deps.OpenSpecFun_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
@@ -1561,9 +1879,9 @@ version = "1.3.0"
 
 [[deps.Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
-git-tree-sha1 = "93e82cebd5b25eb33068570e3f63a86be16955be"
+git-tree-sha1 = "b29873144e57f9fcf8d41d107138a4378e035298"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.31.1"
+version = "1.31.2"
 
 [[deps.PlutoUI]]
 deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
@@ -1636,9 +1954,9 @@ version = "1.2.1"
 
 [[deps.RecipesPipeline]]
 deps = ["Dates", "NaNMath", "PlotUtils", "RecipesBase"]
-git-tree-sha1 = "dc1e451e15d90347a7decc4221842a022b011714"
+git-tree-sha1 = "5d7acddc4bf58e37905b32a2aa469b83477fceb4"
 uuid = "01d81517-befc-4cb6-b9ec-a95719d0359c"
-version = "0.5.2"
+version = "0.6.1"
 
 [[deps.Reexport]]
 git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
@@ -1647,9 +1965,9 @@ version = "1.2.2"
 
 [[deps.RelocatableFolders]]
 deps = ["SHA", "Scratch"]
-git-tree-sha1 = "cdbd3b1338c72ce29d9584fdbe9e9b70eeb5adca"
+git-tree-sha1 = "22c5201127d7b243b9ee1de3b43c408879dff60f"
 uuid = "05181044-ff0b-4ac5-8273-598c1e38db00"
-version = "0.1.3"
+version = "0.3.0"
 
 [[deps.Requires]]
 deps = ["UUIDs"]
@@ -2104,12 +2422,22 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═c34f220e-6706-4661-8f99-7b8d856c015a
+# ╠═4e5181d5-f0b3-4194-9c4d-c70119db1c11
+# ╠═9824289d-e5c9-4713-9dde-3ddbcd888676
+# ╠═8f7cd2bc-d0eb-4681-ac99-37bcab30819b
 # ╟─394d2f30-fd0b-11ec-1fc6-8ba50442f9a2
-# ╠═62d62d31-132c-4fc9-a0c1-e9507ce92d3e
-# ╠═7a6a6e87-56c1-4a7c-b49c-81bda3c82065
+# ╟─62d62d31-132c-4fc9-a0c1-e9507ce92d3e
+# ╠═09e67d1b-dddd-4128-9df5-46ea1e664c76
+# ╟─7a6a6e87-56c1-4a7c-b49c-81bda3c82065
 # ╟─c5502518-c38b-4b21-806f-52868115d00f
-# ╠═776fa883-806a-45e8-866a-fd9ea49de765
+# ╟─776fa883-806a-45e8-866a-fd9ea49de765
 # ╠═0c7b1103-8533-440b-944e-eca21d739952
+# ╠═24bb245c-3fbd-4c17-955c-0f483b0e157a
+# ╠═61121415-bf02-447d-a4d0-14e4c68829ce
+# ╠═ad67872f-06ad-4088-be30-ab865dadc003
+# ╠═87399a03-8c61-4912-9068-29ee9d49d97f
+# ╠═74e918fa-d49f-40cc-96a7-af7c8dec803a
 # ╠═e5e6f968-7729-4631-93d9-4acb7e12b82c
 # ╠═c4189247-0959-4e94-b198-db96de500f40
 # ╠═eb991f2a-ed86-4c32-bc08-a36434366ce0
@@ -2124,7 +2452,8 @@ version = "0.9.1+5"
 # ╠═c8b6d38d-4d2c-47e3-ae15-cfe3237ab160
 # ╠═c8ee01db-2032-4154-9c7c-5f82cf026644
 # ╠═215afe86-91a8-4330-9240-f0f992e49ef3
-# ╠═104f2db7-9610-4675-a760-709a2d13c4c9
+# ╟─104f2db7-9610-4675-a760-709a2d13c4c9
+# ╠═525e13e1-d2be-4d73-8f9f-68c3e7570357
 # ╠═6a1c5476-ebb2-4584-9a6b-17ea7716b4ce
 # ╠═7be7820e-23b4-4172-9791-f43a703b5a36
 # ╠═f07fcd5f-807e-4802-8193-2c90a2484b5c
@@ -2137,6 +2466,8 @@ version = "0.9.1+5"
 # ╠═29e50e5f-2496-43c5-96bd-1cb529383197
 # ╠═b3b5f9be-5014-4ed5-a8bf-9063f733065b
 # ╠═850e1e36-09e0-4cd9-932e-1121336a145a
+# ╠═74b5477b-9168-4cd8-aada-d661129ad2cb
+# ╠═e52caa5e-dbe6-43d3-aa64-2fa6eda70a4e
 # ╠═a01b63b0-96a5-4aca-86f9-5ef3320b59f0
 # ╠═9522c1f6-4781-4537-ac9d-420bb05584b6
 # ╠═e49480c8-3d67-4547-93fd-0d96b32085b6
@@ -2149,18 +2480,25 @@ version = "0.9.1+5"
 # ╠═a6e4cc74-f8b0-4b0b-b0bf-30863eed784b
 # ╠═29173ad3-d9d2-421d-a384-0e54368399ca
 # ╠═57638089-79c4-4a03-bf12-12290f229eee
-# ╟─a70ffb37-2fe6-4974-9210-230494608dd8
+# ╠═a70ffb37-2fe6-4974-9210-230494608dd8
+# ╠═3dff1720-648d-45f4-ad4c-b69ed624e90f
 # ╠═f2c9bcd0-04ea-4df6-b8a1-c2268d3976f5
 # ╠═78f702d0-e3d1-4259-8a1b-4d181b3ac42f
 # ╠═364f4cd7-21a6-4bbd-ba5f-6724c947532a
-# ╠═969f480c-f12a-432c-9296-81741a47d8b7
+# ╟─969f480c-f12a-432c-9296-81741a47d8b7
 # ╠═d67ec3a2-7d74-4ba1-bf17-d884fc4c05e7
 # ╠═b675a03d-df22-41b7-8492-9ed7399aa41d
 # ╠═3b325115-9c50-4beb-b76f-f69712cca8a8
 # ╠═7fd5df5f-2767-48a2-ab80-d4912dba16e6
 # ╠═01482bd8-5371-402d-9571-eed7feeed4cd
 # ╠═bf4c4087-103b-4ba6-a73d-b4dc078e66c1
+# ╠═a81be1c2-fdda-4fd3-8c90-88335901d3a7
+# ╠═f4ebe983-0375-45dc-b107-a17b74516939
+# ╠═6b71eb5f-e5d5-40e7-87fb-0b41835a54ce
+# ╠═2e16679f-ac65-4507-af49-53f0895273a0
 # ╠═f7899725-2afe-46de-9586-66727eca0ad5
+# ╠═ffc2d82b-aa46-4f04-93d2-38ef36a172b3
+# ╠═9477d6e7-9bdb-403c-98d6-512ad6f58da2
 # ╠═90abf264-1fe9-4460-830d-50c6e88b4ce0
 # ╠═8cf32708-2c11-4711-820f-e6964de03804
 # ╟─00000000-0000-0000-0000-000000000001
