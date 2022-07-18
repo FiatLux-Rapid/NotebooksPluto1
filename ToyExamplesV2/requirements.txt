@@ -1,0 +1,4 @@
+julia-0.5.7
+streamlit-1.11.0
+streamlit-autorefresh-0.0.1
+specklepy-2.7.4
