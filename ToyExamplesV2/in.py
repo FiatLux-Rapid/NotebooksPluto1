@@ -10,7 +10,7 @@ from streamlit_autorefresh import st_autorefresh
 # Run the autorefresh about every 2000 milliseconds (2 seconds) and stop
 # after it's been refreshed 100 times.
 #count = st_autorefresh(interval=5000, limit=1e6, key="fizzbuzzcounter")
-ID = st_autorefresh(interval=5000, limit=1e6, key="fizzbuzzcounter")
+ID = st_autorefresh(interval=10000, limit=1e6, key="fizzbuzzcounter")
 
 stream_id="36b6a4554d"  # spécifique au projet ToyExampleV2_APIJulia
 client = SpeckleClient(host="speckle.xyz", use_ssl=True)

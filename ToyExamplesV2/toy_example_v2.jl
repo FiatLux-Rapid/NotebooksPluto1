@@ -20,7 +20,7 @@ using JuMP
 using PlutoLinks
 
 # ╔═╡ 23f87e45-d35f-49df-b855-b7d338470823
-
+using Dates
 
 # ╔═╡ f5a4cfbf-ea0e-45f9-86e2-f80362c5b0e7
 
@@ -65,16 +65,44 @@ file_content = @use_file(my_file)
 """
 
 # ╔═╡ b64ca4a9-92a7-4945-b540-03253076787e
+begin
 
-	file_content = @use_file(pwd()*"\\in.txt")
-	
-
+#@async file_content =   read(pwd()*"\\in.txt")
+end	
 
 # ╔═╡ 7ca705dd-3906-4936-97d6-0b4a052ec2c5
-received_data=split(file_content,"\r\n")
+my_in_file=pwd()*"\\in.txt"
+
+# ╔═╡ 622d8cfc-177c-42a3-be2e-9cd768cf8c30
+
+ @use_file(my_in_file)
+
+# ╔═╡ f784480f-2fe6-48f4-a8c4-549f42d6cdc3
+begin
+	@use_file(my_in_file)
+	file_content =   @use_file(my_in_file)
+	file_content1 =   @use_file(my_in_file)
+	if file_content != file_content1
+	   	file_content3= @use_file(my_in_file)
+	else
+		file_content3=file_content
+	end
+	
+end
+	
+	
+
+# ╔═╡ 739da1cf-9264-4660-a55e-fdddb4cf3297
+begin
+	sleep(1)
+	received_data=split(file_content3,"\r\n")
+end
 
 # ╔═╡ f8c7166f-9216-48bc-be73-641bcc652ce9
+begin
 
+ #data_change=Dates.unix2datetime(mtime((pwd()*"\\in.txt")))
+end
 
 # ╔═╡ 1b651911-efd8-4f79-bf16-63df96dff3d1
 begin
@@ -177,6 +205,7 @@ end
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 Ipopt = "b6b21f68-93f8-5de0-b562-5493be1d77c9"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
@@ -703,6 +732,9 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─0e20a115-ad8e-4c9e-b2d9-a4f0c6119054
 # ╠═b64ca4a9-92a7-4945-b540-03253076787e
 # ╠═7ca705dd-3906-4936-97d6-0b4a052ec2c5
+# ╠═622d8cfc-177c-42a3-be2e-9cd768cf8c30
+# ╠═f784480f-2fe6-48f4-a8c4-549f42d6cdc3
+# ╠═739da1cf-9264-4660-a55e-fdddb4cf3297
 # ╠═f8c7166f-9216-48bc-be73-641bcc652ce9
 # ╠═1b651911-efd8-4f79-bf16-63df96dff3d1
 # ╟─800b3df5-8ba0-4d78-945f-b91c5357c29d

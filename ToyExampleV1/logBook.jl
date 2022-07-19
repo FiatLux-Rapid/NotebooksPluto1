@@ -189,6 +189,24 @@ import Pkg
 > 👍 On peut zoomer dézoomer un notebook Pluto en appuyant sur *Ctrl* en même temps qu'en agissant sur la roulette de la souris
 
 > 👍 Pour éviter l'affichage lié à l'exécution d'une cellule, il suffit de rajouter *nothing* à la fin de la cellule et rien de ne sera afficher
+
+> 👍 Pour deployer une API streamlit sur streamlit cloud il est nécessaire de télécharger les dépendances associées. Pour se faire se placer dans le réprtoire de l'application et créer un nouvel environnement conda
+```console
+	conda create --name toyv2 python=3.9
+```
+avant d'utiliser pip :'/home/appuser/venv/bin/python -m pip install --upgrade pip' 
+	ainsi qu'un fichier requirements.txt dans lequel on place toutes les dépendances nécessaire à app.py avec leur n° de version
+
+dans notre cas
+```
+streamlit==1.11.0
+streamlit-autorefresh==0.0.1
+specklepy==2.7.4
+```
+
+
+heroku 793de2bb-666b-4ace-bc19-dac81b7ae481 autorization token test
+e8cbea9d-4d70-42e4-993a-7df985aaf71c token heroku cli
 """
 
 # ╔═╡ 09e67d1b-dddd-4128-9df5-46ea1e664c76
