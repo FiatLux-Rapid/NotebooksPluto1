@@ -42,6 +42,19 @@ begin
 end
 
 # ╔═╡ ab9907ce-d0a0-464b-9436-da7d8654ca1e
+md"""
+## To Do
+* Remplacer le fichier d'échange in.txt par une gestion d'historique (objet résultat)
+* Eviter de résoudre une requête ayant déjà fait l'objet d'un traitement
+* Passer d'un problème résolu à un problème plus général
+* Permettre l'accès au ressources python, julia et Gh à l'utilisateur final sans installation
+"""
+
+# ╔═╡ 2103d6d4-c73f-4512-bfb4-4194e1036d06
+@htl """
+ <p>FIATLUX et le cloud</p>
+      <img src = "https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/e4820323423781fedb05dceec1da49c5dfd35886/FIATLUX_cloud.PNG?raw=true" alt = "FIATLUX in the Cloud" width = 100% height = 100%  border = "5" align = "left"/>
+"""
 
 
 # ╔═╡ c34f220e-6706-4661-8f99-7b8d856c015a
@@ -2444,6 +2457,7 @@ version = "0.9.1+5"
 
 # ╔═╡ Cell order:
 # ╠═ab9907ce-d0a0-464b-9436-da7d8654ca1e
+# ╟─2103d6d4-c73f-4512-bfb4-4194e1036d06
 # ╠═c34f220e-6706-4661-8f99-7b8d856c015a
 # ╠═4e5181d5-f0b3-4194-9c4d-c70119db1c11
 # ╠═9824289d-e5c9-4713-9dde-3ddbcd888676
