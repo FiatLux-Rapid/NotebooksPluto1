@@ -103,7 +103,7 @@ with st.sidebar.form("my_form"):
         account = get_default_account()
         #client.authenticate_with_account(account)
         client.authenticate_with_token("bb79167d4c8279ffcdac840cf0593191b54504f359")
-        transport = ServerTransport(client=client, stream_id=new_stream_id)
+        #transport = ServerTransport(client=client, stream_id=new_stream_id)
 
         # this serialises the block and sends it to the transport
         hash = operations.send(base=block, transports=[transport])
