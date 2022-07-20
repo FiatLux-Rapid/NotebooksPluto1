@@ -48,7 +48,7 @@ st.write(st.session_state.ID)
 if a != st.session_state.ID: 
     st.session_state.ID=a
     st.write(st.session_state.ID)
-    file1 = open("in.txt", "w") 
+    file1 = open("in.txt", "a") 
     file1.write(a+" ,"+str(b)+","+str(c))
     file1.close()
    
