@@ -23,7 +23,7 @@ using PlutoLinks
 using Dates
 
 # ╔═╡ f5a4cfbf-ea0e-45f9-86e2-f80362c5b0e7
-
+#pip3 install -r requirements.txt
 
 # ╔═╡ 0e20a115-ad8e-4c9e-b2d9-a4f0c6119054
 md"""

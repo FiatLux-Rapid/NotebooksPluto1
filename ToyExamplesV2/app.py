@@ -31,7 +31,7 @@ st.write("""Le rayon du verre est R, l'épaisseur de la paroi et du socle e, H e
 
 **Volume de la part matière**: *πR²e* (pour le socle du verre) *+ πR²(H-e)-π(R-e)²(H-e)*
 (pour la paroi latérale). 
-C'est cette quantité qu'il faut minimiser
+C'est cette quantité qu'il faut minimiser!
 """)
 
 st.markdown("<h2 style='text-align: left; color: Maroon;'>Méthode de résolution</h2>", unsafe_allow_html=True)
@@ -99,7 +99,8 @@ with st.form("my_form"):
         new_stream_id="36b6a4554d"  # spécifique au projet ToyExampleV2_APIJulia
 
         account = get_default_account()
-        client.authenticate_with_account(account)
+        #client.authenticate_with_account(account)
+        client.authenticate_with_token("bb79167d4c8279ffcdac840cf0593191b54504f359")
         transport = ServerTransport(client=client, stream_id=new_stream_id)
 
         # this serialises the block and sends it to the transport
