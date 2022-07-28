@@ -1,4 +1,5 @@
 #from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
+#from cgi import test
 import time
 import streamlit as st
 import streamlit.components.v1 as components
@@ -46,12 +47,13 @@ st.write("""Le rayon du verre est R, l'épaisseur de la paroi et du socle e, H e
 **Volume de la part matière**: *πR²e* (pour le socle du verre) *+ πR²(H-e)-π(R-e)²(H-e)*
 (pour la paroi latérale). 
 C'est cette quantité qu'il faut minimiser!
+Dans se cas simple, l'optimisation a une solution analytique : R=H , ce qui nous permettra de valider le module d'optimisation utilisé 
 """)
 
 st.markdown("<h2 style='text-align: left; color: Maroon;'>Méthode de résolution</h2>", unsafe_allow_html=True)
 
 st.markdown("""
-* L'optimisation sous contraintes est réalisée par un programme *Julia*. Ce programme minimisant la part matière pour atteindre le volume requis fournira les valeurs optimales pour R et H
+* L'optimisation sous contraintes est réalisée par un programme *Julia* dédié (JuMP). Ce programme minimisant la part matière pour atteindre le volume requis fournira les valeurs optimales pour R et H
 * Un modèle paramétrique du verre, réalisé sous *Grasshopper*, fournira la représentation 3D du verre.
 * Les échanges de données entre les divers logiciels mis en œuvre se fait de façon asynchrone à l'aide de *Speckle* 
 * Le site est réalisé à partir du logiciel *Streamlit*
@@ -61,22 +63,37 @@ st.markdown("""
 """)
 
 
-
 class Block1(Base):
-    volume: float
-    epaisseur: float
-    
-
-    def __init__(self, volume, epaisseur, **kwargs) -> None:
+    v: float
+    e: float
+    #hauteur:float
+    #rayon:float
+    def __init__(self, v, e, **kwargs) -> None:
         super().__init__(**kwargs)
         # mark the origin as a detachable attribute
-        self.volume = volume
-        self.epaisseur = epaisseur
- 
-
-
+        self.v = v
+        self.e = e  #36b6a4554d
+      #  self.hauteur = hauteur
+      #  self.rayon = rayon
 st.sidebar.markdown("<h2 style='text-align: left; color: Maroon;'>Envoi des données</h2>", unsafe_allow_html=True)
 
+
+
+
+#class Block2(Base):
+    #v: float
+ #   e: float
+ #   h:float
+ #   r:float
+    
+#    def __init__(self, e,h,r, **kwargs) -> None:
+ #       super().__init__(**kwargs)
+        # mark the origin as a detachable attribute
+        
+ #       self.e = e  #36b6a4554d
+ #       self.h = h
+ #       self.r = r
+       
 
 with st.sidebar.form("my_form"):
     #st.write("Inside the form")
@@ -84,66 +101,83 @@ with st.sidebar.form("my_form"):
     V=st.number_input('Volume V du verre souhaité (cm ³)', 0, 1000,value=300)
     e=st.number_input('Epaisseur e de la paroi (cm )', 0.10,5.0,value=0.2)
     
-    #slider_val = st.slider("Form slider")
-    #checkbox_val = st.checkbox("Form checkbox")
-
     # Every form must have a submit button.
     submitted = st.form_submit_button("Submit")
     if submitted:
         #st.write("slider", slider_val, "checkbox", checkbox_val)
-        # here's the data you want to send
-#block = Block(length=2, height=4)
-        block = Block1(volume=V, epaisseur=e)	
-
-
+        # here's the data you want to send	
+        block = Block1(v=V, e=e)
         # next create a server transport - this is the vehicle through which you will send and receive
         client = SpeckleClient(host="https://speckle.xyz/")
         new_stream_id="36b6a4554d"  # spécifique au projet ToyExampleV2_APIJulia
-
+        
+        #client.authenticate
         account = get_default_account()
         #client.authenticate_with_account(account)
         client.authenticate_with_token("bb79167d4c8279ffcdac840cf0593191b54504f359")
-        #transport = ServerTransport(client=client, stream_id=new_stream_id)
-
+        transport = ServerTransport(client=client, stream_id=new_stream_id)
+        
         # this serialises the block and sends it to the transport
         hash = operations.send(base=block, transports=[transport])
+
         commid_id = client.commit.create(
             stream_id=new_stream_id, 
             object_id=hash, 
             message="V and e transmission",
-            )
-        st.write("Les nouvelles données ont été envoyées")
+        )
+        st.write("Les nouvelles données ont été envoyées, stream=36b6a4554d,commit=",commid_id)
         
+    # Réception du résultat de l'optimisation
+    results = st.form_submit_button("Result")
+    if results:  
+        new_stream_id="b4fdac11b9"  # spécifique au projet ToyExampleV2_APIJulia
+        client = SpeckleClient(host="speckle.xyz", use_ssl=True)
+        account = get_default_account()
+        client.authenticate(token=account.token)
+        transport = ServerTransport(client=client, stream_id=new_stream_id)
+        last_obj_id = client.commit.list(new_stream_id)[0].referencedObject
+        st.write(last_obj_id)
+        #st.write(client)
+        st.write(new_stream_id)
+        lastcommit=client.commit.list(new_stream_id)[0]
+       # <iframe src="https://speckle.xyz/embed?stream=b4fdac11b9&commit=73809b959a" width="600" height="400" frameborder="0"></iframe>
         
-        
-        
-        #time.sleep(20)
-        #"c9b24bc2de" -> fromGH
-        #my_glass="""<iframe src="https://speckle.xyz/embed?stream=c9b24bc2de" width="600" height="400" frameborder="0"></iframe>"""
-        
-        #stream="https://speckle.xyz/embed?stream=c9b24bc2de"
-        #if vo not in st.session_state:
-        #  st.session_state.vo=300
-        #  st.write(st.session_state.stream)
-        #if V != st.session_state.vo: 
-        #  st.session_state.vo=V
-        #  st.write(st.session_state.vo)
+        #components.iframe("https://speckle.xyz/embed?stream=b4fdac11b9&commit=73809b959a",width=600 ,height=400 , scrolling=True )
+        #last_obj = operations.receive(obj_id="0513dd3106ddd14faa070501045d21df", remote_transport=transport)
+        last_obj = operations.receive(obj_id=last_obj_id, remote_transport=transport)
+       
 
-        #if ep not in st.session_state:
-        #  st.session_state.ep=0.5
-        #  st.write(st.session_state.ep)
-        #if e != st.session_state.ep: 
-        #  st.session_state.ep=e
-        #  st.write(st.session_state.ep)
-        
-        
+        #st.write(last_obj)
+        e=last_obj.e
+        h=last_obj.h
+        r=last_obj.r
+        v=last_obj.v
 
-#st.write("Outside the form")
-st.sidebar.markdown("<h2 style='text-align: left; color: Maroon;'>Récupération des données optimisées</h2> <par>  Puis rafraîchir la page</par> ", unsafe_allow_html=True)
-view = st.sidebar.button("view 3D")
+        st.write("Volume=",v,"épaisseur=",e,"hauteur=",h,"rayon=",r)
+        st.write("Recliquez si les données V et e sont incoorectes")
+
+
+view = st.button("view 3D")
 if view:
     my_glass="""<iframe src="https://speckle.xyz/embed?stream=c9b24bc2de" width="600" height="400" frameborder="0"></iframe>"""
     st.markdown(my_glass, unsafe_allow_html=True)
 
+
+
+
+
+        # now send data to GH
+        #new_stream_id="c9b24bc2de"  # spécifique au projet ToyExampleV2_APIJulia
+        #transport = ServerTransport(client=client, stream_id=new_stream_id)
+        #block2 = Block2( e=last_obj.e,h=last_obj.h,r=last_obj.r)
+        #hash = operations.send(base=block2, transports=[transport])
+        #my_glass="""<iframe src="https://speckle.xyz/embed?stream=c9b24bc2de" width="600" height="400" frameborder="0"></iframe>"""
+        #st.markdown(my_glass, unsafe_allow_html=True)
+        
+            
+   
+
+
+    
 
 

@@ -45,7 +45,7 @@ submitted = st.form_submit_button("Submit")   #  "send" action from client
             object_id=hash, 
             message="V and e transmission",
             )
-        st.write("Les nouvelles données ont été envoyées")
+        st.write("Les nouvelles données ont été reçues")
 ```
 et in.py les reçoit et les stocke dans in.txt:
 ```python
@@ -70,11 +70,21 @@ begin
 #@async file_content =   read(pwd()*"\\in.txt")
 end	
 
+# ╔═╡ f8c7166f-9216-48bc-be73-641bcc652ce9
+begin
+
+ #data_change=Dates.unix2datetime(mtime((pwd()*"\\in.txt")))
+end
+
+# ╔═╡ 04e7fe7a-4e6e-4b67-acf2-940db32578a5
+md"""
+Nouveau design: on nne lance la modélisation et GH que si la requête est nouvelle
+"""
+
 # ╔═╡ 7ca705dd-3906-4936-97d6-0b4a052ec2c5
-my_in_file=pwd()*"\\in.txt"
+my_in_file=  pwd()*"\\commit.txt"           # pwd()*"\\in.txt"
 
 # ╔═╡ 622d8cfc-177c-42a3-be2e-9cd768cf8c30
-
  @use_file(my_in_file)
 
 # ╔═╡ f784480f-2fe6-48f4-a8c4-549f42d6cdc3
@@ -92,26 +102,86 @@ end
 	
 	
 
+# ╔═╡ 4db62b3d-c8a9-4cff-97a0-70ce16b0a51e
+file_content3
+
 # ╔═╡ 739da1cf-9264-4660-a55e-fdddb4cf3297
 begin
 	sleep(1)
 	received_data=split(file_content3,"\r\n")
+	received_data=received_data[end-1]
+	received_data=split(received_data,",")
 end
 
-# ╔═╡ f8c7166f-9216-48bc-be73-641bcc652ce9
-begin
+# ╔═╡ dfa3e35d-970d-4d95-9c3e-53cef27c54b2
+received_data[end-1]
 
- #data_change=Dates.unix2datetime(mtime((pwd()*"\\in.txt")))
-end
+# ╔═╡ 4440f44a-69e2-4a6f-98c4-42e1860f0161
+received_data[1]
+
+# ╔═╡ 76b72def-3e69-4e99-a1e2-18903ea9e89f
+md"""
+Il y a un décalage d'un indice dans les données reçues (commit_id en plus en index 1)
+"""
+
+# ╔═╡ c6e573e6-d994-4d5c-9e70-9ba0df69662b
+received_data
 
 # ╔═╡ 1b651911-efd8-4f79-bf16-63df96dff3d1
 begin
-
-	received_id=received_data[1]
-	V=parse(Float64,received_data[2])
-	épaisseur=parse(Float64, received_data[3])
-	"Volume= "*"$(V)"*", épaisseur="*"$(épaisseur)"
+     commit_id=received_data[1]
+	received_id=received_data[2]#received_data[1]
+	V= parse(Float64,received_data[3]) #parse(Float64,received_data[2])
+	épaisseur=parse(Float64, received_data[4]) #parse(Float64, received_data[3])
+	"Volume= "*"$(V)"*", épaisseur="*"$(épaisseur)"*", commit ID: "*"$(commit_id)" 
 end
+
+# ╔═╡ c4ea0c3e-d720-4666-bc09-3bfc2e115b14
+begin
+	totaltime, totallines = open(my_in_file) do f
+	    linecounter = 0
+	    timetaken = @elapsed for l in eachline(f)
+	        linecounter += 1
+	    end
+    (timetaken, linecounter)
+	end
+previousrun=[]
+  # data associés à une requête identique si l'objet (received_data[2]) est présent dans commit.txt
+open(my_in_file) do file
+    for ln in 1:totallines-1
+		temp=readline(file)
+        if occursin(received_data[2], temp)
+			previousrun=ln,temp
+			break # inutile de chercher davantage...
+		end
+    end
+end
+	
+end
+	
+
+
+# ╔═╡ 5e27aae7-29fe-4861-ba52-68e7dffd7da2
+previousrun
+
+# ╔═╡ 373d2d43-3658-442c-b47e-973e153c70dc
+md"""
+On ne lance l'optimisation que si elle n'a pas été faite. On peut rechercher l'objet ID dans les commits (on peut faire ce traitement dans in.py ou dans toy_example_v2.jl). Nous choisissons Julia pour sa rapidité. Lecture de $(totallines)
+lignes en $(totaltime) secondes !
+"""
+
+# ╔═╡ a87033ad-52a9-4777-8859-6081df1462b4
+
+
+# ╔═╡ b5c604d2-67ec-4e89-b9df-6a3ce96299da
+begin
+	if previousrun !=[]
+		"coucou"
+	end
+end
+
+# ╔═╡ 50b83ab9-6f75-458e-9121-b667fa9c78f8
+
 
 # ╔═╡ 800b3df5-8ba0-4d78-945f-b91c5357c29d
 md"""
@@ -123,78 +193,92 @@ import Ipopt
 
 # ╔═╡ 4d970cf0-35e9-4554-a849-b71fb8e4eefc
 begin
-	e=épaisseur # épaisseur du verre
-	model = Model(Ipopt.Optimizer)
-	r,h= nothing, nothing # clear the julia variables
-	@variable(model, r >= e)  # le rayon
-	@variable(model, h >= e) # la hauteur
-	vol=V  # volume objectif cm3
+	if previousrun ==[]
+		e=épaisseur # épaisseur du verre
+		model = Model(Ipopt.Optimizer)
+		r,h= nothing, nothing # clear the julia variables
+		@variable(model, r >= e)  # le rayon
+		@variable(model, h >= e) # la hauteur
+		vol=V  # volume objectif cm3
+		
+		@NLobjective(model, Min,π*r^2*e+π*(r^2-(r-e)^2)*(h-e))  # le volume de la part matière est à minimiser
+		# On calcule le volume intérieur du verre
+		@NLconstraint(model, c, π*(r-e)^2*(h-e)== vol) # "c" est le nom de la contrainte
+		#@NLconstraint(model, c1, r>=e) # 
+		optimize!(model);
 	
-	@NLobjective(model, Min,π*r^2*e+π*(r^2-(r-e)^2)*(h-e))  # le volume de la part matière est à minimiser
-	# On calcule le volume intérieur du verre
-	@NLconstraint(model, c, π*(r-e)^2*(h-e)== vol) # "c" est le nom de la contrainte
-	#@NLconstraint(model, c1, r>=e) # 
-	optimize!(model);
-
-	r=value(r)  # variable à nouveau julia
-	h=value(h)
-    [r,h,π*(r-e)^2*(h-e)]  # volume calculé. L'optimum correspond à r=h !
+		r=value(r)  # variable à nouveau julia
+		h=value(h)
+	    [r,h,π*(r-e)^2*(h-e)]  # volume calculé. L'optimum correspond à r=h !
+	end
 end
 
 # ╔═╡ f9b35fb4-3022-4bbf-aa82-4d4a0f9add6a
-r,h,e
+string((string(r),string(h),string(e)))
+
+# ╔═╡ 4bae178c-81f3-4365-abd9-9109fd8bcf11
+V
 
 # ╔═╡ 83bd5ef9-d4c2-413d-a8a2-5e2d55c11615
 md"""
 ### Transmission des données vers Grasshopper et l'API
 """
 
+# ╔═╡ 16726266-fc65-4525-b009-58090127c44a
+r
+
+# ╔═╡ daa90290-b991-47fc-babf-97d3daf7e5a3
+previousrun
+
 # ╔═╡ a549d05e-6ea6-4556-a65c-5243915021b2
 begin
-	 fromJulia="5cd63d05d1"
-py"""from specklepy.objects import Base
+	if previousrun==[]
+	 	fromJulia="b4fdac11b9" #"36b6a4554d" #"5cd63d05d1"  
+		py"""from specklepy.objects import Base
 from specklepy.api.client import SpeckleClient 
 from specklepy.api.credentials import get_default_account
 from specklepy.transports.server.server import ServerTransport
 from specklepy.api import operations
-
+		
 class Block2(Base):
-
-	thickness: float
-	height: float
-	radius: float
-
-	def __init__(self, thickness=0.1,height=1.0,radius=1.1, **kwargs) -> None:
-	    super().__init__(**kwargs)
-	    self.radius = radius
-	    self.thickness =thickness
-	    self.height=height
-
-block2 = Block2(thickness=$(e),height=$(h) ,radius=$(r) )
-# next create a server transport
+	e: float
+	h: float
+	r: float
+	v: float
+			
+		
+	def __init__(self, e=0.1,h=1.0,r=1.1,v=10.0, **kwargs) -> None:
+		super().__init__(**kwargs)
+		self.r = r
+		self.e =e
+		self.h=h
+		self.v=v
+				
+		
+block2 = Block2(e=$(e),h=$(h) ,r=$(r) ,v=$(V))
+		# next create a server transport
 client = SpeckleClient(host="https://speckle.xyz/")
-
+		
 new_stream_id=$(fromJulia) # spécifique au projet	
 account = get_default_account()
 client.authenticate_with_account(account)
 transport = ServerTransport(client=client, stream_id=new_stream_id)
-		
-# this serialises the block and sends it to the transport
+				
+		# this serialises the block and sends it to the transport
 hash = operations.send(base=block2, transports=[transport])
 commid_id = client.commit.create(
 		stream_id=new_stream_id, 
 		object_id=hash, 
 		message="result of optimization",
 		)
+		"""
+	end
 
-"""
-
-
-	
+	py"hash"
 end
 
 # ╔═╡ 84da22af-9f73-4021-bb8e-fe5dc064f197
-
+py"""object_id"""
 
 # ╔═╡ 3c06b8b2-9c65-4cb6-abd9-f0a29c33fffc
 
@@ -731,17 +815,32 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═f5a4cfbf-ea0e-45f9-86e2-f80362c5b0e7
 # ╟─0e20a115-ad8e-4c9e-b2d9-a4f0c6119054
 # ╠═b64ca4a9-92a7-4945-b540-03253076787e
-# ╠═7ca705dd-3906-4936-97d6-0b4a052ec2c5
 # ╠═622d8cfc-177c-42a3-be2e-9cd768cf8c30
 # ╠═f784480f-2fe6-48f4-a8c4-549f42d6cdc3
+# ╠═4db62b3d-c8a9-4cff-97a0-70ce16b0a51e
 # ╠═739da1cf-9264-4660-a55e-fdddb4cf3297
+# ╠═dfa3e35d-970d-4d95-9c3e-53cef27c54b2
 # ╠═f8c7166f-9216-48bc-be73-641bcc652ce9
-# ╠═1b651911-efd8-4f79-bf16-63df96dff3d1
+# ╠═4440f44a-69e2-4a6f-98c4-42e1860f0161
+# ╠═04e7fe7a-4e6e-4b67-acf2-940db32578a5
+# ╠═7ca705dd-3906-4936-97d6-0b4a052ec2c5
+# ╟─76b72def-3e69-4e99-a1e2-18903ea9e89f
+# ╠═c6e573e6-d994-4d5c-9e70-9ba0df69662b
+# ╟─1b651911-efd8-4f79-bf16-63df96dff3d1
+# ╠═5e27aae7-29fe-4861-ba52-68e7dffd7da2
+# ╟─373d2d43-3658-442c-b47e-973e153c70dc
+# ╠═c4ea0c3e-d720-4666-bc09-3bfc2e115b14
+# ╠═a87033ad-52a9-4777-8859-6081df1462b4
+# ╠═b5c604d2-67ec-4e89-b9df-6a3ce96299da
+# ╠═f9b35fb4-3022-4bbf-aa82-4d4a0f9add6a
+# ╠═50b83ab9-6f75-458e-9121-b667fa9c78f8
 # ╟─800b3df5-8ba0-4d78-945f-b91c5357c29d
 # ╠═ebc0d851-fafc-44ae-b503-17a50904bd27
 # ╠═4d970cf0-35e9-4554-a849-b71fb8e4eefc
-# ╠═f9b35fb4-3022-4bbf-aa82-4d4a0f9add6a
+# ╠═4bae178c-81f3-4365-abd9-9109fd8bcf11
 # ╟─83bd5ef9-d4c2-413d-a8a2-5e2d55c11615
+# ╠═16726266-fc65-4525-b009-58090127c44a
+# ╠═daa90290-b991-47fc-babf-97d3daf7e5a3
 # ╠═a549d05e-6ea6-4556-a65c-5243915021b2
 # ╠═84da22af-9f73-4021-bb8e-fe5dc064f197
 # ╠═3c06b8b2-9c65-4cb6-abd9-f0a29c33fffc

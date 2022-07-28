@@ -41,13 +41,248 @@ begin
 	using DataFrames
 end
 
+# ╔═╡ a9d70c1a-4318-434a-a225-75326755d29f
+md"""
+## AGIR T0+1
+F:\sauvegarde19122018\EFFITECH2014\RAPID\Affaire\Gestion\CR_09_14.docx
+1- Courant rms en pulsé
+
+2- topologie pulsée et solid state modulator http://purco.qc.ca/ftp/Steven%20Mark/mannix/solid_state_pulsed_power.pdf
+https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/493070/State_of_the_art.pdf?sequence=1&isAllowed=y 
+
+3- Calcul de transformateur et matrix transformer
+https://vtechworks.lib.vt.edu/bitstream/handle/10919/28280/Draft_after_ETD_Review.pdf
+https://www.pes-publications.ee.ethz.ch/uploads/tx_ethpublications/18_Design_Procedure_for_Compact_Pulse_Transformers.pdf
+https://www.pes-publications.ee.ethz.ch/uploads/tx_ethpublications/Matrix_Upload.pdf
+
+5- **Design automatique LCC Resonant Converter** https://www.downloadmaghaleh.com/wp-content/uploads/edd/maghaleh/1398/ghara.electro.pdf 
+Paralleling of LLC Resonant Converters using Frequency Controlled Current Balancing 
+https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.861.7795&rep=rep1&type=pdf
+
+6-JFET en cascode
+
+7- liaison wifi par dongle 
+
+8_ Digital control of resonnant converter
+https://ir.canterbury.ac.nz/bitstream/handle/10092/1090/thesis_fulltext.pdf;jsessionid=5E787F25B77A5B405FC061A3047BF190?sequence=1
+
+state space analysis: https://vtechworks.lib.vt.edu/bitstream/handle/10919/19327/Feng_W_D_2013.pdf?sequence=1
+
+9_ normaliser les variables pour être plus générique (Dimensionless variables)
+
+10- Oscilloscope wifi Hantek IDSO1070A WIFI Connect 70MHz 250MSa/s 2 Channels PC USB Oscilloscope
+
+## T0+2
+1- AC/DC converter (entrées triphasées)  https://www.pes-publications.ee.ethz.ch/uploads/tx_ethpublications/24_Comparative_Evaluation_of_Three-Phase_Cortes_ECCE_Europe_01.pdf
+I2AFM PFC rectifier IMY rectifier c.	A buck-boost rectifier vienna
+ Boost entrelacé (panneau solaire)
+2- fast charging
+https://www.researchgate.net/publication/359925803_A_Comprehensive_Review_of_Power_Converter_Topologies_and_Control_Methods_for_Electric_Vehicle_Fast_Charging_Applications
+
+3- Echangeur à eau https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/153088/eth-5020-02.pdf?sequence=2&isAllowed=y (p 159)
+
+4- Equilibrage LLC en série :Analysis of multi-phase LLC resonant converters
+https://sci-hub.hkvisa.net/10.1109/cobep.2009.5347673
+
+5- acquisition (obsolète) Labtool  https://www.embeddedartists.com/products/labtool/ 
+
+## T0+3
+1- Régulation sur charge stable: activer progressivement les convertisseurs pour atteidre le plat (où la forme souhaitée) en boucle ouverte --> si trop haut en tension injecter moins de puissance, le déphasage dépend de la longueur de l'impulsion et du nb de convertisseurs 
+2- En mode pulsé valider les mesures hors périodes d'injection de puissance (CEM)
+3- La mesure de la tension d'entrée permet de mieux ajuster l'injection de puissance
+4- Logiciel de pilotage AGIR 1 et 2 à prendre en compte
+
+## T0+4
+1- Transmission de puissance sans fil (servitude)
+2- Remplacement éclateur par stack de thyristors /IGBT
+3- Electroporation bipolaire en mode burst (innovation)
+4- Magnétron en mode burst avec E/B constant et B à 200 kHz (innovation)
+5- Isolation mixte air/isolant solide répartie en stack
+
+## T0+5
+1- Thyrisors 10* 1.5 kV/32 kA (testé à 8,5 kV 3A avant destruction)
+2- carte de déclenchement 24V - 40 kV jitter ~10 ns 
+3- sonde opto-isolée
+
+## T0+6 carte mixte thyrisor/IGBT (80 IGBT ): 
+
+## T0+7
+* Vienna 800 et 1000V. Améliorations:-	Changement du type de thyristor
+-	Passage du refroidissement thyristor avec une épaisseur de 10 mm 
+-	Passage à des résistances de charge de 50 W
+-	Amélioration locale des distances d’isolement  
+
+## T0+8
+* Sécurités de mise en œuvre du triphasé
+* Essais carte 5 IGBT= 5kV 1000 A et Thyristors 5kV et 4 kA (en combiné 3.5 kV 4.5 KA destruction)
+
+## T0+9
+Intégration en cuve de 12 convertisseurs
+
+## T0+10 (Septembre 2016)
+* SPI optique 2 voies 
+* Utilisation d'AGiR1 en rampe de compensation (pour V constant malgré la décharge d'une capa) 
+
+## Octobre :
+* Gestion de CEM à fort niveau sur AGIR1
+* Mise en sécurité si tension Vienen trop basse
+
+## Novembre 2016
+Modélisation de l’injection progressive AGIR1 
+Nouveau chronogramme compatible d’un nombre quelconque de convertisseurs (AGIR1)
+AGIR1: on peut bypasser des convertisseur pour être toujours proche de la résonnance à bas niveau
+
+## Janvier 2017
+impulsions monopolaires positives et/ou négatives ou des impulsions bipolaires suivant la façon dont on  référence la masse en sortie d’AGIR
+
+
+## 2/2017
+inhiber un convertisseur défaillant (AGIR1) ou bypass à puissnce faible
+
+## 3 et 4 2017
+reconfiguration des convertisseurs en cas de défaut
+"""
+
+ 
+
+# ╔═╡ 33d66dc0-b2b2-4105-8afb-03bd287b3494
+md"""
+## Innovations à valoriser
+* Remplacement éclateur par stack de thyristors /IGBT
+* Electroporation bipolaire en mode burst (innovation)
+* Magnétron en mode burst avec E/B constant et B à 200 kHz (innovation)
+* Isolation mixte air/isolant solide répartie en stack
+* AGIR1 en rampe de compensation
+"""
+
+# ╔═╡ 6b224b49-13db-46a2-8b1a-32b6120f1709
+md"""
+## Executive summary
+
+|Modélisation		|  Réalisation |
+|:-------------|:----------|
+|* Transformateur matriciel|* Transformateur matriciel|
+|* Calcul des courants rms |* Instrumentation low cost Wifi|
+|* Optimisation convertisseurs résonnants  |* JFET en montage cascode|
+|* Pilotage par espace d'état (modélisation) |* Pilotage par espace d'état (µC)|
+|* Optimisation de convertisseur AC.DC triphasé|* Module d'acquisition flottant (V et I)|
+|* Fast charging  |* Fast Charging|
+|* Echangeur thermique à air ou à eau  |* Echangeur thermique à air ou à eau | 
+|* Régulation convertisseurs pulsé en boucle ouverte (tension d'entrée et mise en route successive sur la tension de sortie)  |* Mesure hors injection (mode pulsé) pioltage |
+|*  Transmission de puissance sans fil  |* Transmission de puissance sans fil |
+|* Carte de déclenchement 24V - 40 kV |* Carte de déclenchement 24V - 40 kV |
+|* Mesure hors injection (mode pulsé)  |* Sonde opto-isolée|
+|* Logiciel de pilotage AGIR 1 et 2|* Logiciel de pilotage AGIR 1 et 2|
+|* Isolation air solide|* carte mixte thyrisor/IGBT |
+|* Gestion de CEM à fort niveau sur AGIR1| * Mise en sécurité si tension Vienne trop basse
+"""
+
+# ╔═╡ 0b768aef-e6cf-4804-9ee4-121abc2f0456
+md"""
+#https://media.softwaresim.com/Figure_1_-_Types_of_Simulation_Models_oxbaox-1000.webp
+* Déterministes
+  * modèles statiques   modelingToolKit,Roots
+  * modèles dynamiques  continus/discrets  --> DiffferentialEquations.jl 
+* Stochastiques
+  * Statiques: Monte Carlo/WOS
+  * Dynamiques: Evènement discret
+"""
+
+# ╔═╡ f3ce81d7-2cae-429f-a9a9-1b15773771ad
+md"""
+## Similitudes et différences entre réseaux de neurones et FIATLUX
+Dans les deux cas on passe par des couches successives dont les paramètres sont ajustés pour atteindre une fonction objectif. Mais les couches de FIATLUX font des traitements plus complexes et dans un contexte plus large
+
+
+|Deep learning  		|  FIATLUX  |
+|:-------------|:----------|
+|* couche typique: y=σ(ax+b)		|*  y=f(x,p)  |
+|* couches successives   |* couches distribuées |
+|* localisées |* décentralisées |
+| * sources souvent disponibles |* open source |
+
+
+## Similitudes et différences entre les GAFA et FIATLUX  
+Dans les deux cas, l'objectif est de fournir un service à un très grand nombre d'utilisateurs car les besoins couverts sont universels
+
+|GAFA  		|  FIATLUX    |
+|:-------------|:----------|
+|* **Google**: répondre aux besoins d'information		|*  idem mais FIATLUX crée l'information adaptée au besoin  |
+|* **Amazon** : livre des objets standard produits partout dans le monde   |* livre des produits customisés (production locale possible) |
+|* **Facebook**: permet les liens sociaux |* permet le travail collaboratif avec des échanges de donnéees complexes |
+|* **Apple**: permet la communication entre personnes et homme/machine  |* permet  la communication en réseau, multi-logiciel avec archivage de l'historique |
+
+"""
+
+
+# ╔═╡ 5d5264d2-ef1d-425c-aef2-43b389fc6e35
+
+
+# ╔═╡ 687699e3-4c60-49ee-a505-af52cd63aeb1
+md"""
+
+Logbook 22/07
+
+Installation de speckle rhino connector pour avoir un meilleur rendu dans l'objet reçu
+
+Plantage de speckle GH (send) suite à ajout connecteur pour Rhino
+Désinstallation Réinstallation OK
+
+Il est possible d'envoyer des données en même temps que l'objet 3D à partir de Grasshopper. L'extraction de ce sous-objet est néanmoins encore problématique (il est dans Base[0][0]) dans l'API client.
+On a pu démontré que le conditionnement des données envoyées par GH sont correctes (via un codage par clef,envoie, réception locale et décodage par clef et en valeur)
+
+Reste à faire de même sur app.py: le stream ID et le commit ID est bon . Reste le décodage de Base
+
+LogBook 24/7
+
+L'architecture décentralisée de FIATLUX fonctionne maintenant pour le mini-exemple:
+* l'API app.py envoie les données V et e
+* Ces données sont reçues par toy_example_v2.jl, l'optimisation est traitée et renvoyée sur le cloud. 
+* Ces données sont récupérées par l'API app.jl et par Grasshopper pour réalisation de la forme 3D correspondante, cet objet est envoyé sur le cloud par GH
+* L'objet est reçu par l'API app.jl pour affichage
+"""
+
+# ╔═╡ aff6f9ff-966c-4ee1-8d57-4bb74dd600fe
+md"""
+## Cahier des charges de FIATLUX
+Les principales caractéristiques sont les suivantes. Il faut pouvoir:
+* Facilement réutiliser les solutions existantes (codes disponibles sur Github (souvent Python), plugins Grasshopper,openModelica) 
+* Facilement porter en code des solutions décrites dans les publications de recherche sans dégradations des performances (Julia)
+* Assurer l'interopérabilité des diverses  ressources: où qu'elles soient, quelque soit le logiciel utilisé → L'architecture reenue correspond à du calcul distribué sous forme de graphe
+* Il faut aussi des outils pour poser résoudre le problème une fois posé sans trop de traitement préalable, ces problèmes peuvent être:
+  * De type arithmétique (symbolics)
+  * De type géométrique paramétré (Grasshopper)
+  * Sous forme d'équations différentielles (DifferentialEquations.jl)
+  * De systèmes d'équations à simplifier (MTK)
+  * D'optimisation mécanique (TopOpt)
+  * D'optimisation (Flux)
+  * D'assemblage de modèles asynchrones (openModelica)
+* Il faut aussi résoudre des classes de problèmes plutôt que des problèmes spécifiques (équations aux variables réduites)
+* Et ne pas résoudre deux fois le même problème (archiivage des solutions)
+Il faut noter que les solutions à stocker ne sont ps aussi simple que des fichiers : objet 3D constitués d'une arborescente dde sous-objet 3D, avec des paramètres spécifiques susceptible de se rattacher à chaqu'un des sous-objets.
+* L'outil doit pouvoir s'adapter à tout type d'utilisateurs:
+  * Utilisateurs finaux (clients) ne dispoant que d'un navigateur
+  * Développeurs, pour qui il faut proposer des outils simples de mise en oeuvre, gratuit ou peu coûteux, open source pour permettre des adaptations plus faciles.
+  * Etudiants pour lesquels formation et outils logiciel sont intégrés 
+
+"""
+
+# ╔═╡ 8391d64a-f4e9-4a4a-babb-52ade178a9d2
+md"""
+Le 21/07/2022
+* Nous avons réussi à récupérer le commit-ID d'un stream, ce qui nous permettra de récupérer l'objet complet
+* Le fichier in.txt a évoluer pour ne prendre en compte que les nouvelles requêtes (et donc les nouveaux objets) --> Il faudra récupérer l'objet sans relancer une requête à gh dans ce cas
+* Le fichier commit.txt comporte l'id deu commit, de l'objet et les données de requête 
+
+"""
+
 # ╔═╡ ab9907ce-d0a0-464b-9436-da7d8654ca1e
 md"""
 ## To Do
 * Remplacer le fichier d'échange in.txt par une gestion d'historique (objet résultat)
 * Eviter de résoudre une requête ayant déjà fait l'objet d'un traitement
 * Passer d'un problème résolu à un problème plus général
-* Permettre l'accès au ressources python, julia et Gh à l'utilisateur final sans installation
+* Permettre l'accès aux ressources python, julia et Gh à l'utilisateur final sans installation
 """
 
 # ╔═╡ 2103d6d4-c73f-4512-bfb4-4194e1036d06
@@ -56,6 +291,25 @@ md"""
       <img src = "https://github.com/FiatLux-Rapid/NotebooksPluto1/blob/e4820323423781fedb05dceec1da49c5dfd35886/FIATLUX_cloud.PNG?raw=true" alt = "FIATLUX in the Cloud" width = 100% height = 100%  border = "5" align = "left"/>
 """
 
+
+# ╔═╡ 10ca7ab5-b21b-40ce-9807-cd53a84e0777
+md"""
+> 👍 L'environnement développeur est une orgatisation du travail collaboratif ("graph computing") dont l'importance devrait passé de 10% aujourd'hui à 80% l'an prochain (source julia graph computing JuliaCon 2022)
+
+> 👍 L'historique des échanges permet d'éviter des recalculs s'ils ont déjà été fait. Il faut garder l'historique complet de toute la chaine aal à la requête
+
+> 👍 Cet historique permet aussi la réalisation de digital twins dont la base de données est produite pendant les temps morts.
+
+> 👍 Un domaine géométrique complexe peut être décrit sous forme paramétrique, comme une succession de rotation dont l'axe passe par chacun des cercles tour à tour (transformée de fourier).
+"""
+
+
+
+
+# ╔═╡ 0a93ff73-3aa1-4b08-8ab1-5cd7bdbcce53
+@htl """
+ <img src = "https://www.geogebra.org/resource/t9uspumz/ipZk24Uzs5rUtKJK/material-t9uspumz-thumb.png" alt = "Drawing with circles" width =80% height = 80%  border = "5" align = "right"/>
+"""
 
 # ╔═╡ c34f220e-6706-4661-8f99-7b8d856c015a
 md"""
@@ -2456,20 +2710,31 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═a9d70c1a-4318-434a-a225-75326755d29f
+# ╠═33d66dc0-b2b2-4105-8afb-03bd287b3494
+# ╠═6b224b49-13db-46a2-8b1a-32b6120f1709
+# ╠═0b768aef-e6cf-4804-9ee4-121abc2f0456
+# ╠═f3ce81d7-2cae-429f-a9a9-1b15773771ad
+# ╠═5d5264d2-ef1d-425c-aef2-43b389fc6e35
+# ╟─687699e3-4c60-49ee-a505-af52cd63aeb1
+# ╟─aff6f9ff-966c-4ee1-8d57-4bb74dd600fe
+# ╟─8391d64a-f4e9-4a4a-babb-52ade178a9d2
 # ╠═ab9907ce-d0a0-464b-9436-da7d8654ca1e
-# ╟─2103d6d4-c73f-4512-bfb4-4194e1036d06
+# ╠═2103d6d4-c73f-4512-bfb4-4194e1036d06
+# ╠═10ca7ab5-b21b-40ce-9807-cd53a84e0777
+# ╠═0a93ff73-3aa1-4b08-8ab1-5cd7bdbcce53
 # ╠═c34f220e-6706-4661-8f99-7b8d856c015a
-# ╠═4e5181d5-f0b3-4194-9c4d-c70119db1c11
+# ╟─4e5181d5-f0b3-4194-9c4d-c70119db1c11
 # ╠═9824289d-e5c9-4713-9dde-3ddbcd888676
 # ╠═8f7cd2bc-d0eb-4681-ac99-37bcab30819b
 # ╟─394d2f30-fd0b-11ec-1fc6-8ba50442f9a2
-# ╠═62d62d31-132c-4fc9-a0c1-e9507ce92d3e
+# ╟─62d62d31-132c-4fc9-a0c1-e9507ce92d3e
 # ╠═09e67d1b-dddd-4128-9df5-46ea1e664c76
 # ╟─7a6a6e87-56c1-4a7c-b49c-81bda3c82065
 # ╟─c5502518-c38b-4b21-806f-52868115d00f
 # ╟─776fa883-806a-45e8-866a-fd9ea49de765
-# ╠═0c7b1103-8533-440b-944e-eca21d739952
-# ╠═24bb245c-3fbd-4c17-955c-0f483b0e157a
+# ╟─0c7b1103-8533-440b-944e-eca21d739952
+# ╟─24bb245c-3fbd-4c17-955c-0f483b0e157a
 # ╠═61121415-bf02-447d-a4d0-14e4c68829ce
 # ╠═ad67872f-06ad-4088-be30-ab865dadc003
 # ╠═87399a03-8c61-4912-9068-29ee9d49d97f
