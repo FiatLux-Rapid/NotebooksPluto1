@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.5
+# v0.19.9
 
 using Markdown
 using InteractiveUtils
@@ -169,10 +169,13 @@ Hello UTF-8 encoding  <!-- not different ? --></p>
 
        
        <p>Simple Image Insert</p>
-      <img src = "https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive-960x540.jpg" alt = "Test Image" width = "240" height = "124"  border = "5" align = "left"/>
+      <img src = "‪D:\2022\FIATLUX_Implementation\NotebooksPluto\schematic.svg" alt = "Test Image" width = "240" height = "124"  border = "5" align = "left"/>
 	    
 
 """
+
+# ╔═╡ 767f8b06-1fe0-4691-a1b7-3ad1a6a3cb97
+
 
 # ╔═╡ 2b6f129b-3d45-4bae-805e-fc4ab4812f5c
  #<meta http-equiv = "refresh" content = "50; url = http://www.tutorialspoint.com" />
@@ -2570,6 +2573,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─e91d7926-ec6e-41e7-aba2-9dca333c8aa5
 # ╠═d07fcdb0-7afc-4a25-b68a-49fd1e3405e7
 # ╠═d7fbf15c-ca4f-47b2-981b-a1cff241d3d7
+# ╠═767f8b06-1fe0-4691-a1b7-3ad1a6a3cb97
 # ╠═2b6f129b-3d45-4bae-805e-fc4ab4812f5c
 # ╟─410ba4fa-467d-4776-ad6d-4452137c6fa5
 # ╟─e39117c4-9042-43f1-817a-517345e7ba30
